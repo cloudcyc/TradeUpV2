@@ -37,14 +37,14 @@ function Profile({ navigation }){
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AddNewRequest')}>
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('ManageMarketplace')}>
                   <View style={styles.row}>
                       <Ionicons name='briefcase-outline' size={35} />
                       <Text style={styles.ButtonText}>Manage My Marketplace</Text>
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AddNewRequest')}>
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('ManageShop')}>
                   <View style={styles.row}>
                       <Ionicons name='receipt-outline' size={35} />
                       <Text style={styles.ButtonText}>Manage My Shop</Text>

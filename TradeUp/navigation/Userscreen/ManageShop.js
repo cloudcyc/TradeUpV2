@@ -4,7 +4,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 Ionicons.loadFont();
 
-function AdminShop({ navigation }){
+function ManageShop({ navigation }){
 
     const SampleProduct = [{
         ProductName: "Iphone 13", Name: "John Sandford", Price:"RM888", product_image:
@@ -59,7 +59,7 @@ function AdminShop({ navigation }){
             renderItem={({item}) => {
                 return (
 
-                    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'AdminShopProduct', item)}>
+                    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'ManageShopDetails', item)}>
                         <Image style={styles.userImage} source={{uri:item.product_image}}/>
                         <View style={styles.cardFooter}>
                             <View >
@@ -74,6 +74,11 @@ function AdminShop({ navigation }){
             
             />
 
+            <TouchableOpacity
+                onPress={() => navigation.navigate('AddShopProduct')}
+                style={styles.roundButton2}>
+                <Text style={styles.addtext}>+</Text>
+            </TouchableOpacity> 
 
             </SafeAreaView>
 
@@ -245,4 +250,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default AdminShop
+export default ManageShop

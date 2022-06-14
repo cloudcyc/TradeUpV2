@@ -2,42 +2,36 @@ import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 Ionicons.loadFont();
 
-function AdminShop({ navigation }){
+function ManageMarketplace({ navigation }){
 
     const SampleProduct = [{
-        ProductName: "Iphone 13", Name: "John Sandford", Price:"RM888", product_image:
+        ProductName: "Iphone 13", Name: "John Sandford", product_image:
         "https://www.igeeksblog.com/wp-content/uploads/2021/08/black-wallpaper-for-iphone-10-675x450.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
       }, {
-        ProductName: "Iphone 14", Name: "John Sandford", Price:"RM888", product_image:
+        ProductName: "Iphone 14", Name: "John Sandford", product_image:
         "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
       }, {
-        ProductName: "Iphone 15", Name: "John Sandford", Price:"RM888", product_image:
+        ProductName: "Iphone 15", Name: "John Sandford", product_image:
         "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
       }, {
-        ProductName: "Iphone 16", Name: "John Sandford", Price:"RM888", product_image:
+        ProductName: "Iphone 16", Name: "John Sandford", product_image:
         "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
       }, {
-        ProductName: "Iphone 17", Name: "John Sandford", Price:"RM888", product_image:
+        ProductName: "Iphone 15", Name: "John Sandford", product_image:
         "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
       }, {
-        ProductName: "Iphone 18", Name: "John Sandford", Price:"RM888", product_image:
+        ProductName: "Iphone 16", Name: "John Sandford", product_image:
         "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
       }, {
-        ProductName: "Iphone 19", Name: "John Sandford", Price:"RM888", product_image:
+        ProductName: "Iphone 15", Name: "John Sandford", product_image:
         "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
       }, {
-        ProductName: "Iphone 20", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", Price:"RM888", product_image:
+        ProductName: "Iphone 16", Name: "John Sandford", product_image:
         "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
       }];
-
 
     return(
         <SafeAreaView style={styles.root}>
@@ -59,12 +53,15 @@ function AdminShop({ navigation }){
             renderItem={({item}) => {
                 return (
 
-                    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'AdminShopProduct', item)}>
+                    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'ManageMarketplaceDetails', item)}>
                         <Image style={styles.userImage} source={{uri:item.product_image}}/>
                         <View style={styles.cardFooter}>
-                            <View >
+                            <View style={{alignItems:"center", justifyContent:"center"}}>
                             <Text style={styles.name}>{item.ProductName}</Text>
-                            <Text style={styles.position}>{item.Price}</Text>
+                            <Text style={styles.position}>{item.Name}</Text>
+                            {/* <TouchableOpacity style={styles.followButton}>
+                                <Text style={styles.followButtonText}>View</Text>  
+                            </TouchableOpacity> */}
                         </View>
                         </View>
                     </TouchableOpacity>
@@ -74,7 +71,11 @@ function AdminShop({ navigation }){
             
             />
 
-
+            <TouchableOpacity
+                onPress={() => navigation.navigate('AddMarketplaceProduct')}
+                style={styles.roundButton2}>
+                <Text style={styles.addtext}>+</Text>
+            </TouchableOpacity>     
             </SafeAreaView>
 
     );
@@ -104,7 +105,6 @@ const styles = StyleSheet.create({
         alignItems:'center',
         marginLeft:20,
         marginRight:20,
-        paddingBottom:20,
     },
 
     section:{
@@ -139,7 +139,10 @@ const styles = StyleSheet.create({
     },
 
     list: {
+        paddingTop:20,
         paddingHorizontal: 20,
+        paddingBottom:20,
+        height:'100%'
     },
 
     card:{
@@ -156,7 +159,7 @@ const styles = StyleSheet.create({
         backgroundColor:"white",
         flexBasis: '46%',
         marginHorizontal: 10,
-        borderRadius:15
+        borderRadius:15,
       },
 
       cardFooter: {
@@ -166,6 +169,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 1,
         flexDirection: 'row',
         alignItems:"center", 
+        justifyContent:"center"
       },
 
       cardContent: {
@@ -191,19 +195,18 @@ const styles = StyleSheet.create({
       },
 
       name:{
-        fontSize:16,
+        fontSize:18,
         flex:1,
         alignSelf:'center',
-        fontWeight:'600'
+        color:"#008080",
+        fontWeight:'bold'
       },
 
       position:{
         fontSize:14,
         flex:1,
-        alignSelf:'flex-start',
-        color:"#dc2f02",
-        paddingTop:5,
-        fontWeight:'500'
+        alignSelf:'center',
+        color:"#696969"
       },
 
       followButton: {
@@ -240,9 +243,6 @@ const styles = StyleSheet.create({
         fontSize:30
     }
 
-    
-
-
 })
 
-export default AdminShop
+export default ManageMarketplace
