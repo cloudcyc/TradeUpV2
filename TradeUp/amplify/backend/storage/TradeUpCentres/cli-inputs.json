@@ -1,0 +1,14 @@
+{
+  "resourceName": "TradeUpCentres",
+  "tableName": "TradeUpCentres",
+  "partitionKey": {
+    "fieldName": "centreStatus",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "centreID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

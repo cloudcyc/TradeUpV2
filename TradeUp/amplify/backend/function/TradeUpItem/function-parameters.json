@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "storage": {
+      "TradeUpItems": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

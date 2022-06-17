@@ -1,0 +1,98 @@
+{
+  "function": {
+    "TradeUpCentre": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "TradeUpCentres",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        }
+      ]
+    },
+    "TradeUpUser": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "TradeUpUsers",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        }
+      ]
+    },
+    "TradeUpItem": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "TradeUpItems",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        }
+      ]
+    }
+  },
+  "api": {
+    "TradeUpApi": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "TradeUpCentre",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "TradeUpUser",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "TradeUpItem",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    }
+  },
+  "storage": {
+    "TradeUpCentres": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
+    },
+    "TradeUpUsers": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
+    },
+    "TradeUpItems": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "resourceName": "TradeUpUsers",
+  "tableName": "TradeUpUsers",
+  "partitionKey": {
+    "fieldName": "userEmail",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "userID",
+    "fieldType": "string"
+  },
+  "gsi": [
+    {
+      "name": "userID-index",
+      "partitionKey": {
+        "fieldName": "userID",
+        "fieldType": "string"
+      },
+      "sortKey": {
+        "fieldName": "userFullname",
+        "fieldType": "string"
+      }
+    },
+    {
+      "name": "userRole-index",
+      "partitionKey": {
+        "fieldName": "userRole",
+        "fieldType": "string"
+      }
+    }
+  ],
+  "triggerFunctions": []
+}

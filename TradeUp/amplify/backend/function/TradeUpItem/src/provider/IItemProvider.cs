@@ -1,0 +1,15 @@
+using System.Threading.Tasks;
+using System;
+namespace TradeUpItem
+{
+    public interface IItemProvider
+    {
+        Task<ItemModel[]> GetActiveItemByModeAsync(string inputItemMode);
+        Task<ItemModel[]> GetActiveItemByModeAndCategoryAsync(string inputItemMode, string inputItemStatus);
+        Task<ItemModel[]> GetActiveItemByModeAndCategoryUserIDExistAsync(string inputItemMode, string inputItemStatus, string inputUserID);
+        Task<bool> AddItemWithImageAsync (ItemModel item);
+        Task<bool> AddItemWithoutImageAsync (ItemModel item);
+        Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID);
+        Task<bool> DeleteSelectedItemWithoutImageAsync(String inputItemID, String inputUserID);
+    }
+}

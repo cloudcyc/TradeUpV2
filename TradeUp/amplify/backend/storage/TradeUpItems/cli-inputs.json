@@ -1,0 +1,14 @@
+{
+  "resourceName": "TradeUpItems",
+  "tableName": "TradeUpItems",
+  "partitionKey": {
+    "fieldName": "itemID",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "userID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

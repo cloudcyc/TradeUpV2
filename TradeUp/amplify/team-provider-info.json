@@ -1,0 +1,31 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tradeup-dev-22836-authRole",
+      "UnauthRoleArn": "arn:aws:iam::439033634294:role/amplify-tradeup-dev-22836-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::439033634294:role/amplify-tradeup-dev-22836-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-tradeup-dev-22836-deployment",
+      "UnauthRoleName": "amplify-tradeup-dev-22836-unauthRole",
+      "StackName": "amplify-tradeup-dev-22836",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:439033634294:stack/amplify-tradeup-dev-22836/22efaba0-eda2-11ec-8779-06d2337c6f1c",
+      "AmplifyAppId": "dty6ky84696ij"
+    },
+    "categories": {
+      "function": {
+        "TradeUpUser": {
+          "deploymentBucketName": "amplify-tradeup-dev-22836-deployment",
+          "s3Key": "amplify-builds/TradeUpUser-39372b56746a37763370-build.zip"
+        },
+        "TradeUpCentre": {
+          "deploymentBucketName": "amplify-tradeup-dev-22836-deployment",
+          "s3Key": "amplify-builds/TradeUpCentre-48704776727a78646c68-build.zip"
+        },
+        "TradeUpItem": {
+          "deploymentBucketName": "amplify-tradeup-dev-22836-deployment",
+          "s3Key": "amplify-builds/TradeUpItem-4e516f33573741622b6b-build.zip"
+        }
+      }
+    }
+  }
+}

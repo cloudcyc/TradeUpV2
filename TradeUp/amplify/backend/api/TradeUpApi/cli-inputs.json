@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "paths": {
+    "/centres": {
+      "name": "/centres",
+      "lambdaFunction": "TradeUpCentre",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/users": {
+      "name": "/users",
+      "lambdaFunction": "TradeUpUser",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/items": {
+      "name": "/items",
+      "lambdaFunction": "TradeUpItem",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
