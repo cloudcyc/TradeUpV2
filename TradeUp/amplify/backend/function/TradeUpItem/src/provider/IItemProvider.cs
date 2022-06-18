@@ -11,5 +11,6 @@ namespace TradeUpItem
         Task<bool> AddItemWithoutImageAsync (ItemModel item);
         Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID);
         Task<bool> DeleteSelectedItemWithoutImageAsync(String inputItemID, String inputUserID);
+        Task<bool> DeleteImageByIDAsync(String inputItemID);
     }
 }
