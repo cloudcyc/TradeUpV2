@@ -247,7 +247,8 @@ const styles = StyleSheet.create({
     },
 
     textInputStyle: {
-        flex: 1
+        flex: 1,
+        paddingTop:0,
     },
 
     textInputStyle2: {
