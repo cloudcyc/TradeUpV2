@@ -64,9 +64,9 @@ const styles = StyleSheet.create({
       flex:1,
     },
     row:{
-        flexDirection: 'row',
-        justifyContent:'space-between',
-        alignItems:'center',
+        // flexDirection: 'row',
+        // justifyContent:'space-between',
+        // alignItems:'center',
         paddingLeft:10,
         paddingRight:10,
         
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     price:{
       marginTop:10,
       fontSize:20,
-      color:"#dc2f02",
+      // color:"#dc2f02",
       fontWeight:'bold',
       paddingBottom:5
     },
