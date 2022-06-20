@@ -166,8 +166,8 @@ const styles = StyleSheet.create({
     },
 
     roundcard: {
-        width: 165,
-        height: 100,
+        width: 145,
+        height: 90,
         justifyContent: 'center',
         borderRadius: 20,
         backgroundColor: 'white',
