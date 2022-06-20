@@ -5,6 +5,37 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 Ionicons.loadFont();
 
 function AdminLocation({ navigation }){
+
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
+    const [centreList, setcentreList] = React.useState([]);
+    const [search, setNewSearch] = React.useState("");
+    const getActiveCentreAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres';
+    const getCentreList = () => {
+        fetch(getActiveCentreAPI).then((response) => response.json()).then((json) => { 
+            setcentreList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    const handleSearchChange = (text) => {
+        setNewSearch(text)
+        
+      };
+    const filteredCentre = !search
+    ? centreList
+    : centreList.filter((filterCentre) =>
+        filterCentre.centreAddress.toLowerCase().includes(search.toLowerCase())
+      );
+
+    React.useEffect(() => {
+        if(isFocused){ 
+            getCentreList();
+        }
+        
+        
+    },[navigation, isFocused]);
+
     return(
         <View style={styles.root}>
 
@@ -12,7 +43,9 @@ function AdminLocation({ navigation }){
                 
                 <View style={styles.containerSearch}>
                     <Ionicons name='search-outline' size={25} color='grey' style={{paddingLeft:5,paddingRight:5}} />
-                    <TextInput placeholder='Search Location Name'/>
+                    <TextInput placeholder='Search Location Name'
+                        onChangeText ={(text) => handleSearchChange(text)}
+                    />
                 </View>
 
                 <Ionicons name='person-circle-outline' size={40} color='#00b4d8' style={{paddingLeft:5}} onPress={() => navigation.navigate('Profile')}/>
@@ -20,32 +53,36 @@ function AdminLocation({ navigation }){
             </View>
 
         <View>
+        <FlatList 
+                        data={filteredCentre}
+                        keyExtractor= {(key) => {
+                            return key.centreID;
+                        }}
+                        ItemSeparatorComponent={() => {
+                            return (
+                                <View style={styles.separator}/>
+                            )
+                        }}
+                        renderItem={({item}) => {
+                            return (
 
-        <TouchableOpacity
-            onPress={() => navigation.navigate('AdminLocationDetails')}
-            style={styles.roundButton}>
-            <Image style={styles.icon} source={{
-            uri:
-                'https://s1.cdn.autoevolution.com/images/news/google-maps-is-getting-a-feature-that-just-makes-sense-these-days-150219_1.jpg',
-            }}/>
-            <Text style={styles.locationtitle}>Pavilion Kuala Lumpur</Text>
-            <Text style={styles.locationtitle2}>Phone:      03-2118 8833</Text>
-            <Text style={styles.locationtitle2}>Location:  Lot 5.100.00 Level 5, Pavilion Elite</Text>
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate('AdminLocationDetails', item)}
+                                            style={styles.roundButton}>
+                                            <Image style={styles.icon} source={{
+                                            uri:
+                                                'https://tradeups3.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[item.centreID]+'.jpg',
+                                            }}/>
+                                                <Text style={styles.locationtitle}>{item.centreName}</Text>
+                                                <Text style={styles.locationtitle2}>Location:  {item.centreAddress}</Text>
+                                                <Text style={styles.locationtitle2}>Status:  {item.centreStatus}</Text>
 
 
-        </TouchableOpacity>
-
-        <TouchableOpacity
-            onPress={() => navigation.navigate('AdminLocationDetails')}
-            style={styles.roundButton}>
-            <Image style={styles.icon} source={{
-            uri:
-                'https://s1.cdn.autoevolution.com/images/news/google-maps-is-getting-a-feature-that-just-makes-sense-these-days-150219_1.jpg',
-            }}/>
-            <Text style={styles.locationtitle}>KLCC Malaysia</Text>
-            <Text style={styles.locationtitle2}>Phone:      03-2382 2828</Text>
-            <Text style={styles.locationtitle2}>Location:  Lot 316-A, Level 3</Text>
-        </TouchableOpacity> 
+                                        </TouchableOpacity>
+                                    )
+                        }}
+            >
+            </FlatList> 
 
         </View>
 
