@@ -41,17 +41,17 @@ function AdminLocationDetails ({navigation}) {
                 <View style={[styles.bottomView]}>
 
                     <TouchableOpacity
-                        style={styles.loginScreenButton}
-                        onPress={openCoordinate}
-                        underlayColor='#fff'>
-                        <Text style={styles.loginText}>View in Map</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
                         style={styles.loginScreenButton2}
                         onPress={() => navigation.navigate('AdminEditLocation', route.params)}
                         underlayColor='#fff'>
                         <Text style={styles.loginText}>Edit Details</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.loginScreenButton}
+                        onPress={openCoordinate}
+                        underlayColor='#fff'>
+                        <Text style={styles.loginText}>View in Map</Text>
                     </TouchableOpacity>
                 
                 </View>
@@ -167,7 +167,20 @@ const styles = StyleSheet.create({
         borderRadius:10,
         borderWidth: 1,
         borderColor: '#fff',
-        width:'100%',
+        width:'50%',
+        height:45,
+        marginBottom:50
+    },
+
+    loginScreenButton2:{
+        marginTop:30,
+        paddingTop:10,
+        paddingBottom:10,
+        backgroundColor:'#0096c7',
+        borderRadius:10,
+        borderWidth: 1,
+        borderColor: '#fff',
+        width:'50%',
         height:45,
         marginBottom:50
     },
@@ -189,6 +202,10 @@ const styles = StyleSheet.create({
         marginBottom:20,
         flexDirection:'row', 
         justifyContent: 'center',
+    },
+
+    bottomView:{
+        flexDirection:'row'
     }
 
 });
