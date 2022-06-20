@@ -1,43 +1,54 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import { useIsFocused } from "@react-navigation/native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 Ionicons.loadFont();
 
 function AdminShop({ navigation }){
+  const isFocused = useIsFocused(); //used to refresh upon entering new screen
+  const [sellList, setsellList] = React.useState([]);
+  const [search, setNewSearch] = React.useState("");
+  const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Sell';
+  const getSellList = () => {
+      fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+        setsellList(json);
+      }).catch((error) => {
+          console.error(error);
+      });
+  }
 
-    const SampleProduct = [{
-        ProductName: "Iphone 13", Name: "John Sandford", Price:"RM888", product_image:
-        "https://www.igeeksblog.com/wp-content/uploads/2021/08/black-wallpaper-for-iphone-10-675x450.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 14", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 17", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 18", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 19", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 20", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }];
+  const handleSearchChange = (text) => {
+      setNewSearch(text)
+      
+    };
+  const filteredSell = !search
+  ? sellList
+  : sellList.filter((filteredSell) =>
+    filteredSell.centreAddress.toLowerCase().includes(search.toLowerCase())
+    );
 
+  React.useEffect(() => {
+      if(isFocused){ 
+        getSellList();
+      }
+      
+      
+  },[navigation, isFocused]);
+
+  const Statuscolor = (inputStatus) => {
+    if (inputStatus == "Active"){
+      return(
+        <Text style={styles.greenText}>{inputStatus}</Text>
+      )
+    }
+    else
+    {
+      return(
+        <Text style={styles.redText}>{inputStatus}</Text>
+      )
+    }
+  }
 
     return(
         <SafeAreaView style={styles.root}>
@@ -52,7 +63,10 @@ function AdminShop({ navigation }){
             </View>
 
             <FlatList
-            data={SampleProduct}
+            data={filteredSell}
+            keyExtractor= {(key) => {
+                            return key.itemID;
+                        }}
             style={styles.list}
             numColumns={2}
             contentContainerStyle={styles.listContainer}
@@ -60,11 +74,18 @@ function AdminShop({ navigation }){
                 return (
 
                     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'AdminShopProduct', item)}>
-                        <Image style={styles.userImage} source={{uri:item.product_image}}/>
+                        <Image style={styles.userImage} source={{uri: 'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
                         <View style={styles.cardFooter}>
-                            <View >
-                            <Text style={styles.name}>{item.ProductName}</Text>
-                            <Text style={styles.position}>{item.Price}</Text>
+                            <View style={{alignItems:"center", justifyContent:"center"}}>
+                            <Text style={styles.name}>{item.itemName}</Text>
+                            <Text style={styles.position}>RM {item.itemPrice}</Text>
+                            { 
+                              Statuscolor(item.itemStatus)
+                            }
+                            
+                            {/* <TouchableOpacity style={styles.followButton}>
+                                <Text style={styles.followButtonText}>View</Text>  
+                            </TouchableOpacity> */}
                         </View>
                         </View>
                     </TouchableOpacity>
@@ -185,8 +206,8 @@ const styles = StyleSheet.create({
 
       userImage:{
         height: 120,
-        width: 120,
-        borderRadius:60,
+        width: '100%',
+        // borderRadius:60,
         alignSelf:'center',
       },
 
@@ -201,9 +222,26 @@ const styles = StyleSheet.create({
         fontSize:14,
         flex:1,
         alignSelf:'flex-start',
-        color:"#dc2f02",
         paddingTop:5,
         fontWeight:'500'
+      },
+
+      redText:{
+        fontSize:14,
+        flex:1,
+        alignSelf:'center',
+        paddingTop:5,
+        fontWeight:'500',
+        color:"#dc2f02"
+      },
+
+      greenText:{
+        fontSize:14,
+        flex:1,
+        alignSelf:'center',
+        paddingTop:5,
+        fontWeight:'500',
+        color:"#02DC13"
       },
 
       followButton: {
