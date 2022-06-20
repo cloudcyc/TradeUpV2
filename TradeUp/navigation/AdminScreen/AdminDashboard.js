@@ -11,22 +11,14 @@ function AdminDashboard ({navigation}) {
 
         <ScrollView style={styles.root}>
 
-            <View style={styles.row3}>
-                <View>
-                    <View style={styles.nameContainer}>
-                    <Text style={styles.title}>Welcome Back,</Text>
-                    </View>
-                    <View style={styles.end}>
-                    <Text style={styles.title2}>Username</Text>
-                    </View>
-                </View>
-                <Ionicons name='person-circle-outline' size={40} color='#FFF' source={{uri: 'https://cdn-icons-png.flaticon.com/512/758/758645.png'}} onPress={() => navigation.navigate('AdminProfile')}/>
-            </View>
+            <Text style={styles.title}>Your Dashboard</Text>
+            <Text style={styles.title2}>Monitor Your App Here In Simple View</Text>
 
             <View style={styles.container}>
 
                 <View style={styles.root2}>
 
+                <View style={{backgroundColor:'white', borderRadius:15}}>
                 <Text style={styles.title3}>Marketplace:</Text>
 
                 <View style={styles.separator}></View>
@@ -47,6 +39,9 @@ function AdminDashboard ({navigation}) {
                         </TouchableOpacity>
 
                     </View>
+                    </View>
+
+                    <View style={{backgroundColor:'white', borderRadius:15, marginTop:10}}>
 
                     <Text style={styles.title3}>Shop:</Text>
 
@@ -68,12 +63,15 @@ function AdminDashboard ({navigation}) {
                             </TouchableOpacity>
 
                         </View>
+                        </View>
+
+                        <View style={{backgroundColor:'white', borderRadius:15, marginTop:10}}>
 
                         <Text style={styles.title3}>Users:</Text>
 
                         <View style={styles.separator}></View>
 
-                        <View style={styles.row}>
+                        <View style={styles.row2}>
 
                             <TouchableOpacity style={styles.roundcard} onPress={() => navigation.navigate('AdminManageUserScreen')}>
 
@@ -82,6 +80,7 @@ function AdminDashboard ({navigation}) {
 
                             </TouchableOpacity>
 
+                        </View>
                         </View>
 
                 </View>
@@ -93,8 +92,7 @@ function AdminDashboard ({navigation}) {
 const styles = StyleSheet.create({
 
     root:{
-        backgroundColor: '#00BFFF',
-        height:'100%',
+        backgroundColor: '#dff0fb',
         paddingTop: 50,
     },
 
@@ -102,7 +100,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginRight:20
+        marginRight:20,
     },
 
     separator:{
@@ -114,8 +112,25 @@ const styles = StyleSheet.create({
         marginLeft:5
     },
 
+    title:{
+        marginLeft:20,
+        fontSize:25,
+        fontWeight:'500',
+        paddingTop:10,
+        color:'#6c757d'
+    },
+
+    title2:{
+        marginLeft:20,
+        fontSize:15,
+        fontWeight:'500',
+        paddingTop:10,
+        color:'#6c757d'
+    },
+
+
     title3:{
-        marginLeft:5,
+        marginLeft:10,
         fontSize:18,
         fontWeight:'500',
         paddingTop:10
@@ -127,24 +142,8 @@ const styles = StyleSheet.create({
         width: 270,
     },
 
-    title:{
-        paddingLeft:20,
-        fontSize: 15,
-        color: 'white',
-        marginBottom:5,
-    },
-
-    title2:{
-        paddingLeft:20,
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: 'white',
-        paddingBottom:20,
-    },
-
     container:{
-        backgroundColor: '#E9ECEF',
-        borderRadius: 40,
+        backgroundColor: '#dff0fb',
         paddingLeft:20,
         paddingRight:30,
         height: '1000%',
@@ -162,7 +161,13 @@ const styles = StyleSheet.create({
 
     row:{
         flexDirection: 'row',
+        justifyContent: 'space-evenly',
+    },
+
+    row2:{
+        flexDirection: 'row',
         justifyContent: 'space-between',
+        marginLeft:15
     },
 
     roundcard: {
@@ -170,7 +175,7 @@ const styles = StyleSheet.create({
         height: 90,
         justifyContent: 'center',
         borderRadius: 20,
-        backgroundColor: 'white',
+        backgroundColor: '#f2f6f9',
         marginBottom: 10,
     },
 
