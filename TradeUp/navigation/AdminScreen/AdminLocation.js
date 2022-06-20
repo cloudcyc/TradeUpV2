@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     root:{
         padding:20,
         height:'100%',
-        paddingTop:40,
+        // paddingTop:40,
     },
 
     roundButton: {

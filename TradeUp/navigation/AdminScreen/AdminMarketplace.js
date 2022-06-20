@@ -10,7 +10,7 @@ function AdminMarketplace({ navigation }){
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
   const [tradeList, settradeList] = React.useState([]);
   const [search, setNewSearch] = React.useState("");
-  const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Trade';
+  const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Trade&inputUserRole=Admin';
   const gettradeList = () => {
       fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
         settradeList(json);
@@ -26,7 +26,7 @@ function AdminMarketplace({ navigation }){
   const filteredTrade = !search
   ? tradeList
   : tradeList.filter((filteredTrade) =>
-  filteredTrade.centreAddress.toLowerCase().includes(search.toLowerCase())
+  filteredTrade.itemName.toLowerCase().includes(search.toLowerCase())
     );
 
   React.useEffect(() => {
@@ -58,7 +58,9 @@ function AdminMarketplace({ navigation }){
                 
                 <View style={styles.containerSearch}>
                     <Ionicons name='search-outline' size={25} color='grey' style={{paddingLeft:5,paddingRight:5}} />
-                    <TextInput placeholder='Search Product Name'/>
+                    <TextInput placeholder='Search Product Name'
+                      onChangeText ={(text) => handleSearchChange(text)}
+                    />
                 </View>
 
             </View>

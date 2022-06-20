@@ -65,7 +65,7 @@ function AdminDashboard ({navigation}) {
                         </View>
                         </View>
 
-                        <View style={{backgroundColor:'white', borderRadius:15, marginTop:10}}>
+                        <View style={{backgroundColor:'white', borderRadius:15, marginTop:10, marginBottom:25}}>
 
                         <Text style={styles.title3}>Users:</Text>
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
 
     root:{
         backgroundColor: '#dff0fb',
-        paddingTop: 50,
+        // paddingTop: 50,
     },
 
     row3:{

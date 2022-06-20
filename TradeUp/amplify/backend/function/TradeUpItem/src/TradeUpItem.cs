@@ -64,14 +64,37 @@ namespace TradeUpItem
                             Body = JsonConvert.SerializeObject(items)
                         };
                     }
-                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputItemMode"))
+                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputItemMode") && request.QueryStringParameters.ContainsKey("inputUserRole")) 
                     {
-                        var items = await itemProvider.GetActiveItemByModeAsync(request.QueryStringParameters["inputItemMode"]);
-                        return new APIGatewayProxyResponse
-                        {
-                            StatusCode = 200,
-                            Body = JsonConvert.SerializeObject(items)
-                        };
+                        switch (request.QueryStringParameters["inputUserRole"]) {
+                            case "Admin":
+                                var AdminItems = await itemProvider.AdminGetAllItemByModeAsync(request.QueryStringParameters["inputItemMode"]);
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 200,
+                                    Body = JsonConvert.SerializeObject(AdminItems)
+                                };
+                            break;
+
+                            case "Member":
+                                var MemberItems = await itemProvider.GetActiveItemByModeAsync(request.QueryStringParameters["inputItemMode"]);
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 200,
+                                    Body = JsonConvert.SerializeObject(MemberItems)
+                                };
+                            break;
+
+                            case "":
+                                var AllActiveItemsOnly = await itemProvider.GetActiveItemByModeAsync(request.QueryStringParameters["inputItemMode"]);
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 200,
+                                    Body = JsonConvert.SerializeObject(AllActiveItemsOnly)
+                                };
+                            break;
+                        }  
+                        
                     }
                     break;
                 case "POST":

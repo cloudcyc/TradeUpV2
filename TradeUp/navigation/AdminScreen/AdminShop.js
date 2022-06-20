@@ -9,7 +9,7 @@ function AdminShop({ navigation }){
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
   const [sellList, setsellList] = React.useState([]);
   const [search, setNewSearch] = React.useState("");
-  const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Sell';
+  const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Sell&inputUserRole=Admin';
   const getSellList = () => {
       fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
         setsellList(json);
@@ -25,7 +25,7 @@ function AdminShop({ navigation }){
   const filteredSell = !search
   ? sellList
   : sellList.filter((filteredSell) =>
-    filteredSell.centreAddress.toLowerCase().includes(search.toLowerCase())
+    filteredSell.itemName.toLowerCase().includes(search.toLowerCase())
     );
 
   React.useEffect(() => {
@@ -57,7 +57,9 @@ function AdminShop({ navigation }){
                 
                 <View style={styles.containerSearch}>
                     <Ionicons name='search-outline' size={25} color='grey' style={{paddingLeft:5,paddingRight:5}} />
-                    <TextInput placeholder='Search Product Name'/>
+                    <TextInput placeholder='Search Product Name'
+                      onChangeText ={(text) => handleSearchChange(text)}
+                    />
                 </View>
 
             </View>
