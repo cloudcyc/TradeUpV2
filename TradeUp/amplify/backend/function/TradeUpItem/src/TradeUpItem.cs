@@ -102,41 +102,62 @@ namespace TradeUpItem
                     else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("NewImage") && request.QueryStringParameters.ContainsKey("inputItemID"))
                     {
                         switch (request.QueryStringParameters["NewImage"]) {
-                            case "TRUE":
-                                response.StatusCode = 200;
-                            // if (await itemProvider.DeleteImageByIDAsync(request.QueryStringParameters["inputItemID"]))
-                            // {
-                            //     return new APIGatewayProxyResponse 
-                            //     { 
-                            //         StatusCode = 400
-                            //     };
-                            // }
-                            // else{
-                            //     if (item == null){
-                            //         return new APIGatewayProxyResponse {StatusCode = 400};
-                            //     }
-                            //     else if (item != null)
-                            //     {
-                            //         if (await itemProvider.AddItemWithImageAsync(item))
-                            //             {
-                            //                 return new APIGatewayProxyResponse 
-                            //                 { 
-                            //                     StatusCode = 200
-                            //                 };
-                            //             }
-                            //             else
-                            //             {
-                            //                 return new APIGatewayProxyResponse
-                            //                 {
-                            //                     StatusCode = 400
-                            //                 };
-                            //             }
-                            //     }
-                            // }
-                                break;
-                            case "FALSE":
-                                response.StatusCode = 201;
-                                break;
+                            case "True":   
+                                if (await itemProvider.DeleteImageByIDAsync(request.QueryStringParameters["inputItemID"]))
+                                {
+                                    return new APIGatewayProxyResponse 
+                                    { 
+                                        StatusCode = 400
+                                    };
+                                }
+                                else
+                                {
+                                    if (item == null)
+                                    {
+                                        return new APIGatewayProxyResponse {StatusCode = 400};
+                                    }
+                                    else if (item != null)
+                                    {
+                                        if (await itemProvider.AddItemWithImageAsync(item))
+                                        {
+                                            return new APIGatewayProxyResponse 
+                                            { 
+                                                StatusCode = 200
+                                            };
+                                        }
+                                        else
+                                        {
+                                            return new APIGatewayProxyResponse
+                                            {
+                                                StatusCode = 400
+                                            };
+                                        }
+                                    }
+                                }
+                            break;
+                            case "False":
+                                if (item == null)
+                                {
+                                    return new APIGatewayProxyResponse {StatusCode = 400};
+                                }
+                                else if (item != null)
+                                {
+                                    if (await itemProvider.AddItemWithoutImageAsync(item))
+                                        {
+                                            return new APIGatewayProxyResponse 
+                                            { 
+                                                StatusCode = 200
+                                            };
+                                        }
+                                        else
+                                        {
+                                            return new APIGatewayProxyResponse
+                                            {
+                                               StatusCode = 400
+                                            };
+                                        }
+                                }
+                            break;
                         }
                         
                     }
