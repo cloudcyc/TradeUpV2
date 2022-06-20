@@ -9,7 +9,7 @@ function AdminDashboard ({navigation}) {
    
     return(
 
-        <View style={styles.root}>
+        <ScrollView style={styles.root}>
 
             <View style={styles.row3}>
                 <View>
@@ -25,7 +25,7 @@ function AdminDashboard ({navigation}) {
 
             <View style={styles.container}>
 
-                <ScrollView style={styles.root2}>
+                <View style={styles.root2}>
 
                 <Text style={styles.title3}>Marketplace:</Text>
 
@@ -84,9 +84,9 @@ function AdminDashboard ({navigation}) {
 
                         </View>
 
-                </ScrollView>
+                </View>
             </View>
-        </View>
+        </ScrollView>
     )
 };
 
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         borderRadius: 40,
         paddingLeft:20,
         paddingRight:30,
-        height: '100%',
+        height: '1000%',
     },
 
     end: {

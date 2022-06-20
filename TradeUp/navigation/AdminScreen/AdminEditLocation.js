@@ -2,11 +2,14 @@ import React,{useState} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Picker } from "@react-native-picker/picker";
 import { event } from 'react-native-reanimated';
 
 function AdminEditLocation ({navigation}) {
 
     const [image, setImage] = useState('https://cdn-icons-png.flaticon.com/512/401/401061.png');
+    const [NewCentreStatus, setNewCentreStatus] = useState(null);
+
 
     const choosePhotoFromLibrary = () => {
         ImagePicker.openPicker({
@@ -132,6 +135,24 @@ function AdminEditLocation ({navigation}) {
                         </TouchableOpacity>
                     </View>
                 </View>
+
+                <View>
+
+                    <Text style={styles.title2}>Current Status:</Text>
+                    <Picker
+                        selectedValue={NewCentreStatus}
+                        onValueChange={(value, index) => setNewCentreStatus(value)}
+                        mode="dropdown" // Android only
+                        style={styles.picker}>
+                        
+
+                        <Picker.Item label="Select location status to update" value= {null} />
+                        <Picker.Item label="Active" value="Active" />
+                        <Picker.Item label="Inactive" value="Inactive" />
+
+                    </Picker>
+
+            </View>
 
                 <TouchableOpacity
                     style={styles.loginScreenButton}
@@ -314,6 +335,13 @@ const styles = StyleSheet.create({
           paddingLeft : 10,
           paddingRight : 10
     },
+
+    picker: {
+        marginVertical: 10,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: "#666",
+      },
 
 })
 
