@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
+import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground, Alert} from 'react-native';
 import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -25,7 +25,46 @@ function AdminMarketplaceProduct({ navigation }){
       }
       
       
-  },[navigation, isFocused]);
+    },[navigation, isFocused]);
+
+    const deleteItemFunction = async(inputItemID, inputUserID) => {
+      var deleteUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+ inputItemID + '&inputUserID='+ inputUserID;
+      console.log(deleteUserAPI);
+      let res = await fetch(deleteUserAPI, {
+        method: "DELETE"
+      }).then((res) => {
+        if (res.status == 200) {
+                alert("Item deleted successfully.");
+                navigation.navigate('AdminTabs');
+              } else {
+                alert("Item delete failed. Error:" + res.status)
+                console.log("Some error occured: ");
+                console.log(res.status)
+                console.log(res)
+              }
+      });
+    };
+
+    const showAlertBox = (inputItemID,inputUserID,inputUserName) => {
+      return Alert.alert(
+        "Are your sure?",
+        "Are you sure you want to delete this Item by "+inputUserName+" ?" ,
+        [
+          // The "Yes" button
+          {
+            text: "Yes",
+            onPress: () => {
+              deleteItemFunction(inputItemID,inputUserID);
+            },
+          },
+          // The "No" button
+          // Does nothing but dismiss the dialog when tapped
+          {
+            text: "No",
+          },
+        ]
+      );
+    };
 
 
     return(
@@ -40,12 +79,12 @@ function AdminMarketplaceProduct({ navigation }){
 
           <View style={styles.separator}></View>
           <View style={styles.addToCarContainer}>
-          <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('AdminTabs')}>
+          <TouchableOpacity style={styles.shareButton2} onPress={() => showAlertBox(route.params.itemID,route.params.userID, userName)}>
               <Text style={styles.shareButtonText}>Delete</Text>  
             </TouchableOpacity>
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('AdminEditMarketplaceProduct')}>
+            {/* <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('AdminEditMarketplaceProduct')}>
               <Text style={styles.shareButtonText}>Edit Details</Text>  
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View> 
         </ScrollView>
       </View>

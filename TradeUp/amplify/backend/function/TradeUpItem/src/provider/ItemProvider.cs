@@ -253,13 +253,13 @@ namespace TradeUpItem
             var response = await dynamoDB.PutItemAsync(request);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
-            public async Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID){
+            public async Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID, String inputUserID){
             var request = new DeleteItemRequest
                 {
                     TableName = "TradeUpItems-dev",
                     Key = new Dictionary<string,AttributeValue>() {
-                         { "inputItemID", new AttributeValue { S = inputItemID } },
-                        //  { "userID", new AttributeValue { S = inputUserID } }
+                         { "itemID", new AttributeValue { S = inputItemID } },
+                         { "userID", new AttributeValue { S = inputUserID } }
                      },
                 };
             var response = await dynamoDB.DeleteItemAsync(request);

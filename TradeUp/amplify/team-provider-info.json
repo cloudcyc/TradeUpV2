@@ -23,7 +23,7 @@
         },
         "TradeUpItem": {
           "deploymentBucketName": "amplify-tradeup-dev-22836-deployment",
-          "s3Key": "amplify-builds/TradeUpItem-6f456369767335386359-build.zip"
+          "s3Key": "amplify-builds/TradeUpItem-6f2f666d2b66515a7637-build.zip"
         }
       }
     }

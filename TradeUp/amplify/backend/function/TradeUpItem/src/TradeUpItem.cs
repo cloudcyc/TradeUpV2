@@ -196,7 +196,7 @@ namespace TradeUpItem
                 case "DELETE":
                     if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputItemID") && request.QueryStringParameters.ContainsKey("inputUserID") )
                     {
-                        if (await itemProvider.DeleteSelectedItemWithoutImageAsync(request.QueryStringParameters["inputItemID"],request.QueryStringParameters["inputUserID"]))
+                        if (await itemProvider.DeleteSelectedItemWithImageAsync(request.QueryStringParameters["inputItemID"],request.QueryStringParameters["inputUserID"]))
                         {
                             return new APIGatewayProxyResponse 
                             { 

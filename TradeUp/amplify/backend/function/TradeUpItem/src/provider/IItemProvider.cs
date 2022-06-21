@@ -10,7 +10,7 @@ namespace TradeUpItem
         Task<ItemModel[]> GetActiveItemByModeAndCategoryUserIDExistAsync(string inputItemMode, string inputItemStatus, string inputUserID);
         Task<bool> AddItemWithImageAsync (ItemModel item);
         Task<bool> AddItemWithoutImageAsync (ItemModel item);
-        Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID);
+        Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID, String inputUserID);
         Task<bool> DeleteSelectedItemWithoutImageAsync(String inputItemID, String inputUserID);
         Task<bool> DeleteImageByIDAsync(String inputItemID);
     }
