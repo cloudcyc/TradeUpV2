@@ -6,7 +6,7 @@ function RequestDetailScreen ({navigation}) {
 
     const {height} = useWindowDimensions();
     const route = useRoute();
-    var postUpdateCentreAPI = 'https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres?';
+    var postUpdateCentreAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres?';
 
     const acceptRequest = async () => {
         postUpdateCentreAPI = postUpdateCentreAPI+'inputCurrentCentreStatus='+ route.params.centreStatus +'&inputNewCentreStatus=Active&inputCentreID='+route.params.centreID;
@@ -72,7 +72,7 @@ function RequestDetailScreen ({navigation}) {
         <View>
 
             <View style={styles.root}>
-                <Image  source={{uri: 'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg'}}
+                <Image  source={{uri: 'https://tradeups3.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg'}}
                         style={{width: 400, height: 250}}
                         resizeMode='stretch' />        
             </View>

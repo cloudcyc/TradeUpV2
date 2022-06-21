@@ -36,6 +36,22 @@ function AdminLocation({ navigation }){
         
     },[navigation, isFocused]);
 
+    const Statuscolor = (inputStatus) => {
+        if (inputStatus == "Active"){
+          return(
+            
+            <Text style={styles.greenlocationtitle2}>Status:  {inputStatus}</Text>
+          )
+        }
+        else
+        {
+          return(
+            
+            <Text style={styles.redlocationtitle2}>Status:  {inputStatus}</Text>
+          )
+        }
+      }
+
     return(
         <View style={styles.root}>
 
@@ -75,7 +91,7 @@ function AdminLocation({ navigation }){
                                             }}/>
                                                 <Text style={styles.locationtitle}>{item.centreName}</Text>
                                                 <Text style={styles.locationtitle2}>Location:  {item.centreAddress}</Text>
-                                                <Text style={styles.locationtitle2}>Status:  {item.centreStatus}</Text>
+                                                {Statuscolor(item.centreStatus)}
 
 
                                         </TouchableOpacity>
@@ -162,6 +178,18 @@ const styles = StyleSheet.create({
         padding:5,
         paddingTop: 5,
         color:'grey'
+    },
+    redlocationtitle2: {
+        fontWeight:'500',
+        padding:5,
+        paddingTop: 5,
+        color:"#dc2f02"
+    },
+    greenlocationtitle2: {
+        fontWeight:'500',
+        padding:5,
+        paddingTop: 5,
+        color:"#02DC13"
     },
 
     roundButton2: {

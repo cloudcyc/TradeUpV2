@@ -6,7 +6,7 @@ Ionicons.loadFont();
 
 function AdminProfile({ navigation }){
     return(
-        <View>
+        <View style={styles.container}>
             <View style = {styles.Header}>
                 <Image source={{ uri: "https://static.wikia.nocookie.net/pingu/images/9/97/KFCLogo.png/revision/latest?cb=20170428071912" }} style={styles.pic} />
                 <View style={styles.ProfileDetail}>
@@ -65,6 +65,9 @@ function AdminProfile({ navigation }){
 }
 
 const styles = StyleSheet.create({
+    container:{
+        flex:1,
+      },
 
     Header:{
         paddingTop:40,

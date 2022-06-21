@@ -55,7 +55,7 @@ function AddNewRequest ({navigation}) {
 
     const addRequest = async () => {
         
-        let res = await fetch("https://3yerh8al29.execute-api.ap-southeast-1.amazonaws.com/dev/centres", {
+        let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres", {
                 method: "POST",
                 body: JSON.stringify({
                     centreID: 'cid' + uuid.v4(),
@@ -84,7 +84,7 @@ function AddNewRequest ({navigation}) {
     return(
         <ScrollView style={styles.root}>
             
-            <Text style={styles.title}>Location Request Form</Text>
+            <Text style={styles.title}>Centre Request Form</Text>
             <Text style={styles.description}>Feel free to let us know about location details</Text>
 
             <View>
@@ -104,13 +104,6 @@ function AddNewRequest ({navigation}) {
             <View>
                 <Text style={styles.title2}>Centre Address:</Text>
                 <View style={styles.sectionStyle}>
-                    {/* <Image
-                        source={{
-                        uri:
-                            'https://cdn-icons.flaticon.com/png/512/3293/premium/3293303.png?token=exp=1652674900~hmac=499ef48a9e78c075dc6754cf36c5dc02',
-                        }}
-                        style={styles.imageStyle}
-                    /> */}
                     <Ionicons name='location-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
@@ -125,13 +118,6 @@ function AddNewRequest ({navigation}) {
                 <Text style={styles.title2}>Centre Coordinate</Text>
                 <Text style={styles.title3}>Latitude:</Text>
                 <View style={styles.sectionStyle}>
-                    {/* <Image
-                        source={{
-                        uri:
-                            'https://cdn-icons.flaticon.com/png/512/1151/premium/1151429.png?token=exp=1652674708~hmac=5c4f3b8bb218142273ab2cc455fd4169',
-                        }}
-                        style={styles.imageStyle}
-                    /> */}
                     <Ionicons name='navigate-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
@@ -143,13 +129,6 @@ function AddNewRequest ({navigation}) {
                 </View>
                 <Text style={styles.title3}>Longitude:</Text>
                 <View style={styles.sectionStyle}>
-                    {/* <Image
-                        source={{
-                        uri:
-                            'https://cdn-icons.flaticon.com/png/512/1151/premium/1151429.png?token=exp=1652674708~hmac=5c4f3b8bb218142273ab2cc455fd4169',
-                        }}
-                        style={styles.imageStyle}
-                    /> */}
                     <Ionicons name='navigate-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
@@ -164,13 +143,6 @@ function AddNewRequest ({navigation}) {
             <View>
                 <Text style={styles.title2}>Centre Description</Text>
                 <View style={styles.sectionStyle}>
-                    {/* <Image
-                        source={{
-                        uri:
-                            'https://cdn-icons.flaticon.com/png/512/3293/premium/3293303.png?token=exp=1652674900~hmac=499ef48a9e78c075dc6754cf36c5dc02',
-                        }}
-                        style={styles.imageStyle}
-                    /> */}
                     <Ionicons name='document-text-outline' size={25} />
                     <TextInput
                         style={styles.textInputStyle}
