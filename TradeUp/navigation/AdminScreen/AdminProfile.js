@@ -44,7 +44,7 @@ function AdminProfile({ navigation }){
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.Signoutbutton}>
+                <TouchableOpacity style={styles.Signoutbutton} onPress={() => navigation.navigate('HomeTabs')}>
                   <View style={styles.row}>
                       <Ionicons name='power-outline' size={35} color='#FFF' />
                       <Text style={styles.SignoutText}>Sign Out</Text>
