@@ -4,12 +4,24 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Picker } from "@react-native-picker/picker";
 import { event } from 'react-native-reanimated';
+import { useRoute } from "@react-navigation/native";
+import ImgToBase64 from 'react-native-image-base64';
 
 function AdminEditLocation ({navigation}) {
+    const route = useRoute();
 
-    const [image, setImage] = useState('https://cdn-icons-png.flaticon.com/512/401/401061.png');
+    const [centreID,setcentreID] = useState(route.params.centreID);
+    const [centreName,setcentreName] = useState(route.params.centreName);
+    const [centreDesc,setcentreDesc] = useState(route.params.centreDescription);
+    const [centreAddress,setcentreAddress] = useState(route.params.centreAddress);
+    const [centreLatitude,setcentreLatitude] = useState(route.params.centreCoordinate[1]);
+    const [centreLongitude,setcentreLongitude] = useState(route.params.centreCoordinate[0]);
+    const [createdTime,setcreatedTime] = useState(route.params.createdTime);
+    const [currentCentreStatus, setCurrentCentreStatus] = useState(route.params.centreStatus);
     const [NewCentreStatus, setNewCentreStatus] = useState(null);
-
+    const [image, setImage] = useState('https://tradeups3.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg');
+    const [uploadImage, setuploadImage] = useState(null);
+    var postUpdateCentreAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres?';
 
     const choosePhotoFromLibrary = () => {
         ImagePicker.openPicker({
@@ -18,15 +30,103 @@ function AdminEditLocation ({navigation}) {
             cropping: true
           }).then(image => {
             console.log(image);
+            ImgToBase64.getBase64String(image.path)
+                .then(base64String => 
+                    setuploadImage(base64String)
+                    )
+                .catch(err => 
+                    alert("Something wrong here. Error: " + err)
+                    );
             setImage(image.path);
           });
     };
+
+    const updateCentre = async () => {
+        //inputCurrentCentreStatus=Inactive& inputNewCentreStatus=Active& inputCentreID=cid0003
+        if (currentCentreStatus == NewCentreStatus || NewCentreStatus == null)
+        {
+            postUpdateCentreAPI = postUpdateCentreAPI+'inputCurrentCentreStatus='+currentCentreStatus+'&inputCentreID='+centreID;
+            //Status Never changed
+            if (uploadImage != null){
+                //New Image
+                postUpdateCentreAPI = postUpdateCentreAPI+'&NewImage=True';
+                var data = {
+                    centreID: centreID,
+                    centreName: centreName,
+                    centreAddress: centreAddress,
+                    centreCoordinate: [ centreLatitude, centreLongitude ],
+                    centreDescription: centreDesc,
+                    centreStatus: currentCentreStatus,
+                    createdTime: createdTime,
+                    centreImage: uploadImage
+                }
+                console.log(postUpdateCentreAPI);
+            }else{
+                //No New Image
+                console.log(postUpdateCentreAPI);
+                var data = {
+                    centreID: centreID,
+                    centreName: centreName,
+                    centreAddress: centreAddress,
+                    centreCoordinate: [ centreLatitude, centreLongitude ],
+                    centreDescription: centreDesc,
+                    centreStatus: currentCentreStatus,
+                    createdTime: createdTime
+                }
+                console.log(data);
+            }
+        }
+        else if (currentCentreStatus != NewCentreStatus || NewCentreStatus != null){
+            //Status changed
+            postUpdateCentreAPI = postUpdateCentreAPI+'inputCurrentCentreStatus='+currentCentreStatus+'&inputNewCentreStatus=' + NewCentreStatus +'&inputCentreID='+centreID;
+            if (uploadImage != null){
+                //New Image
+                postUpdateCentreAPI = postUpdateCentreAPI+'&NewImage=True';
+                var data = {
+                    centreID: centreID,
+                    centreName: centreName,
+                    centreAddress: centreAddress,
+                    centreCoordinate: [ centreLatitude, centreLongitude ],
+                    centreDescription: centreDesc,
+                    centreStatus: NewCentreStatus,
+                    createdTime: createdTime,
+                    centreImage: uploadImage
+                }
+            }else{
+                //No New Image
+                var data = {
+                    centreID: centreID,
+                    centreName: centreName,
+                    centreAddress: centreAddress,
+                    centreCoordinate: [ centreLatitude, centreLongitude ],
+                    centreDescription: centreDesc,
+                    centreStatus: NewCentreStatus,
+                    createdTime: createdTime
+                }
+            }
+        }
+        let res = await fetch(postUpdateCentreAPI, {
+            method: "POST",
+            body: JSON.stringify(data),
+          }).then((res) => {
+            if (res.status == 200) {
+                    alert("Centre updated successfully.")
+                    console.log("Item created successfully");
+                    navigation.navigate('AdminTabs')
+                  } else {
+                    alert("Centre update failed. Error:" + res.status)
+                    console.log("Some error occured: ");
+                    console.log(res.status)
+                    console.log(res)
+                  }
+          });
+    }
 
     return(
         <ScrollView style={styles.root}>
 
             <View>
-                <Text style={styles.title2}>Location Name:</Text>
+                <Text style={styles.title2}>Centre Name:</Text>
                 <View style={styles.sectionStyle}>
                     <Ionicons name='business-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
 
@@ -34,30 +134,13 @@ function AdminEditLocation ({navigation}) {
                         style={styles.textInputStyle}
                         placeholder="Enter Location Name Here"
                         underlineColorAndroid="transparent"
+                        value={centreName} onChangeText = {(val) => setcentreName(val)}
                     />
                 </View>
             </View>
 
             <View>
-                <Text style={styles.title2}>Phone Number:</Text>
-                <View style={styles.sectionStyle}>
-                    <Image
-                        source={{
-                        uri:
-                            'https://cdn-icons-png.flaticon.com/128/159/159832.png',
-                        }}
-                        style={styles.imageStyle}
-                    />
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter Contact Number Here"
-                        underlineColorAndroid="transparent"
-                    />
-                </View>
-            </View>
-
-            <View>
-                <Text style={styles.title2}>Address:</Text>
+                <Text style={styles.title2}>Centre Address:</Text>
                 <View style={styles.sectionStyle2}>
                     <Ionicons name='pin-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
 
@@ -66,6 +149,7 @@ function AdminEditLocation ({navigation}) {
                         style={styles.textInputStyle}
                         placeholder="Enter Address Here"
                         underlineColorAndroid="transparent"
+                        value= {centreAddress} onChangeText = {(val) => setcentreAddress(val)}
                     />
                 </View>
             </View>
@@ -81,6 +165,8 @@ function AdminEditLocation ({navigation}) {
                         placeholder="Enter Latitude Here"
                         underlineColorAndroid="transparent"
                         keyboardType='numeric'
+                        value= {centreLatitude}
+                        onChangeText = {(val) => setcentreLatitude(val)}
                     />
                 </View>
             </View>
@@ -96,12 +182,14 @@ function AdminEditLocation ({navigation}) {
                         placeholder="Enter Longitude Here"
                         underlineColorAndroid="transparent"
                         keyboardType='numeric'
+                        value= {centreLongitude}
+                        onChangeText = {(val) => setcentreLongitude(val)}
                     />
                 </View>
             </View>
 
             <View>
-                <Text style={styles.title2}>Open Hours:</Text>
+                <Text style={styles.title2}>Centre Description:</Text>
                 <View style={styles.sectionStyle2}>
                     <Image
                         source={{
@@ -113,8 +201,10 @@ function AdminEditLocation ({navigation}) {
                     <TextInput
                         multiline={true}
                         style={styles.textInputStyle}
-                        placeholder="Enter Opening Hours Of The Location Here"
+                        placeholder="Enter Description"
                         underlineColorAndroid="transparent"
+                        value= {centreDesc}
+                        onChangeText = {(val) => setcentreDesc(val)}
                     />
                 </View>
             </View>
@@ -138,7 +228,7 @@ function AdminEditLocation ({navigation}) {
 
                 <View>
 
-                    <Text style={styles.title2}>Current Status:</Text>
+                    <Text style={styles.title2}>Current Status: {currentCentreStatus}</Text>
                     <Picker
                         selectedValue={NewCentreStatus}
                         onValueChange={(value, index) => setNewCentreStatus(value)}
@@ -156,7 +246,7 @@ function AdminEditLocation ({navigation}) {
 
                 <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('AdminTabs')}
+                    onPress={() => updateCentre()}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Submit</Text>
                 </TouchableOpacity>

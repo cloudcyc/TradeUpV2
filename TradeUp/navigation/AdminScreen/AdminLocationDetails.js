@@ -15,7 +15,7 @@ function AdminLocationDetails ({navigation}) {
     return(
         <View>
             <View style={styles.root}>
-                <Image  source={{uri: 'https://nics3test8860.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg'}}
+                <Image  source={{uri: 'https://tradeups3.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[route.params.centreID]+'.jpg'}}
                         style={{width: 400, height: 250}}
                         resizeMode='stretch' />        
             </View>

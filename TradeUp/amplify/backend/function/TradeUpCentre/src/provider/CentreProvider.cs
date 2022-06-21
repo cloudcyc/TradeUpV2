@@ -163,7 +163,7 @@ namespace TradeUpCentre
             using (var stream = new MemoryStream(ImageBytes)){
                 await client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
                 {
-                                BucketName = "tradeups3/CentreAsset",
+                                BucketName = "tradeups3/DonationCentreAsset",
                                 Key = $"{centre.centreID}.jpg",
                                 ContentType = "image/jpeg",
                                 InputStream = stream,
@@ -230,7 +230,7 @@ namespace TradeUpCentre
             var client = new AmazonS3Client();
             
             var request = new Amazon.S3.Model.DeleteObjectRequest{
-                            BucketName = "tradeups3/CentreAsset",
+                            BucketName = "tradeups3/DonationCentreAsset",
                             Key = $"{inputCentreID}.jpg"
             };
 

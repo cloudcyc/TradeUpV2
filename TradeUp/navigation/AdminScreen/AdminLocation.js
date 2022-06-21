@@ -43,7 +43,7 @@ function AdminLocation({ navigation }){
                 
                 <View style={styles.containerSearch}>
                     <Ionicons name='search-outline' size={25} color='grey' style={{paddingLeft:5,paddingRight:5}} />
-                    <TextInput placeholder='Search Location Name'
+                    <TextInput placeholder='Search area'
                         onChangeText ={(text) => handleSearchChange(text)}
                     />
                 </View>

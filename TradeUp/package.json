@@ -20,6 +20,7 @@
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-gesture-handler": "^2.4.2",
+    "react-native-image-base64": "^0.1.4",
     "react-native-image-crop-picker": "^0.37.3",
     "react-native-image-slider-box": "^1.1.24",
     "react-native-numeric-input": "^1.9.1",
