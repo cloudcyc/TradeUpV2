@@ -37,8 +37,9 @@ function AdminShopProduct({ navigation }){
             <View style={styles.row}>
                 <Text style={styles.name}>{route.params.itemName}</Text>
                 <Text style={styles.price}>RM {route.params.itemPrice}</Text>
-                <Text style={styles.price}>By: { userName }</Text>
             </View>
+
+            <Text style={styles.price2}>By: { userName }</Text>
 
             <Text style={styles.description}>{route.params.itemDesc}</Text>
 
@@ -64,9 +65,9 @@ const styles = StyleSheet.create({
       flex:1,
     },
     row:{
-        // flexDirection: 'row',
-        // justifyContent:'space-between',
-        // alignItems:'center',
+        flexDirection: 'row',
+        justifyContent:'space-between',
+        alignItems:'center',
         paddingLeft:10,
         paddingRight:10,
         
@@ -85,11 +86,21 @@ const styles = StyleSheet.create({
     },
     price:{
       marginTop:10,
-      fontSize:20,
+      fontSize:18,
       // color:"#dc2f02",
       fontWeight:'bold',
       paddingBottom:5
     },
+
+    price2:{
+      marginTop:10,
+      fontSize:15,
+      // color:"#dc2f02",
+      fontWeight:'bold',
+      paddingBottom:5,
+      paddingLeft:10
+    },
+
     description:{
       marginTop:20,
       paddingLeft:10,

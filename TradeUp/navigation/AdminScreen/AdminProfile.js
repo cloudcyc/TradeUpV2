@@ -44,6 +44,13 @@ function AdminProfile({ navigation }){
                   </View>
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('RequestScreen')}>
+                  <View style={styles.row}>
+                      <Ionicons name='location-outline' size={35} />
+                      <Text style={styles.ButtonText}>View Location Request</Text>
+                  </View>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.Signoutbutton} onPress={() => navigation.navigate('HomeTabs')}>
                   <View style={styles.row}>
                       <Ionicons name='power-outline' size={35} color='#FFF' />

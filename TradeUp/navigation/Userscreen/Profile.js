@@ -51,6 +51,13 @@ function Profile({ navigation }){
                   </View>
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AddNewRequest')}>
+                  <View style={styles.row}>
+                      <Ionicons name='location-outline' size={35} />
+                      <Text style={styles.ButtonText}>Request Missing Location</Text>
+                  </View>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.Signoutbutton}>
                   <View style={styles.row}>
                       <Ionicons name='power-outline' size={35} color='#FFF' />

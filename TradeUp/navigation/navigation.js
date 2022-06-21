@@ -20,6 +20,8 @@ import AdminPurchaseHistoryDetails from './AdminScreen/AdminPurchaseHistoryDetai
 import AdminManageUserScreen from './AdminScreen/AdminManageUsers';
 import AdminEditUser from './AdminScreen/AdminEditUser';
 import AdminAddUser from './AdminScreen/AdminAddUser';
+import RequestScreen from './AdminScreen/AdminLocationRequestscreen';
+import RequestDetailScreen from './AdminScreen/AdminLocationRequestDetailScreen';
 
 import Location from './Userscreen/Location';
 import LoginScreen from './Userscreen/Loginscreen';
@@ -48,6 +50,7 @@ import AddShopProduct from './Userscreen/AddShopProduct';
 import ManageShopDetails from './Userscreen/ManageShopDetails';
 import EditShopProductDetails from './Userscreen/EditShopProductDetails';
 import Signupscreen from './Userscreen/Signupscreen';
+import AddNewRequest from './Userscreen/AddNewRequest';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -164,6 +167,8 @@ function HomeTabs() {
         <Stack.Screen name="ManageShopDetails" component={ManageShopDetails} options={{title: 'Product Details'}}/>
         <Stack.Screen name="EditShopProductDetails" component={EditShopProductDetails} options={{title: 'Edit Details'}}/>
         <Stack.Screen name="Signupscreen" component={Signupscreen} options={{title: 'Sign Up'}}/>
+        <Stack.Screen name="AddNewRequest" component={AddNewRequest} options={{title: 'Request Location'}}/>
+
         <Stack.Screen name="AdminMarketplaceProduct" component={AdminMarketplaceProduct} options={{title: 'Marketplace Product'}}/>
         <Stack.Screen name="AdminEditMarketplaceProduct" component={AdminEditMarketplaceProduct} options={{title: 'Edit Details'}}/>
         <Stack.Screen name="AdminShopProduct" component={AdminShopProduct} options={{title: 'Product'}}/>
@@ -180,6 +185,9 @@ function HomeTabs() {
         <Stack.Screen name="AdminEditUser" component={AdminEditUser} options={{title: 'Manage User'}}/>
         <Stack.Screen name="AdminAddUser" component={AdminAddUser} options={{title: 'Add New User'}}/>
         <Stack.Screen name="AdminProfile" component={AdminProfile} options={{title: 'Profile'}}/>
+        <Stack.Screen name="RequestScreen" component={RequestScreen} options={{title: 'Location Request'}}/>
+        <Stack.Screen name="RequestDetailScreen" component={RequestDetailScreen} options={{title: 'Request Detail'}}/>
+
 
       </Stack.Navigator>
       
