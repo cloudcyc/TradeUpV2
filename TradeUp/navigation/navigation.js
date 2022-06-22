@@ -22,6 +22,7 @@ import AdminEditUser from './AdminScreen/AdminEditUser';
 import AdminAddUser from './AdminScreen/AdminAddUser';
 import RequestScreen from './AdminScreen/AdminLocationRequestscreen';
 import RequestDetailScreen from './AdminScreen/AdminLocationRequestDetailScreen';
+import ViewTradeRequest from './Userscreen/ViewTradeRequest';
 
 import Location from './Userscreen/Location';
 import LoginScreen from './Userscreen/Loginscreen';
@@ -56,6 +57,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
+import ViewTradeRequestDetails from './Userscreen/ViewTradeRequestDetails';
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator();
 Ionicons.loadFont();
@@ -168,6 +170,10 @@ function HomeTabs() {
         <Stack.Screen name="EditShopProductDetails" component={EditShopProductDetails} options={{title: 'Edit Details'}}/>
         <Stack.Screen name="Signupscreen" component={Signupscreen} options={{title: 'Sign Up'}}/>
         <Stack.Screen name="AddNewRequest" component={AddNewRequest} options={{title: 'Request Location'}}/>
+        <Stack.Screen name="ViewTradeRequest" component={ViewTradeRequest} options={{title: 'View Trade Request'}}/>
+        <Stack.Screen name="ViewTradeRequestDetails" component={ViewTradeRequestDetails} options={{title: 'Trade Request Detail'}}/>
+
+
 
         <Stack.Screen name="AdminMarketplaceProduct" component={AdminMarketplaceProduct} options={{title: 'Marketplace Product'}}/>
         <Stack.Screen name="AdminEditMarketplaceProduct" component={AdminEditMarketplaceProduct} options={{title: 'Edit Details'}}/>

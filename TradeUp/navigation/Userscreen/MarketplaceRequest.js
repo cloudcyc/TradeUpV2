@@ -24,7 +24,7 @@ function MarketplaceRequest({ navigation }){
                 <Text style={styles.title2}>Trade Request Item Name:</Text>
                 <View style={styles.sectionStyle}>
 
-                    <Ionicons name='person-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
+                    <Ionicons name='briefcase-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
                     <TextInput
                         style={styles.textInputStyle}
                         placeholder="Enter Name Here"
@@ -45,6 +45,51 @@ function MarketplaceRequest({ navigation }){
                         placeholder="Enter Description Here"
                         underlineColorAndroid="transparent"
                         multiline={true}
+                    />
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.title2}>Meet Location:</Text>
+                <View style={styles.sectionStyle}>
+
+                    <Ionicons name='location-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder="Enter Name Here"
+                        underlineColorAndroid="transparent"
+                    />
+                    {/* call the name of user according to the account */}
+
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.title2}>Latitude:</Text>
+                <View style={styles.sectionStyle}>
+                    <Ionicons name='location-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
+
+                    <TextInput
+                        multiline={true}
+                        style={styles.textInputStyle}
+                        placeholder="Enter Latitude Here"
+                        underlineColorAndroid="transparent"
+                        keyboardType="phone-pad"
+                    />
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.title2}>Longitude:</Text>
+                <View style={styles.sectionStyle}>
+                    <Ionicons name='location-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
+
+                    <TextInput
+                        multiline={true}
+                        style={styles.textInputStyle}
+                        placeholder="Enter Longitude Here"
+                        underlineColorAndroid="transparent"
+                        keyboardType="phone-pad"
                     />
                 </View>
             </View>

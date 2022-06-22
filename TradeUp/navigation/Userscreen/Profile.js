@@ -30,6 +30,13 @@ function Profile({ navigation }){
                   </View>
                 </TouchableOpacity>
 
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('ViewTradeRequest')}>
+                  <View style={styles.row}>
+                      <Ionicons name='albums-outline' size={35} />
+                      <Text style={styles.ButtonText}>View Trade Request</Text>
+                  </View>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('PurchaseHistory')}>
                   <View style={styles.row}>
                       <Ionicons name='cart-outline' size={35} />
