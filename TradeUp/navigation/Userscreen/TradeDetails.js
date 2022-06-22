@@ -77,13 +77,15 @@ function TradeDetailScreen({ navigation }){
 
             <View style={styles.row}>
                 <Text style={styles.title}>Meet Up Location:</Text>
-                <Text style={styles.Desc}>{route.params.requestMeetLocation}</Text>
-                <TouchableOpacity
-                        style={styles.loginScreenButton}
+                <View>
+                  <Text style={styles.Desc}>{route.params.requestMeetLocation}</Text>
+                  <TouchableOpacity
+                        style={styles.loginScreenButton3}
                         onPress={openCoordinate}
                         underlayColor='#fff'>
                         <Text style={styles.loginText}>View in Map</Text>
                     </TouchableOpacity>
+                  </View>
             </View>
 
             
@@ -137,8 +139,16 @@ const styles = StyleSheet.create({
       paddingTop: 15,
       fontSize: 18,
       fontWeight: 'bold',
-      marginLeft: '36%',
+      marginLeft: '65%',
   },
+
+  Desc2:{
+    paddingLeft:20,
+    paddingTop: 15,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: '50%',
+},
     productImg:{
       alignSelf:'center',
       width: '100%',
@@ -266,6 +276,24 @@ const styles = StyleSheet.create({
       height:45,
       marginBottom:50
   },
+
+  loginScreenButton3:{
+    marginTop:10,
+    paddingTop:10,
+    paddingBottom:10,
+    backgroundColor:'#4cc9f0',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    marginLeft:'68%',
+    height:45,
+    marginBottom:20
+},
+
+  loginText:{
+    color:'white',
+    alignSelf:'center'
+  }
   });    
 
 export default TradeDetailScreen
