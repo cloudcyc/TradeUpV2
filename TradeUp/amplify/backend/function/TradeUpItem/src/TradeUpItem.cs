@@ -93,8 +93,15 @@ namespace TradeUpItem
                                     Body = JsonConvert.SerializeObject(AllActiveItemsOnly)
                                 };
                             break;
-                        }  
-                        
+                        }    
+                    }
+                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputItemID")){
+                        var items = await itemProvider.GetItemByItemID(request.QueryStringParameters["inputItemID"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(items)
+                        };
                     }
                     break;
                 case "POST":

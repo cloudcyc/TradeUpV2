@@ -21,6 +21,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/requests": {
+      "name": "/requests",
+      "lambdaFunction": "TradeUpRequest",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }

@@ -4,15 +4,42 @@ import { FlatList } from 'react-native-gesture-handler';
 import { SliderBox } from "react-native-image-slider-box";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ignoreWarnings from 'ignore-warnings';
+import { useIsFocused } from "@react-navigation/native";
 Ionicons.loadFont();
 
 
 
 function Shop({ navigation }){
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
+    const [sellList, setsellList] = React.useState([]);
+    const [search, setNewSearch] = React.useState("");
+    const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Sell&inputUserRole=';
+    const getSellList = () => {
+        fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+            setsellList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    const handleSearchChange = (text) => {
+        setNewSearch(text)
+        
+        };
+    const filteredSell = !search
+    ? sellList
+    : sellList.filter((filteredSell) =>
+        filteredSell.itemName.toLowerCase().includes(search.toLowerCase())
+        );
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-    }, [])
+        if(isFocused){ 
+            getSellList();
+          }
+          
+          
+      },[navigation, isFocused]);
 
     ignoreWarnings('warn',['ViewPropTypes','[react-native-gesture-handler]'])
 
@@ -29,19 +56,7 @@ function Shop({ navigation }){
         "https://www.teahub.io/photos/full/89-895046_wallpaper-and-selling-your-home-houses-for-sale.jpg"
     ]
 
-    const SampleProduct = [{
-        ProductName: "Iphone 13", Name: "John Sandford", Price:"RM888", product_image:
-        "https://www.igeeksblog.com/wp-content/uploads/2021/08/black-wallpaper-for-iphone-10-675x450.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 14", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", Price:"RM888", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }];
+    
 
     return(
         <ScrollView style={styles.root}>
@@ -139,7 +154,10 @@ function Shop({ navigation }){
 
             <SafeAreaView>
             <FlatList
-            data={SampleProduct}
+            data={filteredSell}
+            keyExtractor= {(key) => {
+                            return key.itemID;
+                        }}
             style={styles.list}
             numColumns={2}
             contentContainerStyle={styles.listContainer}
@@ -147,11 +165,13 @@ function Shop({ navigation }){
                 return (
 
                     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'ShopProductDetails', item)}>
-                        <Image style={styles.userImage} source={{uri:item.product_image}}/>
+                        <Image style={styles.userImage} source={{uri: 'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
                         <View style={styles.cardFooter}>
-                            <View >
-                            <Text style={styles.name}>{item.ProductName}</Text>
-                            <Text style={styles.position}>{item.Price}</Text>
+                            <View style={{alignItems:"center", justifyContent:"center"}}>
+                            <Text style={styles.name}>{item.itemName}</Text>
+                            <Text style={styles.position}>RM {item.itemPrice}</Text>
+                            <Text style={styles.name}>{item.userID}</Text>
+
                         </View>
                         </View>
                     </TouchableOpacity>
@@ -271,8 +291,8 @@ const styles = StyleSheet.create({
 
       userImage:{
         height: 120,
-        width: 120,
-        borderRadius:60,
+        width: "100%",
+        
         alignSelf:'center',
       },
 
@@ -287,7 +307,6 @@ const styles = StyleSheet.create({
         fontSize:14,
         flex:1,
         alignSelf:'flex-start',
-        color:"#dc2f02",
         paddingTop:5,
         fontWeight:'500'
       },

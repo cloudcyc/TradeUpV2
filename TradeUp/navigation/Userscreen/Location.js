@@ -5,6 +5,35 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 Ionicons.loadFont();
 
 function Location({ navigation }){
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
+    const [centreList, setcentreList] = React.useState([]);
+    const [search, setNewSearch] = React.useState("");
+    const getActiveCentreAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Active';
+    const getCentreList = () => {
+        fetch(getActiveCentreAPI).then((response) => response.json()).then((json) => { 
+            setcentreList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+    
+    const handleSearchChange = (text) => {
+        setNewSearch(text)
+        
+      };
+    const filteredCentre = !search
+    ? centreList
+    : centreList.filter((filterCentre) =>
+        filterCentre.centreAddress.toLowerCase().includes(search.toLowerCase())
+      );
+
+    React.useEffect(() => {
+        if(isFocused){ 
+            getCentreList();
+        }
+        
+        
+    },[navigation, isFocused]);
     return(
         <View style={styles.root}>
 
@@ -18,32 +47,36 @@ function Location({ navigation }){
                 <Ionicons name='person-circle-outline' size={40} color='#00b4d8' style={{paddingLeft:5}} onPress={() => navigation.navigate('Profile')}/>
 
             </View>
+            <View>
+                <FlatList 
+                            data={filteredCentre}
+                            keyExtractor= {(key) => {
+                                return key.centreID;
+                            }}
+                            ItemSeparatorComponent={() => {
+                                return (
+                                    <View style={styles.separator}/>
+                                )
+                            }}
+                            renderItem={({item}) => {
+                                return (
+                                    <TouchableOpacity
+                                            onPress={() => navigation.navigate('LocationDetails', item)}
+                                            style={styles.roundButton}>
+                                            <Image style={styles.icon} source={{
+                                            uri:
+                                                'https://tradeups3.s3.ap-southeast-1.amazonaws.com/DonationCentreAsset/'+[item.centreID]+'.jpg',
+                                    }}/>
 
-        <TouchableOpacity
-            onPress={() => navigation.navigate('LocationDetails')}
-            style={styles.roundButton}>
-            <Image style={styles.icon} source={{
-            uri:
-                'https://s1.cdn.autoevolution.com/images/news/google-maps-is-getting-a-feature-that-just-makes-sense-these-days-150219_1.jpg',
-            }}/>
-            <Text style={styles.locationtitle}>Pavilion Kuala Lumpur</Text>
-            <Text style={styles.locationtitle2}>Phone:      03-2118 8833</Text>
-            <Text style={styles.locationtitle2}>Location:  Lot 5.100.00 Level 5, Pavilion Elite</Text>
-
-
-        </TouchableOpacity>
-
-        <TouchableOpacity
-            onPress={() => navigation.navigate('LocationDetails')}
-            style={styles.roundButton}>
-            <Image style={styles.icon} source={{
-            uri:
-                'https://s1.cdn.autoevolution.com/images/news/google-maps-is-getting-a-feature-that-just-makes-sense-these-days-150219_1.jpg',
-            }}/>
-            <Text style={styles.locationtitle}>KLCC Malaysia</Text>
-            <Text style={styles.locationtitle2}>Phone:      03-2382 2828</Text>
-            <Text style={styles.locationtitle2}>Location:  Lot 316-A, Level 3</Text>
-        </TouchableOpacity> 
+                                        <Text style={styles.locationtitle}>{item.centreName}</Text>
+                                        <Text style={styles.locationtitle2}>Location:  {item.centreAddress}</Text>
+                                    </TouchableOpacity>
+                                    )
+                            }}
+                >
+                </FlatList> 
+            </View>
+        
     </View>
     );
 }

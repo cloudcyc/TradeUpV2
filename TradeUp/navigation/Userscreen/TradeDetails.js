@@ -1,42 +1,96 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
 import { useRoute } from "@react-navigation/native";
-
-
+import { useIsFocused } from "@react-navigation/native";
+import { createOpenLink } from 'react-native-open-maps';
 function TradeDetailScreen({ navigation }){
+  const route = useRoute();
+  const isFocused = useIsFocused(); //used to refresh upon entering new screen
+  const coordinate = { latitude: parseFloat(route.params.requestMeetCoordinate[1]) , longitude: parseFloat(route.params.requestMeetCoordinate[0]) };
+  console.log(route.params.requestMeetCoordinate[0] + " " + route.params.requestMeetCoordinate[1]);
+  const openCoordinate = createOpenLink({ ...coordinate, zoom: 20 });
 
+
+  //From user
+  const [fromUserName, setfromUserName] = React.useState('');
+
+  //Posted by Another User
+  const [itemName, setitemName] = React.useState('');
+  const [itemDesc, setitemDesc] = React.useState('');
+
+  const getfromUserInfo = () =>{
+    var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.requestTradeToID;
+    fetch(getUserAPI).then((response) => response.json()).then((json) => {
+      setfromUserName(json[0].userFullname);
+    }).catch((error) => {
+        console.log("Wrong API");
+        console.error(error);
+    });
+  };
+
+  const getitemInfo = () =>{
+      var getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+ route.params.requestItemID;
+      
+      fetch(getItemAPI).then((response) => response.json()).then((json) => {
+        setitemName(json[0].itemName);
+        setitemDesc(json[0].itemDesc);
+        // setitemInfo(json);
+        // console.log(itemInfo);
+      }).catch((error) => {
+          console.log("Wrong API");
+          console.error(error);
+      });
+    };
+
+  React.useEffect(() => {
+    if(isFocused){ 
+      getitemInfo();
+      getfromUserInfo();
+    }
+  },[navigation, isFocused]);
 
     return(
         <View style={styles.container}>
         <ScrollView>
           <View >
-            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
-            <Text style={styles.name}>Brand New iPhone 20</Text>
-            <Text style={styles.price}>Post By: Holland</Text>
+            {/* i want */}
+            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' + route.params.requestItemID +'.jpg'}}/>
+            <Text style={styles.name}>{itemName}</Text>
+            <Text style={styles.price}>Post By: {fromUserName}</Text>
+            <Text style={styles.price}>Description: {itemDesc}</Text>
 
+            {/* i trade with */}
             <View style={styles.row}>
-                <Text style={styles.title}>Name:</Text>
-                <Text style={styles.Desc}>Me (Because  request this trade)</Text>
-            </View>
-
-            <View style={styles.row}>
-                <Text style={styles.title}>Email:</Text>
-                <Text style={styles.Desc}>Me@mail.com</Text>
-            </View>
-
-            <View style={styles.row}>
-                <Text style={styles.title}>Phone:</Text>
-                <Text style={styles.Desc}>0123456789</Text>
+                <Text style={styles.title}>Trade Request Item Name:</Text>
+                <Text style={styles.Desc}>{route.params.requestItemID}</Text>
             </View>
 
             <View style={styles.row}>
                 <Text style={styles.title}>Description:</Text>
-                <Text style={styles.Desc}>I would like to change my Ferrari with your iphone 20</Text>
+                <Text style={styles.Desc}>{route.params.requestTradeItemDesc}</Text>
             </View>
 
             <View style={styles.row}>
+                <Text style={styles.title}>Status:</Text>
+                <Text style={styles.Desc}>{route.params.requestTradeStatus}</Text>
+            </View>
+
+            <View style={styles.row}>
+                <Text style={styles.title}>Meet Up Location:</Text>
+                <Text style={styles.Desc}>{route.params.requestMeetLocation}</Text>
+                <TouchableOpacity
+                        style={styles.loginScreenButton}
+                        onPress={openCoordinate}
+                        underlayColor='#fff'>
+                        <Text style={styles.loginText}>View in Map</Text>
+                    </TouchableOpacity>
+            </View>
+
+            
+            
+            <View style={styles.row}>
                 <Text style={styles.title}>Attachment:</Text>
-                <Image style={styles.productImg2} resizeMode="contain" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
+                <Image style={styles.productImg2} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/RequestAsset/' + route.params.requestID +'.jpg'}}/>
             </View>
 
           </View>
@@ -199,7 +253,19 @@ const styles = StyleSheet.create({
       marginBottom:20,
       flexDirection:'row', 
       justifyContent: 'center',
-    }
+    },
+    loginScreenButton:{
+      marginTop:30,
+      paddingTop:10,
+      paddingBottom:10,
+      backgroundColor:'#4cc9f0',
+      borderRadius:10,
+      borderWidth: 1,
+      borderColor: '#fff',
+      width:'100%',
+      height:45,
+      marginBottom:50
+  },
   });    
 
 export default TradeDetailScreen

@@ -1,0 +1,10 @@
+{
+  "resourceName": "TradeUpRequests",
+  "tableName": "TradeUpRequests",
+  "partitionKey": {
+    "fieldName": "requestID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

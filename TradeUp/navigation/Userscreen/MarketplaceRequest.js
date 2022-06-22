@@ -21,7 +21,7 @@ function MarketplaceRequest({ navigation }){
     return(
         <ScrollView style={styles.root}>
             <View>
-                <Text style={styles.title2}>Name:</Text>
+                <Text style={styles.title2}>Trade Request Item Name:</Text>
                 <View style={styles.sectionStyle}>
 
                     <Ionicons name='person-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
@@ -32,32 +32,6 @@ function MarketplaceRequest({ navigation }){
                     />
                     {/* call the name of user according to the account */}
 
-                </View>
-            </View>
-
-            <View>
-                <Text style={styles.title2}>Email Address:</Text>
-                <View style={styles.sectionStyle}>
-                    
-                    <Ionicons name='mail-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter Email Address Here"
-                        underlineColorAndroid="transparent"
-                    />
-                </View>
-            </View>
-
-            <View>
-                <Text style={styles.title2}>Phone Number:</Text>
-                <View style={styles.sectionStyle}>
-                    
-                    <Ionicons name='call-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter Contact Number Here"
-                        underlineColorAndroid="transparent"
-                    />
                 </View>
             </View>
 

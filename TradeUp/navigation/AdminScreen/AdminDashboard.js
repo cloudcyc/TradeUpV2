@@ -1,11 +1,68 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useIsFocused } from "@react-navigation/native";
 Ionicons.loadFont();
 
 
 function AdminDashboard ({navigation}) {
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
 
+    const [tradeList, settradeList] = React.useState([]);
+    const [sellList, setsellList] = React.useState([]);
+    const [centreList, setcentreList] = React.useState([]);
+    const [RequestList, setRequestList] = React.useState([]);
+    const getSellList = () => {
+        const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Sell&inputUserRole=Admin';
+        fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+          setsellList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    
+    const gettradeList = () => {
+        const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Trade&inputUserRole=Admin';
+        fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+            settradeList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    
+    const getCentreList = () => {
+        const getActiveCentreAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres';
+        fetch(getActiveCentreAPI).then((response) => response.json()).then((json) => { 
+            setcentreList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    
+
+    const getRequestList = () => {
+        const getPendingRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres?inputCentreStatus=Pending';
+        fetch(getPendingRequestAPI).then((response) => response.json()).then((json) => { 
+            setRequestList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+
+  React.useEffect(() => {
+    if(isFocused){ 
+      gettradeList();
+      getSellList();
+      getCentreList();
+      getRequestList();
+    }
+    
+    
+},[navigation, isFocused]);
    
     return(
 
@@ -24,14 +81,15 @@ function AdminDashboard ({navigation}) {
                 <View style={styles.separator}></View>
 
                     <View style={styles.row}>
-                        <TouchableOpacity style={styles.roundcard} onPress={() => navigation.navigate('AdminTradeRequest')}>
+                    {/* onPress={() => navigation.navigate('AdminPurchaseHistory')} */}
+                        <TouchableOpacity style={styles.roundcard} >
 
-                            <Text style={styles.totalrequest}>Total Request:</Text>
-                            <Text style={styles.cardnumber}> 123</Text>
+                            <Text style={styles.totalrequest}>Total Item:</Text>
+                            <Text style={styles.cardnumber}> {tradeList.length}</Text>
 
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.roundcard} onPress={() => navigation.navigate('AdminTradeRequest')}>
+                        <TouchableOpacity style={styles.roundcard} >
 
                             <Text style={styles.pendingrequest}>Request Pending:</Text>
                             <Text style={styles.cardnumber}>8</Text>
@@ -48,14 +106,14 @@ function AdminDashboard ({navigation}) {
                     <View style={styles.separator}></View>
 
                         <View style={styles.row}>
-                            <TouchableOpacity style={styles.roundcard} onPress={() => navigation.navigate('AdminPurchaseHistory')}>
+                            <TouchableOpacity style={styles.roundcard} >
 
                                 <Text style={styles.totalrequest}>Total Purchase:</Text>
-                                <Text style={styles.cardnumber}> 123</Text>
+                                <Text style={styles.cardnumber}> {sellList.length}</Text>
 
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.roundcard} onPress={() => navigation.navigate('AdminPurchaseHistory')}>
+                            <TouchableOpacity style={styles.roundcard} >
 
                                 <Text style={styles.pendingrequest}>Purchase Pending:</Text>
                                 <Text style={styles.cardnumber}>8</Text>
@@ -67,20 +125,27 @@ function AdminDashboard ({navigation}) {
 
                         <View style={{backgroundColor:'white', borderRadius:15, marginTop:10, marginBottom:25}}>
 
-                        <Text style={styles.title3}>Users:</Text>
+                        <Text style={styles.title3}>Centres:</Text>
 
                         <View style={styles.separator}></View>
 
-                        <View style={styles.row2}>
+                        <View style={styles.row}>
 
-                            <TouchableOpacity style={styles.roundcard} onPress={() => navigation.navigate('AdminManageUserScreen')}>
+                            <TouchableOpacity style={styles.roundcard} >
 
-                                <Text style={styles.totalrequest}>Total Users:</Text>
-                                <Text style={styles.cardnumber}> 123</Text>
+                                <Text style={styles.totalrequest}>Total Centre:</Text>
+                                <Text style={styles.cardnumber}> {centreList.length}</Text>
+
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.roundcard} >
+
+                                <Text style={styles.totalrequest}>Centre Request:</Text>
+                                <Text style={styles.cardnumber}> {RequestList.length}</Text>
 
                             </TouchableOpacity>
 
                         </View>
+                        
                         </View>
 
                 </View>

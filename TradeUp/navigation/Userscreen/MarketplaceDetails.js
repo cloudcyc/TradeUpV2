@@ -1,20 +1,38 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
 import { useRoute } from "@react-navigation/native";
-
+import { useIsFocused } from "@react-navigation/native";
 
 function MarketplaceDetails({ navigation }){
 
     const route = useRoute();
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
+    const [userName, setuserName] = React.useState('');
+
+    const getUserInfo = () =>{
+      var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.userID;
+      fetch(getUserAPI).then((response) => response.json()).then((json) => {
+        setuserName(json[0].userFullname);
+      }).catch((error) => {
+          console.log("Wrong API");
+          console.error(error);
+      });
+    };
+
+    React.useEffect(() => {
+      if(isFocused){ 
+        getUserInfo();
+      }
+    },[navigation, isFocused]);
 
     return(
         <View style={styles.container}>
         <ScrollView>
           <View >
-            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:route.params.product_image}}/>
-            <Text style={styles.name}>{route.params.ProductName}</Text>
-            <Text style={styles.price}>By: {route.params.Name}</Text>
-            <Text style={styles.description}>{route.params.product_desc}</Text>
+            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' + route.params.itemID +'.jpg'}}/>
+            <Text style={styles.name}>{route.params.itemName}</Text>
+            <Text style={styles.price}>By: { userName }</Text>
+            <Text style={styles.description}>{route.params.itemDesc}</Text>
           </View>
 
           <View style={styles.separator}></View>

@@ -8,6 +8,7 @@ namespace TradeUpItem
         Task<ItemModel[]> AdminGetAllItemByModeAsync(string inputItemMode);
         Task<ItemModel[]> GetActiveItemByModeAndCategoryAsync(string inputItemMode, string inputItemStatus);
         Task<ItemModel[]> GetActiveItemByModeAndCategoryUserIDExistAsync(string inputItemMode, string inputItemStatus, string inputUserID);
+        Task<ItemModel[]> GetItemByItemID(string inputItemID);
         Task<bool> AddItemWithImageAsync (ItemModel item);
         Task<bool> AddItemWithoutImageAsync (ItemModel item);
         Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID, String inputUserID);

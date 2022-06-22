@@ -47,6 +47,22 @@
           ]
         }
       ]
+    },
+    "TradeUpRequest": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "TradeUpRequests",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        }
+      ]
     }
   },
   "api": {
@@ -77,6 +93,14 @@
             "Name",
             "Arn"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "TradeUpRequest",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
         }
       ]
     }
@@ -91,6 +115,10 @@
       "providerPlugin": "awscloudformation"
     },
     "TradeUpItems": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
+    },
+    "TradeUpRequests": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
     }

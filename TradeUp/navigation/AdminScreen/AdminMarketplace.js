@@ -87,7 +87,7 @@ function AdminMarketplace({ navigation }){
                             {/* <TouchableOpacity style={styles.followButton}>
                                 <Text style={styles.followButtonText}>View</Text>  
                             </TouchableOpacity> */}
-                        </View>
+                          </View>
                         </View>
                     </TouchableOpacity>
 
