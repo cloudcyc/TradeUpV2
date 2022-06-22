@@ -21,13 +21,13 @@ function EditTradeRequest({ navigation }){
     return(
         <ScrollView style={styles.root}>
             <View>
-                <Text style={styles.title2}>Name:</Text>
+                <Text style={styles.title2}>Request Trade Item Name:</Text>
                 <View style={styles.sectionStyle}>
 
-                    <Ionicons name='person-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
+                    <Ionicons name='briefcase-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
                     <TextInput
                         style={styles.textInputStyle}
-                        placeholder="Enter Name Here"
+                        placeholder="Enter Request Trade Item Name Here"
                         underlineColorAndroid="transparent"
                     />
                     {/* call the name of user according to the account */}

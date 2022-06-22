@@ -4,61 +4,18 @@ import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { createOpenLink } from 'react-native-open-maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-function TradeDetailScreen({ navigation }){
-  const route = useRoute();
-  const isFocused = useIsFocused(); //used to refresh upon entering new screen
-  const coordinate = { latitude: parseFloat(route.params.requestMeetCoordinate[1]) , longitude: parseFloat(route.params.requestMeetCoordinate[0]) };
-  console.log(route.params.requestMeetCoordinate[0] + " " + route.params.requestMeetCoordinate[1]);
-  const openCoordinate = createOpenLink({ ...coordinate, zoom: 20 });
+function ViewTradeRequestDetails({ navigation }){
 
-
-  //From user
-  const [fromUserName, setfromUserName] = React.useState('');
-
-  //Posted by Another User
-  const [itemName, setitemName] = React.useState('');
-  const [itemDesc, setitemDesc] = React.useState('');
-
-  const getfromUserInfo = () =>{
-    var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.requestTradeToID;
-    fetch(getUserAPI).then((response) => response.json()).then((json) => {
-      setfromUserName(json[0].userFullname);
-    }).catch((error) => {
-        console.log("Wrong API");
-        console.error(error);
-    });
-  };
-
-  const getitemInfo = () =>{
-      var getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+ route.params.requestItemID;
-      
-      fetch(getItemAPI).then((response) => response.json()).then((json) => {
-        setitemName(json[0].itemName);
-        setitemDesc(json[0].itemDesc);
-        // setitemInfo(json);
-        // console.log(itemInfo);
-      }).catch((error) => {
-          console.log("Wrong API");
-          console.error(error);
-      });
-    };
-
-  React.useEffect(() => {
-    if(isFocused){ 
-      getitemInfo();
-      getfromUserInfo();
-    }
-  },[navigation, isFocused]);
 
     return(
         <View style={styles.container}>
         <ScrollView>
           <View >
             {/* i want */}
-            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' + route.params.requestItemID +'.jpg'}}/>
-            <Text style={styles.name}>{itemName}</Text>
-            <Text style={styles.price}>Post By: {fromUserName}</Text>
-            <Text style={styles.price}>Description: {itemDesc}</Text>
+            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_Homepage.svg/800px-Google_Homepage.svg.png'}}/>
+            <Text style={styles.name}>XXX</Text>
+            <Text style={styles.price}>Post By: XXX</Text>
+            <Text style={styles.price}>Description: XXX</Text>
 
             {/* i trade with */}
                 <Text style={styles.title}>Request Trade Item Name:</Text>
@@ -67,7 +24,7 @@ function TradeDetailScreen({ navigation }){
                     <Ionicons name='briefcase-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
                     <TextInput
                         style={styles.Desc}
-                        placeholder={route.params.requestItemID}
+                        placeholder='XXX'
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
                     />
@@ -80,7 +37,7 @@ function TradeDetailScreen({ navigation }){
                     <Ionicons name='chatbox-ellipses-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
                     <TextInput
                         style={styles.Desc}
-                        placeholder={route.params.requestTradeItemDesc}
+                        placeholder='XXX'
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
                     />
@@ -93,7 +50,7 @@ function TradeDetailScreen({ navigation }){
                     <Ionicons name='pulse-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
                     <TextInput
                         style={styles.Desc}
-                        placeholder={route.params.requestTradeStatus}
+                        placeholder='XXX'
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
                     />
@@ -105,7 +62,6 @@ function TradeDetailScreen({ navigation }){
 
                 <TouchableOpacity
                         style={styles.loginScreenButton3}
-                        onPress={openCoordinate}
                         underlayColor='#fff'>
                         <Text style={styles.loginText}>View in Map</Text>
                     </TouchableOpacity>
@@ -115,7 +71,7 @@ function TradeDetailScreen({ navigation }){
                     <Ionicons name='location-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
                     <TextInput
                         style={styles.Desc}
-                        placeholder={route.params.requestMeetLocation}
+                        placeholder='XXX'
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
                     />
@@ -127,7 +83,7 @@ function TradeDetailScreen({ navigation }){
             
             <View style={styles.row}>
                 <Text style={styles.title2}>Attachment:</Text>
-                <Image style={styles.productImg2} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/RequestAsset/' + route.params.requestID +'.jpg'}}/>
+                <Image style={styles.productImg2} resizeMode="contain" source={{uri:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_Homepage.svg/800px-Google_Homepage.svg.png'}}/>
             </View>
 
           </View>
@@ -135,10 +91,10 @@ function TradeDetailScreen({ navigation }){
           <View style={styles.separator}></View>
           <View style={styles.addToCarContainer}>
           <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('MyTradeRequest')}>
-              <Text style={styles.shareButtonText}>Delete</Text>  
+              <Text style={styles.shareButtonText}>Reject</Text>  
             </TouchableOpacity>
             <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditTradeRequest')}>
-              <Text style={styles.shareButtonText}>Edit Request</Text>  
+              <Text style={styles.shareButtonText}>Accept</Text>  
             </TouchableOpacity>
           </View> 
         </ScrollView>
@@ -373,4 +329,4 @@ sectionStyle2: {
 
 
 
-export default TradeDetailScreen
+export default ViewTradeRequestDetails
