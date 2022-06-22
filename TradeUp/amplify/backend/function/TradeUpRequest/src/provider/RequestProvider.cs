@@ -101,6 +101,83 @@ namespace TradeUpRequest
             return Array.Empty<RequestModel>();
         }
 
+        public async Task<bool> AddRequestWithImageAsync (RequestModel requestbody)
+        {
+            var request = new PutItemRequest
+            {
+                TableName = "TradeUpRequests-dev",
+                Item = new Dictionary<string, AttributeValue>
+                {
+                    {"requestID", new AttributeValue(requestbody.requestID)},
+                    {"requestTradeItemName", new AttributeValue(requestbody.requestTradeItemName)},
+                    {"requestTradeItemDesc", new AttributeValue(requestbody.requestTradeItemDesc)},
+                    {"requestTradeDate", new AttributeValue(requestbody.requestTradeDate)},
+                    {"requestTradeStatus", new AttributeValue(requestbody.requestTradeStatus)},
+                    {"requestTradeToID", new AttributeValue(requestbody.requestTradeToID)},
+                    {"requestTradeFromID", new AttributeValue(requestbody.requestTradeFromID)},
+                    {"requestItemID", new AttributeValue(requestbody.requestItemID)},
+                    {"requestMeetLocation", new AttributeValue(requestbody.requestMeetLocation)},
+                    {"requestMeetCoordinate", new AttributeValue(requestbody.requestMeetCoordinate)},
+                }
+            };
+            
+            byte[] ImageBytes = Convert.FromBase64String(requestbody.requestImage);
+            string decodedString = Encoding.UTF8.GetString(ImageBytes);
+            Image image = Image.Load(ImageBytes);
+            var client = new AmazonS3Client();
+            using (var stream = new MemoryStream(ImageBytes)){
+                await client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
+                {
+                                BucketName = "tradeups3/RequestAsset",
+                                Key = $"{requestbody.requestID}.jpg",
+                                ContentType = "image/jpeg",
+                                InputStream = stream,
+                                CannedACL = S3CannedACL.PublicRead
+
+                });
+            }
+
+            var response = await dynamoDB.PutItemAsync(request);
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        }
+
+        public async Task<bool> AddRequestWithoutImageAsync (RequestModel requestbody)
+        {
+            var request = new PutItemRequest
+            {
+                TableName = "TradeUpRequests-dev",
+                Item = new Dictionary<string, AttributeValue>
+                {
+                    {"requestID", new AttributeValue(requestbody.requestID)},
+                    {"requestTradeItemName", new AttributeValue(requestbody.requestTradeItemName)},
+                    {"requestTradeItemDesc", new AttributeValue(requestbody.requestTradeItemDesc)},
+                    {"requestTradeDate", new AttributeValue(requestbody.requestTradeDate)},
+                    {"requestTradeStatus", new AttributeValue(requestbody.requestTradeStatus)},
+                    {"requestTradeToID", new AttributeValue(requestbody.requestTradeToID)},
+                    {"requestTradeFromID", new AttributeValue(requestbody.requestTradeFromID)},
+                    {"requestItemID", new AttributeValue(requestbody.requestItemID)},
+                    {"requestMeetLocation", new AttributeValue(requestbody.requestMeetLocation)},
+                    {"requestMeetCoordinate", new AttributeValue(requestbody.requestMeetCoordinate)},
+                }
+            };
+            var response = await dynamoDB.PutItemAsync(request);
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        }
+        
+        //     public async Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID, String inputUserID){
+        //     var request = new DeleteItemRequest
+        //         {
+        //             TableName = "TradeUpItems-dev",
+        //             Key = new Dictionary<string,AttributeValue>() {
+        //                  { "itemID", new AttributeValue { S = inputItemID } },
+        //                  { "userID", new AttributeValue { S = inputUserID } }
+        //              },
+        //         };
+        //     var response = await dynamoDB.DeleteItemAsync(request);
+        //     await DeleteImageByIDAsync(inputItemID);
+        //     return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        // }
+
         // public async Task<ItemModel[]> GetActiveItemByModeAndCategoryUserIDExistAsync(string inputItemMode, string inputItemCategory, string inputUserID)
         // {
         //         var result = await dynamoDB.QueryAsync(new QueryRequest{
@@ -145,81 +222,8 @@ namespace TradeUpRequest
         //         }
         //         return Array.Empty<ItemModel>();
         // }
-        // public async Task<bool> AddItemWithImageAsync (ItemModel item)
-        // {
-        //     var request = new PutItemRequest
-        //     {
-        //         TableName = "TradeUpItems-dev",
-        //         Item = new Dictionary<string, AttributeValue>
-        //         {
-        //             {"itemID", new AttributeValue(item.itemID)},
-        //             {"userID", new AttributeValue(item.userID)},
-        //             {"itemCategory", new AttributeValue(item.itemCategory)},
-        //             {"itemDate", new AttributeValue(item.itemDate)},
-        //             {"itemDesc", new AttributeValue(item.itemDesc)},
-        //             {"itemMode", new AttributeValue(item.itemMode)},
-        //             {"itemName", new AttributeValue(item.itemName)},
-        //             {"itemPrice", new AttributeValue(item.itemPrice)},
-        //             {"itemStatus", new AttributeValue(item.itemStatus)},
-        //         }
-        //     };
-            
-        //     byte[] ImageBytes = Convert.FromBase64String(item.itemImage);
-        //     string decodedString = Encoding.UTF8.GetString(ImageBytes);
-        //     Image image = Image.Load(ImageBytes);
-        //     var client = new AmazonS3Client();
-        //     using (var stream = new MemoryStream(ImageBytes)){
-        //         await client.PutObjectAsync(new Amazon.S3.Model.PutObjectRequest
-        //         {
-        //                         BucketName = "tradeups3/ItemAsset",
-        //                         Key = $"{item.itemID}.jpg",
-        //                         ContentType = "image/jpeg",
-        //                         InputStream = stream,
-        //                         CannedACL = S3CannedACL.PublicRead
 
-        //         });
-        //     }
-
-        //     var response = await dynamoDB.PutItemAsync(request);
-        //     return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
-        // }
-
-        // //Add without Image
-        // public async Task<bool> AddItemWithoutImageAsync (ItemModel item)
-        // {
-        //     var request = new PutItemRequest
-        //     {
-        //         TableName = "TradeUpItems-dev",
-        //         Item = new Dictionary<string, AttributeValue>
-        //         {
-        //             {"itemID", new AttributeValue(item.itemID)},
-        //             {"userID", new AttributeValue(item.userID)},
-        //             {"itemCategory", new AttributeValue(item.itemCategory)},
-        //             {"itemDate", new AttributeValue(item.itemDate)},
-        //             {"itemDesc", new AttributeValue(item.itemDesc)},
-        //             {"itemMode", new AttributeValue(item.itemMode)},
-        //             {"itemName", new AttributeValue(item.itemName)},
-        //             {"itemPrice", new AttributeValue(item.itemPrice)},
-        //             {"itemStatus", new AttributeValue(item.itemStatus)},
-        //         }
-        //     };
-        //     var response = await dynamoDB.PutItemAsync(request);
-        //     return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
-        // }
-        //     public async Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID, String inputUserID){
-        //     var request = new DeleteItemRequest
-        //         {
-        //             TableName = "TradeUpItems-dev",
-        //             Key = new Dictionary<string,AttributeValue>() {
-        //                  { "itemID", new AttributeValue { S = inputItemID } },
-        //                  { "userID", new AttributeValue { S = inputUserID } }
-        //              },
-        //         };
-        //     var response = await dynamoDB.DeleteItemAsync(request);
-        //     await DeleteImageByIDAsync(inputItemID);
-        //     return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
-        // } 
-
+    
         // public async Task<bool> DeleteSelectedItemWithoutImageAsync(String inputItemID, String inputUserID){
         //     var request = new DeleteItemRequest
         //         {

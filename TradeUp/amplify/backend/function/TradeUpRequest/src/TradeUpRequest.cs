@@ -57,12 +57,30 @@ namespace TradeUpRequest
                     }
                     break;
                 case "POST":
-                    context.Logger.LogLine($"Post Request: {request.Path}\n");
-                    if (!String.IsNullOrEmpty(contentType)) {
-                        context.Logger.LogLine($"Content type: {contentType}");
+                    var requestbody = JsonConvert.DeserializeObject<RequestModel>(request.Body);
+                    if(request.QueryStringParameters == null)
+                    {
+                        if (requestbody == null){
+                            return new APIGatewayProxyResponse {StatusCode = 400};
+                        }
+                        else if (requestbody != null)
+                        {
+                            if (await requestProvider.AddRequestWithImageAsync(requestbody))
+                            {
+                                return new APIGatewayProxyResponse 
+                                { 
+                                    StatusCode = 200
+                                };
+                            }
+                            else
+                            {
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 400
+                                };
+                            }
+                        }
                     }
-                    context.Logger.LogLine($"Body: {request.Body}");
-                    response.StatusCode = (int)HttpStatusCode.OK;
                     break;
                 case "PUT":
                     context.Logger.LogLine($"Put Request: {request.Path}\n");

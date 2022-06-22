@@ -6,5 +6,7 @@ namespace TradeUpRequest
     {
         Task<RequestModel[]> GetAllRequestAsync();
         Task<RequestModel[]> GetAllRequestByUserIDAsync(string inputRequestTradeFromID);
+        Task<bool> AddRequestWithImageAsync (RequestModel requestbody);
+        Task<bool> AddRequestWithoutImageAsync (RequestModel requestbody);
     }
 }
