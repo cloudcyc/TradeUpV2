@@ -1,37 +1,78 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import { useIsFocused } from "@react-navigation/native";
 Ionicons.loadFont();
 
 function ManageMarketplace({ navigation }){
+  const isFocused = useIsFocused(); //used to refresh upon entering new screen
+  const [itemList, setitemList] = React.useState([]);
+  const [search, setNewSearch] = React.useState("");
+  const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputUserID=uid0002';
+  const getitemList = () => {
+      fetch(getItemAPI).then((response) => response.json()).then((json) => { 
+        setitemList(json);
+      }).catch((error) => {
+          console.error(error);
+      });
+  }
 
-    const SampleProduct = [{
-        ProductName: "Iphone 13", Name: "John Sandford", product_image:
-        "https://www.igeeksblog.com/wp-content/uploads/2021/08/black-wallpaper-for-iphone-10-675x450.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 14", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }];
+  const handleSearchChange = (text) => {
+      setNewSearch(text)
+      
+    };
+  const filteredItem = !search
+  ? itemList
+  : itemList.filter((filteredItem) =>
+  filteredItem.itemName.toLowerCase().includes(search.toLowerCase())
+    );
+
+  useEffect(() => {
+      if(isFocused){ 
+          getitemList();
+        }
+      
+  },[navigation, isFocused]);
+
+
+  const ModeHandle = (inputItemMode) => {
+    if (inputItemMode == "Trade"){
+      return (
+              <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'ManageMarketplaceDetails', item)}>
+                                      <Image style={styles.userImage} source={{uri: 'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
+                                      <View style={styles.cardFooter}>
+                                          <View style={{alignItems:"center", justifyContent:"center"}}>
+                                          <Text style={styles.name}>{item.itemName}</Text>
+                                          <Text style={styles.name}>{item.itemMode}</Text>
+                                          <Text style={styles.name}>{item.userID}</Text>
+                                          {/* <TouchableOpacity style={styles.followButton}>
+                                              <Text style={styles.followButtonText}>View</Text>  
+                                          </TouchableOpacity> */}
+                                        </View>
+                                      </View>
+              </TouchableOpacity>
+            )
+          }
+    else if (inputItemMode == "Sell"){
+      return (
+              <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'ManageMarketplaceDetails', item)}>
+                              <Image style={styles.userImage} source={{uri: 'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
+                              <View style={styles.cardFooter}>
+                                  <View style={{alignItems:"center", justifyContent:"center"}}>
+                                  <Text style={styles.name}>{item.itemName}</Text>
+                                  <Text style={styles.name}>{item.itemMode}</Text>
+                                  <Text style={styles.name}>{item.userID}</Text>
+                                  {/* <TouchableOpacity style={styles.followButton}>
+                                      <Text style={styles.followButtonText}>View</Text>  
+                                  </TouchableOpacity> */}
+                                </View>
+                              </View>
+              </TouchableOpacity>
+              
+            )
+    }
+  }
 
     return(
         <SafeAreaView style={styles.root}>
@@ -40,31 +81,30 @@ function ManageMarketplace({ navigation }){
                 
                 <View style={styles.containerSearch}>
                     <Ionicons name='search-outline' size={25} color='grey' style={{paddingLeft:5,paddingRight:5}} />
-                    <TextInput placeholder='Search Product Name'/>
+                    <TextInput placeholder='Search Product Name'
+                      onChangeText ={(text) => handleSearchChange(text)}
+                    />
                 </View>
 
             </View>
 
             <FlatList
-            data={SampleProduct}
+            data={filteredItem}
             style={styles.list}
             numColumns={2}
             contentContainerStyle={styles.listContainer}
             renderItem={({item}) => {
                 return (
-
-                    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'ManageMarketplaceDetails', item)}>
-                        <Image style={styles.userImage} source={{uri:item.product_image}}/>
-                        <View style={styles.cardFooter}>
-                            <View style={{alignItems:"center", justifyContent:"center"}}>
-                            <Text style={styles.name}>{item.ProductName}</Text>
-                            <Text style={styles.position}>{item.Name}</Text>
-                            {/* <TouchableOpacity style={styles.followButton}>
-                                <Text style={styles.followButtonText}>View</Text>  
-                            </TouchableOpacity> */}
-                        </View>
-                        </View>
-                    </TouchableOpacity>
+                  
+                  <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'ManageMarketplaceDetails', item)}>
+                                      <Image style={styles.userImage} source={{uri: 'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
+                                      <View style={styles.cardFooter}>
+                                          <View style={{alignItems:"center", justifyContent:"center"}}>
+                                          <Text style={styles.name}>{item.itemName}</Text>
+                                          <Text style={styles.name}>Mode: {item.itemMode}</Text>
+                                        </View>
+                                      </View>
+                  </TouchableOpacity>
 
                     )
                 }}
@@ -189,8 +229,7 @@ const styles = StyleSheet.create({
 
       userImage:{
         height: 120,
-        width: 120,
-        borderRadius:60,
+        width: "100%",
         alignSelf:'center',
       },
 

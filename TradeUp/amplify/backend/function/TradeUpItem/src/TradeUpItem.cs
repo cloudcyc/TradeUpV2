@@ -103,6 +103,14 @@ namespace TradeUpItem
                             Body = JsonConvert.SerializeObject(items)
                         };
                     }
+                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserID")){
+                        var items = await itemProvider.GetItemByUserID(request.QueryStringParameters["inputUserID"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(items)
+                        };
+                    }
                     break;
                 case "POST":
                 var item = JsonConvert.DeserializeObject<ItemModel>(request.Body);
