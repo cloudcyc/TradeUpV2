@@ -96,8 +96,8 @@ function HomeTabs() {
         <Tab.Screen name={MarketplaceScreenName} component={Marketplace} options={{headerShown: false,}}/>
         <Tab.Screen name={ShopScreenName} component={Shop} options={{headerShown: false,}}/>
         <Tab.Screen name={LocationScreenName} component={Location} options={{headerShown: false,}}/>        
-        {/* <Tab.Screen name={ProfileScreenName} component={Profile} options={{headerShown: false,}}/> */}
-        <Tab.Screen name={ProfileScreenName} component={LoginScreen} options={{headerShown: false,}}/>
+        <Tab.Screen name={ProfileScreenName} component={Profile} options={{headerShown: false,}}/>
+        {/* <Tab.Screen name={ProfileScreenName} component={LoginScreen} options={{headerShown: false,}}/> */}
 
         
       </Tab.Navigator>

@@ -23,6 +23,25 @@ function AddMarketplaceProduct({ navigation }){
 
     return(
         <ScrollView style={styles.root}>
+
+            <View>
+
+            <Text style={styles.title2}>Select Platform:</Text>
+            <View style={styles.sectionStyle3}>
+                <Picker
+                    selectedValue={selectedCat}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setSelectedCat(itemValue)
+                    }>
+                    <Picker.Item label="Select a categories" value="NULL" />
+                    <Picker.Item label="Marketplace" value="Marketplace" />
+                    <Picker.Item label="Shop" value="Shop" />
+
+                </Picker>
+            </View>
+
+            </View>
+
             <View>
                 <Text style={styles.title2}>Title:</Text>
                 <View style={styles.sectionStyle}>
@@ -34,6 +53,21 @@ function AddMarketplaceProduct({ navigation }){
                         underlineColorAndroid="transparent"
                     />
                     {/* call the name of user according to the account */}
+
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.title2}>Product Price:</Text>
+                <View style={styles.sectionStyle}>
+
+                    <Ionicons name='pricetags-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder="Enter Price Here"
+                        underlineColorAndroid="transparent"
+                        keyboardType='numeric'
+                    />
 
                 </View>
             </View>
