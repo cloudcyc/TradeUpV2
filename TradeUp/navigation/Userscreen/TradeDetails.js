@@ -61,7 +61,7 @@ function TradeDetailScreen({ navigation }){
 
             {/* i trade with */}
             <View style={styles.row}>
-                <Text style={styles.title}>Trade Request Item Name:</Text>
+                <Text style={styles.title}>Item Name:</Text>
                 <Text style={styles.Desc}>{route.params.requestItemID}</Text>
             </View>
 
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
       paddingTop: 15,
       fontSize: 18,
       fontWeight: 'bold',
-      marginLeft: '65%',
+      marginLeft: '40%',
   },
 
   Desc2:{
