@@ -41,7 +41,7 @@ function ManageMarketplaceDetails({ navigation }){
           <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('ManageMarketplace')}>
               <Text style={styles.shareButtonText}>Delete</Text>  
             </TouchableOpacity>
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditMarketplaceDetails')}>
+            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditMarketplaceDetails', route.params)}>
               <Text style={styles.shareButtonText}>Edit Details</Text>  
             </TouchableOpacity>
           </View> 
