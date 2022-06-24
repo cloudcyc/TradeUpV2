@@ -241,9 +241,10 @@ namespace TradeUpItem
                 IndexName = "userID-index",
                 ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
                     {":userID", new AttributeValue { S = inputUserID }},
+                    {":itemStatus", new AttributeValue { S = "Removed" }}
                 },
                 KeyConditionExpression = "userID = :userID",
-                
+                FilterExpression = "itemStatus <> :itemStatus"
             });
 
             if (result != null && result.Items != null){

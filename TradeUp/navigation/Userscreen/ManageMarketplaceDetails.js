@@ -26,25 +26,90 @@ function ManageMarketplaceDetails({ navigation }){
     }
   },[navigation, isFocused]);
 
+  const displayButtons = (inputStatus) => {
+    if (inputStatus == "Sold" || inputStatus == "Traded"){
+      
+    }
+    else
+    {
+      return(
+        <View style={styles.addToCarContainer}>
+          <TouchableOpacity style={styles.shareButton2} onPress={() => deleteItem()}>
+                <Text style={styles.shareButtonText}>Delete</Text>  
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditMarketplaceDetails', route.params)}>
+                <Text style={styles.shareButtonText}>Edit Details</Text>  
+          </TouchableOpacity>
+        </View>
+      )
+    }
+  }
+
+  const deleteItem = async () => {
+    var updateItemAPI = "https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?NewImage=False&inputItemID="+route.params.itemID;
+    let res = await fetch(updateItemAPI, {
+        method: "POST",
+        body: JSON.stringify({
+            itemID: route.params.itemID,
+            userID: route.params.userID,
+            itemCategory: route.params.itemCategory,
+            itemDate: route.params.itemDate,
+            itemDesc: route.params.itemDesc,
+            itemMode: route.params.itemMode,
+            itemName: route.params.itemName,
+            itemPrice: route.params.itemPrice,
+            itemStatus: "Removed"
+        }),
+    }).then((res) => {
+        if (res.status == 200) {
+                alert("Item removed successfully.")
+                console.log("Item removed successfully");
+                navigation.navigate('ManageMarketplace')
+            } else {
+                alert("Submission failed Error:" + res.status)
+                console.log("Some error occured: ");
+                console.log(res.status)
+                console.log(res)
+            }
+    });
+  }
+
+  const Statuscolor = (inputStatus) => {
+    if (inputStatus == "Active"){
+      return(
+        <Text style={styles.GreenStatus}>{inputStatus}</Text>
+      )
+    }
+    else
+    {
+      return(
+        <Text style={styles.RedStatus}>{inputStatus}</Text>
+      )
+    }
+  }
+
+  const showPrice = (inputitemMode) => {
+    if (inputitemMode == "Sell"){
+      return(
+        <Text style={styles.price}>RM {route.params.itemPrice}</Text>
+      )
+    }
+  }
+
     return(
         <View style={styles.container}>
         <ScrollView>
           <View >
             <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' + route.params.itemID +'.jpg'}}/>
-            <Text style={styles.name}>{route.params.itemName}</Text>
+            <Text style={styles.name}>{route.params.itemName}</Text> 
+            {Statuscolor(route.params.itemStatus)}
+            {showPrice(route.params.itemMode)}
             <Text style={styles.price}>By: { userName }</Text>
             <Text style={styles.description}>{route.params.itemDesc}</Text>
           </View>
 
           <View style={styles.separator}></View>
-          <View style={styles.addToCarContainer}>
-          <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('ManageMarketplace')}>
-              <Text style={styles.shareButtonText}>Delete</Text>  
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditMarketplaceDetails', route.params)}>
-              <Text style={styles.shareButtonText}>Edit Details</Text>  
-            </TouchableOpacity>
-          </View> 
+          {displayButtons(route.params.itemStatus)}
         </ScrollView>
       </View>
     );
@@ -74,6 +139,22 @@ const styles = StyleSheet.create({
       marginTop:10,
       fontSize:18,
       color:"grey",
+      fontWeight:'bold'
+    },
+    RedStatus:{
+      paddingLeft:20,
+      paddingRight:20,
+      marginTop:10,
+      fontSize:18,
+      color:"#dc2f02",
+      fontWeight:'bold'
+    },
+    GreenStatus:{
+      paddingLeft:20,
+      paddingRight:20,
+      marginTop:10,
+      fontSize:18,
+      color:"#02DC13",
       fontWeight:'bold'
     },
     description:{

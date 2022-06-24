@@ -69,6 +69,7 @@ function AdminAddLocation ({navigation}) {
         }
         else 
         {
+            
             let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres", {
                         method: "POST",
                         body: JSON.stringify({

@@ -12,7 +12,6 @@ namespace TradeUpRequest
                 public string requestTradeFromID {get; set;}
                 public string requestItemID {get; set;}
                 public string requestMeetLocation {get; set;}
-                public List<string> requestMeetCoordinate {get; set;}
                 public string requestImage {get; set;}
 
         }

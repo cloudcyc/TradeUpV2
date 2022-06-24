@@ -7,9 +7,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 function TradeDetailScreen({ navigation }){
   const route = useRoute();
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
-  const coordinate = { latitude: parseFloat(route.params.requestMeetCoordinate[1]) , longitude: parseFloat(route.params.requestMeetCoordinate[0]) };
-  console.log(route.params.requestMeetCoordinate[0] + " " + route.params.requestMeetCoordinate[1]);
-  const openCoordinate = createOpenLink({ ...coordinate, zoom: 20 });
+  // const coordinate = { latitude: parseFloat(route.params.requestMeetCoordinate[1]) , longitude: parseFloat(route.params.requestMeetCoordinate[0]) };
+  // console.log(route.params.requestMeetCoordinate[0] + " " + route.params.requestMeetCoordinate[1]);
+  // const openCoordinate = createOpenLink({ ...coordinate, zoom: 20 });
 
 
   //From user
@@ -103,12 +103,12 @@ function TradeDetailScreen({ navigation }){
                 <View style={styles.row2}>
                 <Text style={styles.title}>Meet Up Location:</Text>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                         style={styles.loginScreenButton3}
                         onPress={openCoordinate}
                         underlayColor='#fff'>
                         <Text style={styles.loginText}>View in Map</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 <View style={styles.sectionStyle}>
 

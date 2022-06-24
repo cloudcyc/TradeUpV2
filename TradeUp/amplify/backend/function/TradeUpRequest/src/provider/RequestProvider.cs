@@ -37,7 +37,7 @@ namespace TradeUpRequest
                     item.TryGetValue("requestTradeFromID", out var requestTradeFromID);
                     item.TryGetValue("requestItemID", out var requestItemID);
                     item.TryGetValue("requestMeetLocation", out var requestMeetLocation);
-                    item.TryGetValue("requestMeetCoordinate", out var requestMeetCoordinate);
+                    
                     
                     requests.Add(new RequestModel{
                         requestID = requestID?.S,
@@ -49,7 +49,7 @@ namespace TradeUpRequest
                         requestTradeFromID = requestTradeFromID?.S,
                         requestItemID = requestItemID?.S,
                         requestMeetLocation = requestMeetLocation?.S,
-                        requestMeetCoordinate = requestMeetCoordinate?.SS
+                        
                     });
                 }
                 return requests.ToArray();
@@ -81,7 +81,7 @@ namespace TradeUpRequest
                     item.TryGetValue("requestTradeFromID", out var requestTradeFromID);
                     item.TryGetValue("requestItemID", out var requestItemID);
                     item.TryGetValue("requestMeetLocation", out var requestMeetLocation);
-                    item.TryGetValue("requestMeetCoordinate", out var requestMeetCoordinate);
+                    
                     
                     requests.Add(new RequestModel{
                         requestID = requestID?.S,
@@ -93,7 +93,7 @@ namespace TradeUpRequest
                         requestTradeFromID = requestTradeFromID?.S,
                         requestItemID = requestItemID?.S,
                         requestMeetLocation = requestMeetLocation?.S,
-                        requestMeetCoordinate = requestMeetCoordinate?.SS
+                        
                     });
                 }
                 return requests.ToArray();
@@ -117,7 +117,6 @@ namespace TradeUpRequest
                     {"requestTradeFromID", new AttributeValue(requestbody.requestTradeFromID)},
                     {"requestItemID", new AttributeValue(requestbody.requestItemID)},
                     {"requestMeetLocation", new AttributeValue(requestbody.requestMeetLocation)},
-                    {"requestMeetCoordinate", new AttributeValue(requestbody.requestMeetCoordinate)},
                 }
             };
             
@@ -157,10 +156,36 @@ namespace TradeUpRequest
                     {"requestTradeFromID", new AttributeValue(requestbody.requestTradeFromID)},
                     {"requestItemID", new AttributeValue(requestbody.requestItemID)},
                     {"requestMeetLocation", new AttributeValue(requestbody.requestMeetLocation)},
-                    {"requestMeetCoordinate", new AttributeValue(requestbody.requestMeetCoordinate)},
+                    
                 }
             };
             var response = await dynamoDB.PutItemAsync(request);
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        }
+
+        //use this function when item been removed
+        public async Task<bool> UpdateRequestsToRemovedBasedOnID(string inputRequestItemID)
+        {
+            var request = new UpdateItemRequest
+            {
+                TableName = "TradeUpRequests-dev",
+                Key = new Dictionary<string, AttributeValue>(){
+                    { "requestItemID",new AttributeValue {S = inputRequestItemID}},
+                },
+                ExpressionAttributeNames = new Dictionary<string, string>(){
+                    {"#requestTradeStatus", "requestTradeStatus"},
+                    {"#requestItemID", "requestItemID" }
+                },
+                ExpressionAttributeValues = new Dictionary<string, AttributeValue>(){
+                    {":newStatus",new AttributeValue {S = "Removed"}},
+                    {":itemID",new AttributeValue {S = inputRequestItemID}},
+                    // This updates price only if current price is 20.00.
+                    
+                },
+                UpdateExpression = "SET #requestTradeStatus = :newStatus",
+                ConditionExpression = "#requestItemID = :itemID",
+            };
+            var response =  await dynamoDB.UpdateItemAsync(request);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
         

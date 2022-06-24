@@ -8,5 +8,6 @@ namespace TradeUpRequest
         Task<RequestModel[]> GetAllRequestByUserIDAsync(string inputRequestTradeFromID);
         Task<bool> AddRequestWithImageAsync (RequestModel requestbody);
         Task<bool> AddRequestWithoutImageAsync (RequestModel requestbody);
+        Task<bool> UpdateRequestsToRemovedBasedOnID(string inputRequestItemID);
     }
 }

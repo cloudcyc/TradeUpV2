@@ -57,9 +57,9 @@ namespace TradeUpRequest
                     }
                     break;
                 case "POST":
-                    var requestbody = JsonConvert.DeserializeObject<RequestModel>(request.Body);
                     if(request.QueryStringParameters == null)
                     {
+                        var requestbody = JsonConvert.DeserializeObject<RequestModel>(request.Body);
                         if (requestbody == null){
                             return new APIGatewayProxyResponse {StatusCode = 400};
                         }
@@ -80,6 +80,23 @@ namespace TradeUpRequest
                                 };
                             }
                         }
+                    }
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputRequestItemID")){
+                            
+                            if (await requestProvider.UpdateRequestsToRemovedBasedOnID(request.QueryStringParameters["inputRequestItemID"]))
+                            {
+                                return new APIGatewayProxyResponse 
+                                { 
+                                    StatusCode = 200
+                                };
+                            }
+                            else
+                            {
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 400
+                                };
+                            }
                     }
                     break;
                 case "PUT":

@@ -20,14 +20,17 @@ function EditMarketplaceDetails({ navigation }){
     const [itemMode, setitemMode] = useState(route.params.itemMode);
     const [itemName, setitemName] = useState(route.params.itemName);
     const [itemPrice, setitemPrice] = useState(route.params.itemPrice);
-
+    const [itemStatus, setitemStatus] = useState(route.params.itemStatus);
+    
     //new
     const [newitemImage, setnewitemImage] = useState();
-    const [newitemStatus, setnewitemStatus] = useState();
+    
 
     //current
     const [image, setImage] = useState('https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' + route.params.itemID +'.jpg');
-    const [itemStatus, setitemStatus] = useState(route.params.itemStatus);
+    var updateItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?';
+    
+    
 
     const itemModeHandle = (inputitemMode) =>{
         if(inputitemMode == "Sell"){
@@ -51,10 +54,7 @@ function EditMarketplaceDetails({ navigation }){
                 </View>
             )
         }
-        else {
-            setitemPrice('');
-            return null;
-        }
+        
     }
 
     const choosePhotoFromLibrary = () => {
@@ -75,13 +75,86 @@ function EditMarketplaceDetails({ navigation }){
           });
     };
 
-    const [selectedCat, setSelectedCat] = useState();
 
     React.useEffect(() => {
         if(isFocused){ 
           
         }
       },[navigation, isFocused]);
+
+      const updateItem = async () => {
+        if (newitemImage != null){
+            // update with new image
+            if (itemCategory == null || itemDesc == null || itemMode == null || itemName == null || itemStatus == null){
+                alert("Please fill in every criteria.");
+            }
+            else{
+                updateItemAPI = updateItemAPI + "NewImage=True&inputItemID="+itemID;
+                let res = await fetch(updateItemAPI, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            itemID: itemID,
+                            userID: userID,
+                            itemCategory: itemCategory,
+                            itemDate: itemDate,
+                            itemDesc: itemDesc,
+                            itemMode: itemMode,
+                            itemName: itemName,
+                            itemPrice: itemPrice,
+                            itemStatus: itemStatus,
+                            itemImage: newitemImage
+                        }),
+                    }).then((res) => {
+                        if (res.status == 200) {
+                                alert("Item updated successfully.")
+                                console.log("Item updated successfully");
+                                navigation.navigate('ManageMarketplace')
+                            } else {
+                                alert("Submission failed Error:" + res.status)
+                                console.log("Some error occured: ");
+                                console.log(res.status)
+                                console.log(res)
+                            }
+                    });
+                // navigation.navigate('ManageMarketplace')
+            }
+        }
+        else{
+            //update without new image
+            if (itemCategory == null || itemDesc == null || itemMode == null || itemName == null || itemStatus == null){
+                alert("Please fill in every criteria.");
+            }
+            else{
+                updateItemAPI = updateItemAPI + "NewImage=False&inputItemID="+itemID;
+                let res = await fetch(updateItemAPI, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        itemID: itemID,
+                        userID: userID,
+                        itemCategory: itemCategory,
+                        itemDate: itemDate,
+                        itemDesc: itemDesc,
+                        itemMode: itemMode,
+                        itemName: itemName,
+                        itemPrice: itemPrice,
+                        itemStatus: itemStatus
+                    }),
+                }).then((res) => {
+                    if (res.status == 200) {
+                            alert("Item updated successfully.")
+                            console.log("Item updated successfully");
+                            navigation.navigate('ManageMarketplace')
+                        } else {
+                            alert("Submission failed Error:" + res.status)
+                            console.log("Some error occured: ");
+                            console.log(res.status)
+                            console.log(res)
+                        }
+                });
+                // navigation.navigate('ManageMarketplace')
+            }
+        }
+      }
 
 
     return(
@@ -138,9 +211,11 @@ function EditMarketplaceDetails({ navigation }){
                         
                     </Picker>
                 </View>
-
-                <Text style={styles.title2}>Item Mode:</Text>
-                <View style={styles.sectionStyle3}>
+            </View>
+            <View>           
+                <Text style={styles.title2}>Item Mode: {itemMode}</Text>
+                {itemModeHandle(itemMode)}
+                {/* <View style={styles.sectionStyle3}>
                     <Picker
                         selectedValue={itemMode}
                         onValueChange={(itemValue, itemIndex) =>
@@ -151,14 +226,27 @@ function EditMarketplaceDetails({ navigation }){
                         <Picker.Item label="Sell" value="Sell" />
                         <Picker.Item label="Trade" value="Trade" />
                     </Picker>
+                </View> */}
+
+
+            </View>
+            <View>
+            <Text style={styles.title2}>Current Status: {itemStatus}</Text>
+                <View style={styles.sectionStyle3}>
+                <Picker
+                        selectedValue={itemStatus}
+                        onValueChange={(itemValue, itemIndex) =>
+                        setitemStatus(itemValue)
+                        }>
+                    
+                        <Picker.Item label="Select a categories" value="NULL" />
+                        <Picker.Item label="Active" value="Active" />
+                        <Picker.Item label="Inactive" value="Inactive" />
+                        
+                        
+                    </Picker>
                 </View>
             </View>
-
-            
-
-            {/* {itemModeHandle(itemMode)} */}
-
-            
 
             <View>
                 <Text style={styles.title2}>Add Images:</Text>
@@ -179,7 +267,7 @@ function EditMarketplaceDetails({ navigation }){
 
                 <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('ManageMarketplace')}                    
+                    onPress={() => updateItem()}                    
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Submit</Text>
                 </TouchableOpacity>

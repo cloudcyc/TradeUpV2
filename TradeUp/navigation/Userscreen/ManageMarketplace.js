@@ -9,7 +9,7 @@ function ManageMarketplace({ navigation }){
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
   const [itemList, setitemList] = React.useState([]);
   const [search, setNewSearch] = React.useState("");
-  const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputUserID=uid0002';
+  const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputUserID=uid0002'; //update this when logging
   const getitemList = () => {
       fetch(getItemAPI).then((response) => response.json()).then((json) => { 
         setitemList(json);
@@ -74,6 +74,20 @@ function ManageMarketplace({ navigation }){
     }
   }
 
+  const Statuscolor = (inputStatus) => {
+    if (inputStatus == "Active"){
+      return(
+        <Text style={styles.GreenStatus}>{inputStatus}</Text>
+      )
+    }
+    else
+    {
+      return(
+        <Text style={styles.RedStatus}>{inputStatus}</Text>
+      )
+    }
+  }
+
     return(
         <SafeAreaView style={styles.root}>
 
@@ -102,6 +116,7 @@ function ManageMarketplace({ navigation }){
                                           <View style={{alignItems:"center", justifyContent:"center"}}>
                                           <Text style={styles.name}>{item.itemName}</Text>
                                           <Text style={styles.name}>Mode: {item.itemMode}</Text>
+                                          {Statuscolor(item.itemStatus)}
                                         </View>
                                       </View>
                   </TouchableOpacity>
@@ -238,6 +253,20 @@ const styles = StyleSheet.create({
         flex:1,
         alignSelf:'center',
         color:"#008080",
+        fontWeight:'bold'
+      },
+      RedStatus:{
+        fontSize:18,
+        flex:1,
+        alignSelf:'center',
+        color:"#dc2f02",
+        fontWeight:'bold'
+      },
+      GreenStatus:{
+        fontSize:18,
+        flex:1,
+        alignSelf:'center',
+        color:"#02DC13",
         fontWeight:'bold'
       },
 
