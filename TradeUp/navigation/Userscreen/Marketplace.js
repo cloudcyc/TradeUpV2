@@ -22,15 +22,15 @@ function Marketplace({ navigation }){
         });
     }
 
-  const handleSearchChange = (text) => {
-      setNewSearch(text)
-      
-    };
-  const filteredTrade = !search
-  ? tradeList
-  : tradeList.filter((filteredTrade) =>
-  filteredTrade.itemName.toLowerCase().includes(search.toLowerCase())
-    );
+    const handleSearchChange = (text) => {
+        setNewSearch(text)
+        
+        };
+    const filteredTrade = !search
+    ? tradeList
+    : tradeList.filter((filteredTrade) =>
+    filteredTrade.itemName.toLowerCase().includes(search.toLowerCase())
+        );
 
     useEffect(() => {
         if(isFocused){ 

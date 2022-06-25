@@ -55,6 +55,16 @@ namespace TradeUpRequest
                             Body = JsonConvert.SerializeObject(requests)
                         };
                     }
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputRequestItemID"))
+                    {
+                        
+                        var requests = await requestProvider.GetRequestByRequestItemIDAsync(request.QueryStringParameters["inputRequestItemID"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(requests)
+                        };
+                    }
                     break;
                 case "POST":
                     if(request.QueryStringParameters == null)

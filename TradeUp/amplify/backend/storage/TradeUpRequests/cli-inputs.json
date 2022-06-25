@@ -5,6 +5,10 @@
     "fieldName": "requestID",
     "fieldType": "string"
   },
+  "sortKey": {
+    "fieldName": "requestItemID",
+    "fieldType": "string"
+  },
   "gsi": [],
   "triggerFunctions": []
 }

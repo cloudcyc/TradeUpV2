@@ -9,6 +9,7 @@ using System.IO;
 using SixLabors.ImageSharp;
 
 
+
 namespace TradeUpRequest
 {
  public class RequestProvider : IRequestProvider
@@ -163,30 +164,97 @@ namespace TradeUpRequest
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
 
+        //Update status based on delete/traded
+        //get requestItemID first
+        public async Task<RequestModel[]> GetRequestByRequestItemIDAsync(string inputRequestItemID)
+        {
+            var result = await dynamoDB.QueryAsync(new QueryRequest{
+                TableName = "TradeUpRequests-dev",
+                IndexName = "requestItemID-index",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":requestItemID", new AttributeValue { S = inputRequestItemID }}
+                },
+                KeyConditionExpression = "requestItemID = :requestItemID",
+                
+            });
+
+            if (result != null && result.Items != null){
+                var requests = new  List<RequestModel>();
+                foreach (var item in result.Items){
+                    item.TryGetValue("requestID", out var requestID);
+                    item.TryGetValue("requestTradeItemName", out var requestTradeItemName);
+                    item.TryGetValue("requestTradeItemDesc", out var requestTradeItemDesc);
+                    item.TryGetValue("requestTradeDate", out var requestTradeDate);
+                    item.TryGetValue("requestTradeStatus", out var requestTradeStatus);
+                    item.TryGetValue("requestTradeToID", out var requestTradeToID);
+                    item.TryGetValue("requestTradeFromID", out var requestTradeFromID);
+                    item.TryGetValue("requestItemID", out var requestItemID);
+                    item.TryGetValue("requestMeetLocation", out var requestMeetLocation);
+                    
+                    
+                    requests.Add(new RequestModel{
+                        requestID = requestID?.S,
+                        requestTradeItemName = requestTradeItemName?.S,
+                        requestTradeItemDesc = requestTradeItemDesc?.S,
+                        requestTradeDate = requestTradeDate?.S,
+                        requestTradeStatus = requestTradeStatus?.S,
+                        requestTradeToID = requestTradeToID?.S,
+                        requestTradeFromID = requestTradeFromID?.S,
+                        requestItemID = requestItemID?.S,
+                        requestMeetLocation = requestMeetLocation?.S,
+                        
+                    });
+                }
+                return requests.ToArray();
+            }
+            return Array.Empty<RequestModel>();
+        }
+
         //use this function when item been removed
         public async Task<bool> UpdateRequestsToRemovedBasedOnID(string inputRequestItemID)
         {
-            var request = new UpdateItemRequest
-            {
+            var result = await dynamoDB.QueryAsync(new QueryRequest{
                 TableName = "TradeUpRequests-dev",
-                Key = new Dictionary<string, AttributeValue>(){
-                    { "requestItemID",new AttributeValue {S = inputRequestItemID}},
+                IndexName = "requestItemID-index",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":requestItemID", new AttributeValue { S = inputRequestItemID }}
                 },
-                ExpressionAttributeNames = new Dictionary<string, string>(){
-                    {"#requestTradeStatus", "requestTradeStatus"},
-                    {"#requestItemID", "requestItemID" }
-                },
-                ExpressionAttributeValues = new Dictionary<string, AttributeValue>(){
-                    {":newStatus",new AttributeValue {S = "Removed"}},
-                    {":itemID",new AttributeValue {S = inputRequestItemID}},
-                    // This updates price only if current price is 20.00.
+                KeyConditionExpression = "requestItemID = :requestItemID",
+                
+            });
+
+            if (result != null && result.Items != null){
+                var requests = new  List<RequestModel>();
+                foreach (var item in result.Items){
+                    item.TryGetValue("requestID", out var requestID);
+                    item.TryGetValue("requestItemID", out var requestItemID);
                     
-                },
-                UpdateExpression = "SET #requestTradeStatus = :newStatus",
-                ConditionExpression = "#requestItemID = :itemID",
-            };
-            var response =  await dynamoDB.UpdateItemAsync(request);
-            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+                    var request = new UpdateItemRequest
+                    {
+                        TableName = "TradeUpRequests-dev",
+                        Key = new Dictionary<string, AttributeValue>(){
+                            { "requestItemID",new AttributeValue {S = requestItemID?.S}},
+                            { "requestID",new AttributeValue {S = requestID?.S}},
+                            
+                        },
+                        ExpressionAttributeNames = new Dictionary<string, string>(){
+                            {"#requestTradeStatus", "requestTradeStatus"},
+                            
+                        },
+                        ExpressionAttributeValues = new Dictionary<string, AttributeValue>(){
+                            {":newStatus",new AttributeValue {S = "Removed"}},
+                            
+                            // This updates price only if current price is 20.00.
+                            
+                        },
+                        UpdateExpression = "SET #requestTradeStatus = :newStatus",
+                    };
+                    var response =  await dynamoDB.UpdateItemAsync(request);
+                }
+                return true;
+            }
+            // return Array.Empty<RequestModel>();
+            return true;
         }
         
         //     public async Task<bool> DeleteSelectedItemWithImageAsync(String inputItemID, String inputUserID){
