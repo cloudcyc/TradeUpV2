@@ -8,10 +8,10 @@ function MyTradeRequest ({navigation}) {
     const [requestList, setrequestList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
     const getRequestList = () => {
-        // const getAllRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestTradeFromID='+ route.params.userID; //remember to update
-        const getAllRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestTradeFromID=uid0002'; //remember to update
+        // const getSendRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestTradeFromID='+ route.params.userID; //remember to update
+        const getSendRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?RequestMode=Send&inputRequestTradeFromID=uid0002'; //remember to update
     
-        fetch(getAllRequestAPI).then((response) => response.json()).then((json) => { 
+        fetch(getSendRequestAPI).then((response) => response.json()).then((json) => { 
             setrequestList(json);
         }).catch((error) => {
             console.error(error);
@@ -33,6 +33,25 @@ function MyTradeRequest ({navigation}) {
             getRequestList();
         }
     },[navigation, isFocused]);
+
+    const Statuscolor = (inputStatus) => {
+        if (inputStatus == "Accepted" ){
+          return(
+            <Text style={styles.success}>{inputStatus}</Text>
+          )
+        }
+        else if (inputStatus == "Pending")
+        {
+          return(
+            <Text style={styles.pending}>{inputStatus}</Text>
+          )
+        }
+        else{
+            return(
+                <Text style={styles.canceled}>{inputStatus}</Text>
+              )
+        }
+      }
     return(
         // <ScrollView style={styles.root}>
         <View style={styles.root}>
@@ -50,7 +69,8 @@ function MyTradeRequest ({navigation}) {
                     onPress={() => navigation.navigate('TradeDetailScreen', item)}>
                         <View style={styles.row}>
                             <Text style={styles.title}>{item.requestTradeItemName}</Text>
-                            <Text style={styles.success}> {item.requestTradeStatus} </Text>
+                            {Statuscolor(item.requestTradeStatus)}
+                            
                         </View>
                         <View style={styles.end}>
                             <Text style={styles.time}>{item.requestTradeDate}</Text>

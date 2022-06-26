@@ -1,35 +1,84 @@
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList, SafeAreaView } from 'react-native';
-import { NavigationHelpersContext, useIsFocused } from "@react-navigation/native";
+import { NavigationHelpersContext, useIsFocused, useRoute} from "@react-navigation/native";
+
 
 function ViewTradeRequest ({navigation}) {
+    const route = useRoute();
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
+    const [requestList, setrequestList] = React.useState([]);
+    const [search, setNewSearch] = React.useState("");
+    const getRequestList = () => {
+        // const getReceiveRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestTradeFromID='+ route.params.userID; //remember to update
+        const getReceiveRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?RequestMode=Receive&inputRequestTradeFromID=uid0002'; //remember to update
+    
+        fetch(getReceiveRequestAPI).then((response) => response.json()).then((json) => { 
+            setrequestList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
 
-    return(
-        <ScrollView style={styles.root}>
-        <View style={styles.root}>
+    const handleSearchChange = (text) => {
+        setNewSearch(text)
         
-            <TouchableOpacity style={styles.container} onPress={() => navigation.navigate('ViewTradeRequestDetails')}>
-                <View style={styles.row}>
-                    <Text style={styles.title}>iPhone 14</Text>
-                    <Text style={styles.pending}> Pending </Text>
-                </View>
-                <View style={styles.end}>
-                    <Text style={styles.time}>18 April 2022 12:00 pm</Text>
-                </View>
-            </TouchableOpacity>
+        };
+    const filteredRequest = !search
+    ? requestList
+    : requestList.filter((filteredRequest) =>
+    filteredRequest.requestTradeItemName.toLowerCase().includes(search.toLowerCase())
+        );
 
-            <TouchableOpacity style={styles.container }onPress={() => navigation.navigate('ViewTradeRequestDetails')}>
-                <View style={styles.row}>
-                    <Text style={styles.title}>iPhone 20</Text>
-                    <Text style={styles.canceled}> Canceled </Text>
-                </View>
-                <View style={styles.end}>
-                    <Text style={styles.time}>18 April 2022 12:00 pm</Text>
-                </View>
-            </TouchableOpacity>
+        const Statuscolor = (inputStatus) => {
+            if (inputStatus == "Accepted" ){
+              return(
+                <Text style={styles.success}>{inputStatus}</Text>
+              )
+            }
+            else if (inputStatus == "Pending")
+            {
+              return(
+                <Text style={styles.pending}>{inputStatus}</Text>
+              )
+            }
+            else{
+                return(
+                    <Text style={styles.canceled}>{inputStatus}</Text>
+                  )
+            }
+          }
 
+    useEffect(() => {
+        if(isFocused){ 
+            getRequestList();
+        }
+    },[navigation, isFocused]);
+    return(
+        <View style={styles.root}>
+        <FlatList
+            data={filteredRequest}
+            keyExtractor= {(key) => {
+                            return key.requestID;
+                        }}
+            style={styles.list}
+            numColumns={1}
+            contentContainerStyle={styles.listContainer}
+            renderItem={({item}) => {
+                return (
+                    <TouchableOpacity style={styles.container}                            
+                    onPress={() => navigation.navigate('TradeDetailScreen', item)}>
+                        <View style={styles.row}>
+                            <Text style={styles.title}>{item.requestTradeItemName}</Text>
+                            {Statuscolor(item.requestTradeStatus)}
+                        </View>
+                        <View style={styles.end}>
+                            <Text style={styles.time}>{item.requestTradeDate}</Text>
+                        </View>
+                    </TouchableOpacity>
+                    )
+                }}
+            />
             </View> 
-        </ScrollView>
     )
 }
 

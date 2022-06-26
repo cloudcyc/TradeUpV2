@@ -45,15 +45,27 @@ namespace TradeUpRequest
             var requestProvider = new RequestProvider(new AmazonDynamoDBClient());
             switch (request.HttpMethod) {
                 case "GET":
-                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputRequestTradeFromID"))
+                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputRequestTradeFromID") && request.QueryStringParameters.ContainsKey("RequestMode"))
                     {
+                        switch (request.QueryStringParameters["RequestMode"]) {
+                            case "Send": 
+                                var requests1 = await requestProvider.GetAllRequestByUserIDAsync(request.QueryStringParameters["inputRequestTradeFromID"]);
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 200,
+                                    Body = JsonConvert.SerializeObject(requests1)
+                                };
+                            break;
+                            case "Receive": 
+                                var requests2 = await requestProvider.GetReceivedRequestByUserIDAsync(request.QueryStringParameters["inputRequestTradeFromID"]);
+                                return new APIGatewayProxyResponse
+                                {
+                                    StatusCode = 200,
+                                    Body = JsonConvert.SerializeObject(requests2)
+                                };
+                            break;
+                        }
                         
-                        var requests = await requestProvider.GetAllRequestByUserIDAsync(request.QueryStringParameters["inputRequestTradeFromID"]);
-                        return new APIGatewayProxyResponse
-                        {
-                            StatusCode = 200,
-                            Body = JsonConvert.SerializeObject(requests)
-                        };
                     }
                     else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputRequestItemID"))
                     {
