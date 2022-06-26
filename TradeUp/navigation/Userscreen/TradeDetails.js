@@ -195,7 +195,7 @@ function TradeDetailScreen({ navigation }){
                 </View>
                  
 
-                <View style={styles.row}>
+                {/* <View style={styles.row}>
                     <Text style={styles.title2}>Attachment:</Text>
                     <View>
                         <TouchableOpacity onPress={choosePhotoFromLibrary}>
@@ -209,12 +209,12 @@ function TradeDetailScreen({ navigation }){
                         />
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
             
-            {/* <View style={styles.row}>
+            <View style={styles.row}>
                 <Text style={styles.title2}>Attachment:</Text>
                 <Image style={styles.productImg2} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/RequestAsset/' + route.params.requestID +'.jpg'}}/>
-            </View> */}
+            </View>
 
           </View>
           <View style={styles.separator}></View>
