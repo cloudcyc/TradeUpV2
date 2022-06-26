@@ -63,7 +63,24 @@ function ManageMarketplaceDetails({ navigation }){
     }).then((res) => {
         if (res.status == 200) {
                 alert("Item removed successfully.")
-                console.log("Item removed successfully");
+                removePendingItem(route.params.itemID, "Item Removed by Owner");
+                // console.log("Item removed successfully");
+                // navigation.navigate('ManageMarketplace')
+            } else {
+                alert("Submission failed Error:" + res.status)
+                console.log("Some error occured: ");
+                console.log(res.status)
+                console.log(res)
+            }
+    });
+  }
+
+  const removePendingItem = async (inputRequestItemID, inputNewStatus) => {
+    var removePendingRequestAPI = "https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestItemID="+inputRequestItemID+"&inputNewStatus="+inputNewStatus;
+    let res = await fetch(removePendingRequestAPI, {
+        method: "POST",
+    }).then((res) => {
+        if (res.status == 200) {
                 navigation.navigate('ManageMarketplace')
             } else {
                 alert("Submission failed Error:" + res.status)

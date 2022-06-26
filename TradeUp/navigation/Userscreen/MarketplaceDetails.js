@@ -37,7 +37,7 @@ function MarketplaceDetails({ navigation }){
 
           <View style={styles.separator}></View>
           <View style={styles.addToCarContainer}>
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('MarketplaceRequest')}>
+            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('MarketplaceRequest', route.params)}>
               <Text style={styles.shareButtonText}>Request Trade</Text>  
             </TouchableOpacity>
           </View> 

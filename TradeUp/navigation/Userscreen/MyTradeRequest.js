@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList, SafeAreaView } from 'react-native';
 import { useIsFocused } from "@react-navigation/native";
-
+import { useRoute } from "@react-navigation/native";
 function MyTradeRequest ({navigation}) {
+    const route = useRoute();
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [requestList, setrequestList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
     const getRequestList = () => {
+        // const getAllRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestTradeFromID='+ route.params.userID; //remember to update
         const getAllRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestTradeFromID=uid0002'; //remember to update
     
         fetch(getAllRequestAPI).then((response) => response.json()).then((json) => { 
@@ -58,29 +60,6 @@ function MyTradeRequest ({navigation}) {
                 }}
             />
             </View>    
-            // 
-
-            // <TouchableOpacity style={styles.container}>
-            //     <View style={styles.row}>
-            //         <Text style={styles.title}>iPhone 14</Text>
-            //         <Text style={styles.pending}> Pending </Text>
-            //     </View>
-            //     <View style={styles.end}>
-            //         <Text style={styles.time}>18 April 2022 12:00 pm</Text>
-            //     </View>
-            // </TouchableOpacity>
-
-            // <TouchableOpacity style={styles.container}>
-            //     <View style={styles.row}>
-            //         <Text style={styles.title}>iPhone 20</Text>
-            //         <Text style={styles.canceled}> Canceled </Text>
-            //     </View>
-            //     <View style={styles.end}>
-            //         <Text style={styles.time}>18 April 2022 12:00 pm</Text>
-            //     </View>
-            // </TouchableOpacity>
-            
-        // </ScrollView>
     )
 }
 

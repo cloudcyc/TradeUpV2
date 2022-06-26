@@ -157,12 +157,25 @@ namespace TradeUpRequest
                     {"requestTradeFromID", new AttributeValue(requestbody.requestTradeFromID)},
                     {"requestItemID", new AttributeValue(requestbody.requestItemID)},
                     {"requestMeetLocation", new AttributeValue(requestbody.requestMeetLocation)},
-                    
                 }
             };
             var response = await dynamoDB.PutItemAsync(request);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
+
+        public async Task<bool> DeleteImageByIDAsync(String inputRequestID){
+            var client = new AmazonS3Client();
+            
+            var request = new Amazon.S3.Model.DeleteObjectRequest{
+                            BucketName = "tradeups3/RequestAsset",
+                            Key = $"{inputRequestID}.jpg"
+            };
+
+            var response = await client.DeleteObjectAsync(request);
+            Console.WriteLine(response.HttpStatusCode);
+
+            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        } 
 
         //Update status based on delete/traded
         //get requestItemID first
@@ -202,7 +215,6 @@ namespace TradeUpRequest
                         requestTradeFromID = requestTradeFromID?.S,
                         requestItemID = requestItemID?.S,
                         requestMeetLocation = requestMeetLocation?.S,
-                        
                     });
                 }
                 return requests.ToArray();
@@ -211,7 +223,7 @@ namespace TradeUpRequest
         }
 
         //use this function when item been removed
-        public async Task<bool> UpdateRequestsToRemovedBasedOnID(string inputRequestItemID)
+        public async Task<bool> UpdateRequestsToRemovedBasedOnID(string inputRequestItemID, string inputNewStatus)
         {
             var result = await dynamoDB.QueryAsync(new QueryRequest{
                 TableName = "TradeUpRequests-dev",
@@ -239,15 +251,18 @@ namespace TradeUpRequest
                         },
                         ExpressionAttributeNames = new Dictionary<string, string>(){
                             {"#requestTradeStatus", "requestTradeStatus"},
+                            {"#requestTradeStatus1", "requestTradeStatus"},
                             
                         },
                         ExpressionAttributeValues = new Dictionary<string, AttributeValue>(){
-                            {":newStatus",new AttributeValue {S = "Removed"}},
+                            {":newStatus",new AttributeValue {S = inputNewStatus}},
+                            {":currentStatus",new AttributeValue {S = "Pending"}},
                             
                             // This updates price only if current price is 20.00.
                             
                         },
                         UpdateExpression = "SET #requestTradeStatus = :newStatus",
+                        ConditionExpression = "#requestTradeStatus1 = :currentStatus"
                     };
                     var response =  await dynamoDB.UpdateItemAsync(request);
                 }

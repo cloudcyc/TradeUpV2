@@ -91,9 +91,9 @@ namespace TradeUpRequest
                             }
                         }
                     }
-                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputRequestItemID")){
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputRequestItemID") && request.QueryStringParameters.ContainsKey("inputNewStatus")){
                             
-                            if (await requestProvider.UpdateRequestsToRemovedBasedOnID(request.QueryStringParameters["inputRequestItemID"]))
+                            if (await requestProvider.UpdateRequestsToRemovedBasedOnID(request.QueryStringParameters["inputRequestItemID"], request.QueryStringParameters["inputNewStatus"]))
                             {
                                 return new APIGatewayProxyResponse 
                                 { 
@@ -107,6 +107,69 @@ namespace TradeUpRequest
                                     StatusCode = 400
                                 };
                             }
+                    }
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("NewImage") && request.QueryStringParameters.ContainsKey("inputRequestID"))
+                    {
+                        var requestbody = JsonConvert.DeserializeObject<RequestModel>(request.Body);
+                        switch (request.QueryStringParameters["NewImage"]) {
+                            case "True":   
+                                if (await requestProvider.DeleteImageByIDAsync(request.QueryStringParameters["inputRequestID"]))
+                                {
+                                    return new APIGatewayProxyResponse 
+                                    { 
+                                        StatusCode = 400
+                                    };
+                                }
+                                else
+                                {
+                                    if (requestbody == null)
+                                    {
+                                        return new APIGatewayProxyResponse {StatusCode = 400};
+                                    }
+                                    else if (requestbody != null)
+                                    {
+                                        if (await requestProvider.AddRequestWithoutImageAsync(requestbody))
+                                        {
+                                            return new APIGatewayProxyResponse 
+                                            { 
+                                                StatusCode = 200
+                                            };
+                                        }
+                                        else
+                                        {
+                                            return new APIGatewayProxyResponse
+                                            {
+                                                StatusCode = 400
+                                            };
+                                        }
+                                    }
+                                }
+                            break;
+                            case "False":
+                                if (requestbody == null)
+                                {
+                                    return new APIGatewayProxyResponse {StatusCode = 400};
+                                }
+                                else if (requestbody != null)
+                                {
+                                    if (await requestProvider.AddRequestWithoutImageAsync(requestbody))
+                                        {
+                                            return new APIGatewayProxyResponse 
+                                            { 
+                                                StatusCode = 200
+                                            };
+                                        }
+                                        else
+                                        {
+                                            return new APIGatewayProxyResponse
+                                            {
+                                               StatusCode = 400
+                                            };
+                                        }
+                                }
+                            break;
+                        }
+                        
                     }
                     break;
                 case "PUT":

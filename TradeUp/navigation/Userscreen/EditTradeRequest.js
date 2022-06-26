@@ -3,10 +3,31 @@ import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInp
 import ImagePicker from 'react-native-image-crop-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { event } from 'react-native-reanimated';
+import { useRoute } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
+import ImgToBase64 from 'react-native-image-base64';
 
 function EditTradeRequest({ navigation }){
+    const route = useRoute();
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
 
-    const [image, setImage] = useState('https://cdn-icons-png.flaticon.com/512/401/401061.png');
+    const [requestID,setrequestID] = useState(route.params.requestID);
+    const [requestTradeItemName, setrequestTradeItemName] = useState(route.params.requestTradeItemName);
+    const [requestTradeItemDesc, setrequestTradeItemDesc] = useState(route.params.requestTradeItemDesc);
+    const [requestTradeDate, setrequestTradeDate] = useState(route.params.requestTradeDate);
+    const [requestTradeStatus, setrequestTradeStatus] = useState(route.params.requestTradeStatus);
+    const [requestTradeToID, setrequestTradeToID] = useState(route.params.requestTradeToID);
+    const [requestTradeFromID, setrequestTradeFromID] = useState(route.params.requestTradeFromID);
+    const [requestItemID, setrequestItemID] = useState(route.params.requestItemID);
+    const [requestMeetLocation, setrequestMeetLocation] = useState(route.params.requestMeetLocation);
+
+    //new
+    const [newitemImage, setnewitemImage] = useState(null);
+    
+
+    //current
+    const [image, setImage] = useState('https://tradeups3.s3.ap-southeast-1.amazonaws.com/RequestAsset/' + route.params.requestID +'.jpg');
+    // const [image, setImage] = useState('https://cdn-icons-png.flaticon.com/512/401/401061.png');
 
     const choosePhotoFromLibrary = () => {
         ImagePicker.openPicker({
@@ -14,53 +35,108 @@ function EditTradeRequest({ navigation }){
             height: 400,
             cropping: true
           }).then(image => {
+            console.log(image);
+            ImgToBase64.getBase64String(image.path)
+                .then(base64String => 
+                    setnewitemImage(base64String)
+                    )
+                .catch(err => 
+                    alert("Something wrong here. Error: " + err)
+                    );
             setImage(image.path);
           });
     };
 
+    const updateRequest = async () => {
+        if (newitemImage != null){
+            if (requestTradeItemName == null || requestTradeItemDesc == null || requestMeetLocation == null){
+                alert("Please fill in every criteria.");
+            }
+            else 
+            {
+                let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=False&inputRequestID="+route.params.requestID, {
+                            method: "POST",
+                            body: JSON.stringify({
+                                requestID: requestID,
+                                requestTradeItemName: requestTradeItemName, 
+                                requestTradeItemDesc: requestTradeItemDesc,
+                                requestTradeDate: requestTradeDate,
+                                requestTradeStatus: requestTradeStatus,
+                                requestTradeToID: requestTradeToID,
+                                requestTradeFromID: requestTradeFromID, //update this when logging
+                                requestItemID: requestItemID,
+                                requestMeetLocation: requestMeetLocation,
+                                requestImage: newitemImage
+                            }),
+                        }).then((res) => {
+                            if (res.status == 200) {
+                                    alert("Request update successfully.")
+                                    navigation.navigate('MyTradeRequest', {userID: route.params.requestTradeFromID})
+                                } else {
+                                    alert("Submission failed Error:" + res.status)
+                                    console.log("Some error occured: ");
+                                    console.log(res.status)
+                                    console.log(res)
+                                }
+                        });  
+            }
+        }
+        else
+        {
+            if (requestTradeItemName == null || requestTradeItemDesc == null || requestMeetLocation == null){
+                alert("Please fill in every criteria.");
+            }
+            else 
+            {
+                let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=False&inputRequestID="+route.params.requestID, {
+                            method: "POST",
+                            body: JSON.stringify({
+                                requestID: requestID,
+                                requestTradeItemName: requestTradeItemName, 
+                                requestTradeItemDesc: requestTradeItemDesc,
+                                requestTradeDate: requestTradeDate,
+                                requestTradeStatus: requestTradeStatus,
+                                requestTradeToID: requestTradeToID,
+                                requestTradeFromID: requestTradeFromID, //update this when logging
+                                requestItemID: requestItemID,
+                                requestMeetLocation: requestMeetLocation,
+                                
+                            }),
+                        }).then((res) => {
+                            if (res.status == 200) {
+                                alert("Request update successfully.")
+                                navigation.navigate('MyTradeRequest', {userID: route.params.requestTradeFromID})
+                                } else {
+                                    alert("Submission failed Error:" + res.status)
+                                    console.log("Some error occured: ");
+                                    console.log(res.status)
+                                    console.log(res)
+                                }
+                        });  
+            }
+        }
+        
+        
+    }
+
     return(
         <ScrollView style={styles.root}>
             <View>
-                <Text style={styles.title2}>Request Trade Item Name:</Text>
+                <Text style={styles.title2}>Trade Request Item Name:</Text>
                 <View style={styles.sectionStyle}>
 
                     <Ionicons name='briefcase-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
                     <TextInput
                         style={styles.textInputStyle}
-                        placeholder="Enter Request Trade Item Name Here"
+                        placeholder="Enter Name Here"
                         underlineColorAndroid="transparent"
+                        value={requestTradeItemName} onChangeText = {(val) => setrequestTradeItemName(val)}
                     />
                     {/* call the name of user according to the account */}
 
                 </View>
             </View>
-
-            <View>
-                <Text style={styles.title2}>Email Address:</Text>
-                <View style={styles.sectionStyle}>
-                    
-                    <Ionicons name='mail-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter Email Address Here"
-                        underlineColorAndroid="transparent"
-                    />
-                </View>
-            </View>
-
-            <View>
-                <Text style={styles.title2}>Phone Number:</Text>
-                <View style={styles.sectionStyle}>
-                    
-                    <Ionicons name='call-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter Contact Number Here"
-                        underlineColorAndroid="transparent"
-                    />
-                </View>
-            </View>
-
+            
             <View>
                 <Text style={styles.title2}>Trade Request Description:</Text>
                 <View style={styles.sectionStyle2}>
@@ -71,11 +147,28 @@ function EditTradeRequest({ navigation }){
                         placeholder="Enter Description Here"
                         underlineColorAndroid="transparent"
                         multiline={true}
+                        value={requestTradeItemDesc} onChangeText = {(val) => setrequestTradeItemDesc(val)}
+                        
                     />
                 </View>
             </View>
 
-            
+            <View>
+                <Text style={styles.title2}>Meet Location:</Text>
+                <View style={styles.sectionStyle}>
+
+                    <Ionicons name='location-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder="Enter Name Here"
+                        underlineColorAndroid="transparent"
+                        value={requestMeetLocation} onChangeText = {(val) => setrequestMeetLocation(val)}
+                        
+                    />
+                    {/* call the name of user according to the account */}
+
+                </View>
+            </View> 
 
             <View>
                 <Text style={styles.title2}>Add Images:</Text>
@@ -96,7 +189,7 @@ function EditTradeRequest({ navigation }){
 
                 <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('HomeTabs')}                    underlayColor='#fff'>
+                    onPress={() => updateRequest()}                    underlayColor='#fff'>
                     <Text style={styles.loginText}>Submit</Text>
                 </TouchableOpacity>
 

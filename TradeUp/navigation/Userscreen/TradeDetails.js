@@ -43,6 +43,55 @@ function TradeDetailScreen({ navigation }){
       });
     };
 
+    
+    const cancelRequest = async () => {
+            let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=False&inputRequestID="+route.params.requestID, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            requestID:  route.params.requestID,
+                            requestTradeItemName: route.params.requestTradeItemName, 
+                            requestTradeItemDesc:  route.params.requestTradeItemDesc,
+                            requestTradeDate:  route.params.requestTradeDate,
+                            requestTradeStatus: "Canceled",
+                            requestTradeToID: route.params.requestTradeToID,
+                            requestTradeFromID:  route.params.requestTradeFromID,
+                            requestItemID: route.params.requestItemID,
+                            requestMeetLocation:  route.params.requestMeetLocation,
+                        }),
+                    }).then((res) => {
+                        if (res.status == 200) {
+                                alert("Request canceled successfully.")
+                                navigation.navigate('MyTradeRequest', {userID: route.params.requestTradeFromID})
+                            } else {
+                                alert("Submission failed Error:" + res.status)
+                                console.log("Some error occured: ");
+                                console.log(res.status)
+                                console.log(res)
+                            }
+                    });  
+        
+        
+    }
+
+    const displayButtons = (inputStatus) => {
+      if (inputStatus == "Rejected" || inputStatus == "Canceled"){
+        
+      }
+      else
+      {
+        return(
+          <View style={styles.addToCarContainer}>
+          <TouchableOpacity style={styles.shareButton2} onPress={() => cancelRequest()}>
+              <Text style={styles.shareButtonText}>Cancel Request</Text>  
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditTradeRequest', route.params)}>
+              <Text style={styles.shareButtonText}>Edit Request</Text>  
+            </TouchableOpacity>
+          </View> 
+        )
+      }
+    }
+  
   React.useEffect(() => {
     if(isFocused){ 
       getitemInfo();
@@ -67,7 +116,7 @@ function TradeDetailScreen({ navigation }){
                     <Ionicons name='briefcase-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
                     <TextInput
                         style={styles.Desc}
-                        placeholder={route.params.requestItemID}
+                        placeholder={route.params.requestTradeItemName}
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
                     />
@@ -131,16 +180,8 @@ function TradeDetailScreen({ navigation }){
             </View>
 
           </View>
-
           <View style={styles.separator}></View>
-          <View style={styles.addToCarContainer}>
-          <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('MyTradeRequest')}>
-              <Text style={styles.shareButtonText}>Delete</Text>  
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditTradeRequest')}>
-              <Text style={styles.shareButtonText}>Edit Request</Text>  
-            </TouchableOpacity>
-          </View> 
+          {displayButtons(route.params.requestTradeStatus)}
         </ScrollView>
       </View>
     );
