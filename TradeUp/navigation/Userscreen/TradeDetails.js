@@ -1,9 +1,12 @@
-import * as React from 'react';
+import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
 import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { createOpenLink } from 'react-native-open-maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ImgToBase64 from 'react-native-image-base64';
+import ImagePicker from 'react-native-image-crop-picker';
+
 function TradeDetailScreen({ navigation }){
   const route = useRoute();
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
@@ -18,6 +21,26 @@ function TradeDetailScreen({ navigation }){
   //Posted by Another User
   const [itemName, setitemName] = React.useState('');
   const [itemDesc, setitemDesc] = React.useState('');
+  const [image, setImage] = useState('https://tradeups3.s3.ap-southeast-1.amazonaws.com/RequestAsset/' + route.params.requestID +'.jpg');
+
+
+  const choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true
+      }).then(image => {
+        console.log(image);
+        ImgToBase64.getBase64String(image.path)
+            .then(base64String => 
+                setuploadImage(base64String)
+                )
+            .catch(err => 
+                alert("Something wrong here. Error: " + err)
+                );
+        setImage(image.path);
+      });
+};
 
   const getfromUserInfo = () =>{
     var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.requestTradeToID;
@@ -172,12 +195,26 @@ function TradeDetailScreen({ navigation }){
                 </View>
                  
 
+                <View style={styles.row}>
+                    <Text style={styles.title2}>Attachment:</Text>
+                    <View>
+                        <TouchableOpacity onPress={choosePhotoFromLibrary}>
+                        <Image
+                            source={{
+                            uri:
+                                image,
+                            }}
+                            style={styles.productImg2}
+                            resizeMode="contain"
+                        />
+                        </TouchableOpacity>
+                    </View>
+                </View>
             
-            
-            <View style={styles.row}>
+            {/* <View style={styles.row}>
                 <Text style={styles.title2}>Attachment:</Text>
                 <Image style={styles.productImg2} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/RequestAsset/' + route.params.requestID +'.jpg'}}/>
-            </View>
+            </View> */}
 
           </View>
           <View style={styles.separator}></View>
@@ -225,6 +262,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
 
 },
+
+imageStyle2: {
+  padding: 10,
+  margin: 5,
+  height: 120,
+  width: 120,
+  resizeMode: 'stretch',
+  justifyContent: 'center',
+  alignSelf: 'center',
+  marginRight:10,
+  alignContent:'center',
+},
+
   
   Desc:{
       paddingLeft:20,
@@ -251,7 +301,7 @@ const styles = StyleSheet.create({
       width: 200,
       height: 120,
       alignSelf:'flex-end',
-      marginLeft: '42%',
+      marginLeft: '43%',
       marginTop:20
     },
     name:{
@@ -379,6 +429,18 @@ const styles = StyleSheet.create({
     marginLeft:'20%',
     height:45,
     width:'30%'
+},
+
+sectionStyle4: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#fff',
+  borderWidth: 1,
+  height: 150,
+  borderRadius: 5,
+  marginTop: 10,
+  marginBottom:10,
 },
 
   loginText:{
