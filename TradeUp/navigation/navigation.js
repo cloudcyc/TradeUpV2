@@ -1,4 +1,6 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationHelpersContext, useIsFocused, useRoute} from "@react-navigation/native";
 
 import AdminDashboard from './AdminScreen/AdminDashboard';
 import AdminLocation from './AdminScreen/AdminLocation';
@@ -58,6 +60,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import ViewTradeRequestDetails from './Userscreen/ViewTradeRequestDetails';
+
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator();
 Ionicons.loadFont();
@@ -70,8 +73,50 @@ const ShopScreenName = 'Shop';
 const LocationScreenName = 'Locations';
 const ProfileScreenName = 'Profile';
 
+
+function NonMemberHomeTabs() {
+  return (
+    
+    <Tab.Navigator
+    screenOptions={({route}) => ({
+             tabBarIcon: ({focused, color, size}) =>{
+                 let iconName;
+                 let rn = route.name;
+
+                 if (rn === LocationScreenName){
+                     iconName = focused ? 'location' : 'location-outline'
+                 } else if (rn === MarketplaceScreenName){
+                      iconName = focused ? 'home' : 'home-outline'
+                 } else if (rn === ShopScreenName){
+                      iconName = focused ? 'cart' : 'cart-outline'
+                 } else if (rn === ProfileScreenName){
+                      iconName = focused ? 'person' : 'person-outline'
+                 }
+
+                 return <Ionicons name = {iconName} size = {size} color = {color}></Ionicons>
+
+             }
+         })}>
+
+  
+      <Tab.Screen name={MarketplaceScreenName} component={Marketplace} options={{headerShown: false,}}/>
+      <Tab.Screen name={ShopScreenName} component={Shop} options={{headerShown: false,}}/>
+      <Tab.Screen name={LocationScreenName} component={Location} options={{headerShown: false,}}/>
+      <Tab.Screen name={ProfileScreenName} component={LoginScreen} options={{headerShown: false,}}/>  
+      {/* <Tab.Screen name={ProfileScreenName} component={Profile} options={{headerShown: false,}}/>   */}
+      
+       
+      
+      
+
+      
+    </Tab.Navigator>
+  );
+}
+
 function HomeTabs() {
     return (
+      
       <Tab.Navigator
       screenOptions={({route}) => ({
                tabBarIcon: ({focused, color, size}) =>{
@@ -93,13 +138,16 @@ function HomeTabs() {
                }
            })}>
 
-           
-
+    
         <Tab.Screen name={MarketplaceScreenName} component={Marketplace} options={{headerShown: false,}}/>
         <Tab.Screen name={ShopScreenName} component={Shop} options={{headerShown: false,}}/>
-        <Tab.Screen name={LocationScreenName} component={Location} options={{headerShown: false,}}/>        
-        <Tab.Screen name={ProfileScreenName} component={Profile} options={{headerShown: false,}}/>
-        {/* <Tab.Screen name={ProfileScreenName} component={LoginScreen} options={{headerShown: false,}}/> */}
+        <Tab.Screen name={LocationScreenName} component={Location} options={{headerShown: false,}}/>
+        {/* <Tab.Screen name={ProfileScreenName} component={LoginScreen} options={{headerShown: false,}}/>   */}
+        <Tab.Screen name={ProfileScreenName} component={Profile} options={{headerShown: false,}}/>  
+        
+         
+        
+        
 
         
       </Tab.Navigator>
@@ -145,6 +193,7 @@ function HomeTabs() {
   export default function Maincontainer() {
     return (
       <Stack.Navigator>
+        <Stack.Screen name="NonMemberHomeTabs" component={NonMemberHomeTabs} options={{headerShown: false,title: 'Back'}}/>
         <Stack.Screen name="HomeTabs" component={HomeTabs} options={{headerShown: false,title: 'Back'}}/>
         <Stack.Screen name="AdminTabs" component={AdminTabs} options={{headerShown: false,}}/>
         <Stack.Screen name="MarketplaceDetails" component={MarketplaceDetails} options={{title: 'Marketplace Details'}}/>

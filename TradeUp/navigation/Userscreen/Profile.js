@@ -1,16 +1,81 @@
 import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
 Ionicons.loadFont();
 
 
 function Profile({ navigation }){
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
+    const [userFullname, setUserFullname] = useState('Username');
+    const [userInfo, setUserInfo] = useState([]);
+
+    const getUserFunction = async(inputUserID) => {
+        var getUsersAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+ inputUserID;
+        fetch(getUsersAPI).then((response) => response.json()).then((json) => {
+          // console.log(json);
+          // console.log(json[0].userFullname);
+          setUserInfo(json);
+          // console.log(userInfo);
+          setUserFullname(json[0].userFullname);
+          // console.log(userFullname);
+          
+          
+        }).catch((error) => {
+          console.error(error);
+        });
+    
+      };
+
+      const retrieveUserID  = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('userID')
+          if(value != null) {
+            // value previously stored
+            getUserFunction(value);
+            
+          }
+        } catch(e) {
+          // error reading value
+          console.log(e);
+        }
+      };
+
+
+      useEffect(() => {
+        retrieveUserID();
+      }, [navigation,isFocused]);
+
+    const clearAsyncStorage  = () =>{
+        try {
+             AsyncStorage.removeItem('userID');
+          return true;
+        }
+        catch(exception) {
+            return false;
+        }
+      };
+    
+      const logoutFunction = () =>{
+        console.log(clearAsyncStorage());
+        if (clearAsyncStorage() == true){
+    
+          alert("Logout Success.");
+          navigation.navigate('NonMemberHomeTabs');
+          console.log("Logout success")
+        }
+        else{
+          alert("Logout fail");
+        }
+      };
+
     return(
         <View style={styles.container}>
             <View style = {styles.Header}>
                 <Image source={{ uri: "https://static.wikia.nocookie.net/pingu/images/9/97/KFCLogo.png/revision/latest?cb=20170428071912" }} style={styles.pic} />
                 <View style={styles.ProfileDetail}>
-                    <Text style={styles.name}>Holland Team</Text>
+                    <Text style={styles.name}>{userFullname}</Text>
                     <Text style={styles.Email}>Holland@gmail.com</Text>
                 </View>
             </View>
@@ -58,7 +123,7 @@ function Profile({ navigation }){
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.Signoutbutton}>
+                <TouchableOpacity style={styles.Signoutbutton} onPress={() => logoutFunction()}>
                   <View style={styles.row}>
                       <Ionicons name='power-outline' size={35} color='#FFF' />
                       <Text style={styles.SignoutText}>Sign Out</Text>

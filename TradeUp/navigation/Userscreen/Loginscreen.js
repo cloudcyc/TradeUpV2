@@ -1,32 +1,87 @@
 import  React, {useState} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, ActivityIndicator, Platform } from 'react-native';
-import Logo from '../../assets/TradeUpLogo.png'
+import Logo from '../../assets/TradeUpLogo.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 Ionicons.loadFont();
 
 function LoginScreen ({navigation}) {
 
-    const [text, setText] = useState('');
+    const [userEmail,setUserEmail] = useState('');
+    const [userPassword,setUserPassword] = useState('');
+
     const anotherFunc = (val) =>{
-        setText('');
+        setUserEmail('');
     }
 
-    const [pass, setPass] = useState('');
     const ClearPass = (val) =>{
-        setPass('');
+        setUserPassword('');
+    }
+
+
+    const Validation = () => {
+        if (userEmail.length < 0) {
+            alert('Alert', 'Password must be minimum 8 characters');
+            
+        }
+        //Do your stuff if condition meet.
     }
 
     const [visible, setVisible] = useState(false);
 
     const LoginOnPress = () => {
         //loading
-        setVisible(true)
-        //loading end
-        setVisible(false)
-        navigation.navigate('AdminTabs')
-        anotherFunc(text)
-        ClearPass(text)
+        
+        
+
+        var getUsersAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserEmail='+ userEmail +'&inputUserPassword='+ userPassword;
+        fetch(getUsersAPI).then((response) => response.json()).then((json) => {
+            if (json.length > 0){
+                alert("Login Success");
+                if (storeData(json[0].userID)){
+                    //Assign screen based on Role
+                    if ((json[0].userRole) == "Admin"){
+                        navigation.navigate('AdminTabs');
+                        anotherFunc(userEmail)
+                        ClearPass(userPassword)
+                        setVisible(false)
+                    }
+                    else if ((json[0].userRole) == "Member"){
+                        anotherFunc(userEmail)
+                        ClearPass(userPassword)
+                        setVisible(false)
+                        navigation.navigate('HomeTabs');
+                    }
+                }
+                else{
+                    console.log("fail to store");
+                    setVisible(false)
+                }
+
+              }else{
+                alert("Login failed. Incorrect Email or Password");
+                setVisible(false)
+
+                
+              }  
+        }).catch((error) => {
+            console.log("HELLO");
+            console.error(error);
+        });        
+        
     }
+
+
+    const storeData = async (value) => {
+        try {
+          await AsyncStorage.setItem('userID', value)
+        } catch (e) {
+          // saving error
+          console.log("Storing session fail");
+          console.log(e);
+        }
+      }
     
     return(
         <View style={styles.root}>
@@ -49,8 +104,7 @@ function LoginScreen ({navigation}) {
                     placeholder="Enter Your Email Here"
                     underlineColorAndroid="transparent"
                     keyboardType="email-address"
-                    value ={text}
-                    onChangeText ={setText}
+                    value={userEmail} onChangeText = {(val) => setUserEmail(val)}
                 />
             </View>
 
@@ -67,14 +121,13 @@ function LoginScreen ({navigation}) {
                     placeholder="Enter Your Password Here"
                     underlineColorAndroid="transparent"
                     secureTextEntry={true}
-                    value ={pass}
-                    onChangeText ={setPass}
+                    value={userPassword} onChangeText = {(val) => setUserPassword(val)}
                 />
             </View>
 
             <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={LoginOnPress}
+                    onPress={() => LoginOnPress()}
                     underlayColor='#fff'>
                     <View
           style={{
