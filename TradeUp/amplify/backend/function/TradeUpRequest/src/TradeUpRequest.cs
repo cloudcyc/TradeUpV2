@@ -140,7 +140,7 @@ namespace TradeUpRequest
                                     }
                                     else if (requestbody != null)
                                     {
-                                        if (await requestProvider.AddRequestWithoutImageAsync(requestbody))
+                                        if (await requestProvider.AddRequestWithImageAsync(requestbody))
                                         {
                                             return new APIGatewayProxyResponse 
                                             { 
@@ -193,8 +193,22 @@ namespace TradeUpRequest
                     response.StatusCode = (int)HttpStatusCode.OK;
                     break;
                 case "DELETE":
-                    context.Logger.LogLine($"Delete Request: {request.Path}\n");
-                    response.StatusCode = (int)HttpStatusCode.OK;
+                    if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputRequestID"))
+                    {
+                        if (await requestProvider.DeleteImageByIDAsync(request.QueryStringParameters["inputRequestID"]))
+                        {
+                            return new APIGatewayProxyResponse 
+                            { 
+                                StatusCode = 200
+                            };
+                        }
+                        else{
+                            return new APIGatewayProxyResponse
+                            {
+                                StatusCode = 400
+                            };
+                        }
+                    }
                     break;
                 default:
                     context.Logger.LogLine($"Unrecognized verb {request.HttpMethod}\n");

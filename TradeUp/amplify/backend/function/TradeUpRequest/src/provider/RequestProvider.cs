@@ -105,11 +105,11 @@ namespace TradeUpRequest
         {
             var result = await dynamoDB.QueryAsync(new QueryRequest{
                 TableName = "TradeUpRequests-dev",
-                IndexName = "requestTradeFromID-index",
+                IndexName = "requestTradeToID-index",
                 ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
-                    {":requestTradeFromID", new AttributeValue { S = inputRequestTradeFromID }}
+                    {":requestTradeToID", new AttributeValue { S = inputRequestTradeFromID }}
                 },
-                KeyConditionExpression = "requestTradeFromID = :requestTradeFromID",
+                KeyConditionExpression = "requestTradeToID = :requestTradeToID",
                 
             });
 

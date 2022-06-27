@@ -1,102 +1,291 @@
-import * as React from 'react';
+import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
 import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { createOpenLink } from 'react-native-open-maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 function ViewTradeRequestDetails({ navigation }){
+  const route = useRoute();
+  const isFocused = useIsFocused();
 
+  //From user
+  const [fromUserName, setfromUserName] = useState('');
+
+  //Posted by Another User
+    const [itemID, setitemID] = useState('');
+    const [userID, setuserID] = useState('');
+    const [itemCategory, setitemCategory] = useState('');
+    const [itemDate, setitemDate] = useState('');
+    const [itemDesc, setitemDesc] = useState('');
+    const [itemMode, setitemMode] = useState('');
+    const [itemName, setitemName] = useState('');
+    const [itemPrice, setitemPrice] = useState('');
+    //Item status neeed to be updated once accepted
+    // const [itemStatus, setitemStatus] = useState('');
+
+  const getfromUserInfo = () =>{
+    var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.requestTradeFromID;
+    fetch(getUserAPI).then((response) => response.json()).then((json) => {
+      setfromUserName(json[0].userFullname);
+    }).catch((error) => {
+        console.log("Wrong API");
+        console.error(error);
+    });
+  };
+
+  const getitemInfo = () =>{
+      var getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+ route.params.requestItemID;
+      
+      fetch(getItemAPI).then((response) => response.json()).then((json) => {
+        setitemID(json[0].itemID);
+        setuserID(json[0].userID);
+        setitemCategory(json[0].itemCategory);
+        setitemDate(json[0].itemDate);
+        setitemMode(json[0].itemMode);
+        setitemPrice(json[0].itemPrice);
+        setitemName(json[0].itemName);
+        setitemDesc(json[0].itemDesc);
+        // setitemInfo(json);
+        // console.log(itemInfo);
+      }).catch((error) => {
+          console.log("Wrong API");
+          console.error(error);
+      });
+    };
+
+    useEffect(() => {
+      if(isFocused){ 
+        getitemInfo();
+        getfromUserInfo();
+      }
+    },[navigation, isFocused]);
+
+
+    //Not sure why it hit Error
+    const removePendingItem = async (inputRequestItemID, inputNewStatus) => {
+      var removePendingRequestAPI = "https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestItemID="+inputRequestItemID+"&inputNewStatus="+inputNewStatus;
+      let res = await fetch(removePendingRequestAPI, {
+          method: "POST",
+      }).then((res) => {
+          if (res.status == 200) {
+              navigation.navigate('ViewTradeRequest', {userID: route.params.requestTradeToID})
+              } else {
+                  // alert("Submission failed Error:" + res.status)
+                  navigation.navigate('ViewTradeRequest', {userID: route.params.requestTradeToID})
+                  console.log("Some error occured: ");
+                  console.log(res.status)
+                  console.log(res)
+              }
+      });
+    }
+
+    const decisionRequest = async (inputDecision) => {
+      if (inputDecision == "Accept"){
+        let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=False&inputRequestID="+route.params.requestID, {
+                  method: "POST",
+                  body: JSON.stringify({
+                      requestID:  route.params.requestID,
+                      requestTradeItemName: route.params.requestTradeItemName, 
+                      requestTradeItemDesc:  route.params.requestTradeItemDesc,
+                      requestTradeDate:  route.params.requestTradeDate,
+                      requestTradeStatus: "Accepted",
+                      requestTradeToID: route.params.requestTradeToID,
+                      requestTradeFromID:  route.params.requestTradeFromID,
+                      requestItemID: route.params.requestItemID,
+                      requestMeetLocation:  route.params.requestMeetLocation,
+                  }),
+              }).then((res) => {
+                  if (res.status == 200) {
+                    alert("Request Accepted successfully.");
+                    updateItem();
+                    removePendingItem(route.params.requestItemID, "Rejected");
+                          
+                      } else {
+                          alert("Submission failed Error321:" + res.status)
+                          console.log("Some error occured: ");
+                          console.log(res.status)
+                          console.log(res)
+                      }
+              });  
+      }
+      else if (inputDecision == "Reject"){
+        let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=False&inputRequestID="+route.params.requestID, {
+                  method: "POST",
+                  body: JSON.stringify({
+                      requestID:  route.params.requestID,
+                      requestTradeItemName: route.params.requestTradeItemName, 
+                      requestTradeItemDesc:  route.params.requestTradeItemDesc,
+                      requestTradeDate:  route.params.requestTradeDate,
+                      requestTradeStatus: "Rejected",
+                      requestTradeToID: route.params.requestTradeToID,
+                      requestTradeFromID:  route.params.requestTradeFromID,
+                      requestItemID: route.params.requestItemID,
+                      requestMeetLocation:  route.params.requestMeetLocation,
+                  }),
+              }).then((res) => {
+                  if (res.status == 200) {
+                          alert("Request rejected successfully.")
+                          navigation.navigate('ViewTradeRequest', {userID: route.params.requestTradeToID})
+                      } else {
+                          alert("Submission failed Error:" + res.status)
+                          console.log("Some error occured: ");
+                          console.log(res.status)
+                          console.log(res)
+                      }
+              });  
+      }
+    }
+
+    const displayButtons = (inputStatus) => {
+      if (inputStatus == "Rejected" || inputStatus == "Accepted" || inputStatus == "Item Removed by Owner" || inputStatus == "Item Removed by Admin" ){
+        
+      }
+      else
+      {
+        return(
+          <View style={styles.addToCarContainer}>
+          <TouchableOpacity style={styles.shareButton2} onPress={() => decisionRequest("Reject")}>
+              <Text style={styles.shareButtonText}>Reject</Text>  
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.shareButton} onPress={() => decisionRequest("Accept")}>
+              <Text style={styles.shareButtonText}>Accept</Text>  
+            </TouchableOpacity>
+          </View> 
+        )
+      }
+    }
+
+    const updateItem = async () => {
+              var updateItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?';
+              updateItemAPI = updateItemAPI + "NewImage=False&inputItemID="+itemID;
+              let res = await fetch(updateItemAPI, {
+                  method: "POST",
+                  body: JSON.stringify({
+                      itemID: itemID,
+                      userID: userID,
+                      itemCategory: itemCategory,
+                      itemDate: itemDate,
+                      itemDesc: itemDesc,
+                      itemMode: itemMode,
+                      itemName: itemName,
+                      itemPrice: itemPrice,
+                      itemStatus: "Traded"
+                  }),
+              }).then((res) => {
+                  if (res.status == 200) {
+                      
+                      } else {
+                          alert("Submission failed Error:" + res.status)
+                          console.log("Some error occured: ");
+                          console.log(res.status)
+                          console.log(res)
+                      }
+              });
+              // navigation.navigate('ManageMarketplace')
+          
+    }
 
     return(
-        <View style={styles.container}>
-        <ScrollView>
-          <View >
-            {/* i want */}
-            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_Homepage.svg/800px-Google_Homepage.svg.png'}}/>
-            <Text style={styles.name}>XXX</Text>
-            <Text style={styles.price}>Post By: XXX</Text>
-            <Text style={styles.price}>Description: XXX</Text>
+      <View style={styles.container}>
+      <ScrollView>
+        <View >
+          {/* i want */}
+          <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' + route.params.requestItemID +'.jpg'}}/>
+          <Text style={styles.name}>{itemName}</Text>
+          <Text style={styles.price}>Description: {itemDesc}</Text>
 
-            {/* i trade with */}
-                <Text style={styles.title}>Request Trade Item Name:</Text>
-                <View style={styles.sectionStyle}>
+          {/* i trade with */}
+          <Text style={styles.title}>Request By:</Text>
+              <View style={styles.sectionStyle}>
 
-                    <Ionicons name='briefcase-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
-                    <TextInput
-                        style={styles.Desc}
-                        placeholder='XXX'
-                        underlineColorAndroid="transparent"
-                        placeholderTextColor="black"
-                    />
+                  <Ionicons name='briefcase-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
+                  <TextInput
+                      style={styles.Desc}
+                      placeholder={fromUserName}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor="black"
+                      editable= {false}
+                  />
 
-                </View>
+              </View>
+              <Text style={styles.title}>Request Trade Item Name:</Text>
+              <View style={styles.sectionStyle}>
 
-                <Text style={styles.title}>Description:</Text>
-                <View style={styles.sectionStyle}>
+                  <Ionicons name='briefcase-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
+                  <TextInput
+                      style={styles.Desc}
+                      placeholder={route.params.requestTradeItemName}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor="black"
+                      editable= {false}
+                  />
 
-                    <Ionicons name='chatbox-ellipses-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
-                    <TextInput
-                        style={styles.Desc}
-                        placeholder='XXX'
-                        underlineColorAndroid="transparent"
-                        placeholderTextColor="black"
-                    />
+              </View>
 
-                </View>
+              <Text style={styles.title}>Description:</Text>
+              <View style={styles.sectionStyle}>
 
-                <Text style={styles.title}>Status:</Text>
-                <View style={styles.sectionStyle}>
+                  <Ionicons name='chatbox-ellipses-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
+                  <TextInput
+                      style={styles.Desc}
+                      placeholder={route.params.requestTradeItemDesc}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor="black"
+                      editable= {false}
+                  />
 
-                    <Ionicons name='pulse-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
-                    <TextInput
-                        style={styles.Desc}
-                        placeholder='XXX'
-                        underlineColorAndroid="transparent"
-                        placeholderTextColor="black"
-                    />
+              </View>
 
-                </View>
 
-                <View style={styles.row2}>
-                <Text style={styles.title}>Meet Up Location:</Text>
+              <View style={styles.row2}>
+              <Text style={styles.title}>Meet Up Location:</Text>
 
-                <TouchableOpacity
-                        style={styles.loginScreenButton3}
-                        underlayColor='#fff'>
-                        <Text style={styles.loginText}>View in Map</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.sectionStyle}>
+              {/* <TouchableOpacity
+                      style={styles.loginScreenButton3}
+                      onPress={openCoordinate}
+                      underlayColor='#fff'>
+                      <Text style={styles.loginText}>View in Map</Text>
+                  </TouchableOpacity> */}
+              </View>
+              <View style={styles.sectionStyle}>
 
-                    <Ionicons name='location-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
-                    <TextInput
-                        style={styles.Desc}
-                        placeholder='XXX'
-                        underlineColorAndroid="transparent"
-                        placeholderTextColor="black"
-                    />
+                  <Ionicons name='location-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
+                  <TextInput
+                      style={styles.Desc}
+                      placeholder={route.params.requestMeetLocation}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor="black"
+                      editable= {false}
+                  />
 
-                </View>
-                 
+              </View>
+               
 
-            
-            
-            <View style={styles.row}>
-                <Text style={styles.title2}>Attachment:</Text>
-                <Image style={styles.productImg2} resizeMode="contain" source={{uri:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_Homepage.svg/800px-Google_Homepage.svg.png'}}/>
-            </View>
+              {/* <View style={styles.row}>
+                  <Text style={styles.title2}>Attachment:</Text>
+                  <View>
+                      <TouchableOpacity onPress={choosePhotoFromLibrary}>
+                      <Image
+                          source={{
+                          uri:
+                              image,
+                          }}
+                          style={styles.productImg2}
+                          resizeMode="contain"
+                      />
+                      </TouchableOpacity>
+                  </View>
+              </View> */}
+          
+          <View style={styles.row}>
+              <Text style={styles.title2}>Attachment:</Text>
+              <Image style={styles.productImg2} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/RequestAsset/' + route.params.requestID +'.jpg'}}/>
+          </View>
 
           </View>
 
           <View style={styles.separator}></View>
-          <View style={styles.addToCarContainer}>
-          <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('MyTradeRequest')}>
-              <Text style={styles.shareButtonText}>Reject</Text>  
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditTradeRequest')}>
-              <Text style={styles.shareButtonText}>Accept</Text>  
-            </TouchableOpacity>
-          </View> 
+          {displayButtons(route.params.requestTradeStatus)}
         </ScrollView>
       </View>
     );

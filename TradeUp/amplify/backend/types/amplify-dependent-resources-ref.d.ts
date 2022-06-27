@@ -23,6 +23,12 @@ export type AmplifyDependentResourcesAttributes = {
             "Arn": "string",
             "Region": "string",
             "LambdaExecutionRole": "string"
+        },
+        "TradeUpReceipt": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
         }
     },
     "api": {
@@ -64,6 +70,16 @@ export type AmplifyDependentResourcesAttributes = {
             "Region": "string"
         },
         "TradeUpRequests": {
+            "Name": "string",
+            "Arn": "string",
+            "StreamArn": "string",
+            "PartitionKeyName": "string",
+            "PartitionKeyType": "string",
+            "SortKeyName": "string",
+            "SortKeyType": "string",
+            "Region": "string"
+        },
+        "TradeUpReceipts": {
             "Name": "string",
             "Arn": "string",
             "StreamArn": "string",

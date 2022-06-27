@@ -54,7 +54,7 @@ function EditTradeRequest({ navigation }){
             }
             else 
             {
-                let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=False&inputRequestID="+route.params.requestID, {
+                let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=True&inputRequestID="+requestID, {
                             method: "POST",
                             body: JSON.stringify({
                                 requestID: requestID,
@@ -88,7 +88,7 @@ function EditTradeRequest({ navigation }){
             }
             else 
             {
-                let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=False&inputRequestID="+route.params.requestID, {
+                let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=False&inputRequestID="+requestID, {
                             method: "POST",
                             body: JSON.stringify({
                                 requestID: requestID,

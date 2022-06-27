@@ -24,24 +24,6 @@ function TradeDetailScreen({ navigation }){
   const [image, setImage] = useState('https://tradeups3.s3.ap-southeast-1.amazonaws.com/RequestAsset/' + route.params.requestID +'.jpg');
 
 
-  const choosePhotoFromLibrary = () => {
-    ImagePicker.openPicker({
-        width: 300,
-        height: 400,
-        cropping: true
-      }).then(image => {
-        console.log(image);
-        ImgToBase64.getBase64String(image.path)
-            .then(base64String => 
-                setuploadImage(base64String)
-                )
-            .catch(err => 
-                alert("Something wrong here. Error: " + err)
-                );
-        setImage(image.path);
-      });
-};
-
   const getfromUserInfo = () =>{
     var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.requestTradeToID;
     fetch(getUserAPI).then((response) => response.json()).then((json) => {
@@ -142,6 +124,7 @@ function TradeDetailScreen({ navigation }){
                         placeholder={route.params.requestTradeItemName}
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
+                        editable= {false}
                     />
 
                 </View>
@@ -155,6 +138,7 @@ function TradeDetailScreen({ navigation }){
                         placeholder={route.params.requestTradeItemDesc}
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
+                        editable= {false}
                     />
 
                 </View>
@@ -168,6 +152,7 @@ function TradeDetailScreen({ navigation }){
                         placeholder={route.params.requestTradeStatus}
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
+                        editable= {false}
                     />
 
                 </View>
@@ -190,6 +175,7 @@ function TradeDetailScreen({ navigation }){
                         placeholder={route.params.requestMeetLocation}
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
+                        editable= {false}
                     />
 
                 </View>

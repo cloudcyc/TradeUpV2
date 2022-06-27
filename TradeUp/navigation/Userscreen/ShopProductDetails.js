@@ -1,36 +1,47 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
 import { useRoute } from "@react-navigation/native";
-import NumericInput from 'react-native-numeric-input'
+import { useIsFocused } from "@react-navigation/native";
+
 
 
 function ShopProductDetails({ navigation }){
 
     const route = useRoute();
+    const isFocused = useIsFocused(); 
+    const [userName, setuserName] = React.useState('');
 
+    const getUserInfo = () =>{
+      var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.userID;
+      fetch(getUserAPI).then((response) => response.json()).then((json) => {
+        setuserName(json[0].userFullname);
+      }).catch((error) => {
+          console.log("Wrong API");
+          console.error(error);
+      });
+    };
+
+    React.useEffect(() => {
+      if(isFocused){ 
+        getUserInfo();
+      }
+    },[navigation, isFocused]);
     return(
         <ScrollView style={styles.container}>
 
-        <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:route.params.product_image}}/>
+        <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +route.params.itemID +'.jpg'}}/>
 
           <View style={{ marginLeft:20,marginRight:20,height:'100%'}}>
 
             <View style={styles.row}>
-                <Text style={styles.name}>{route.params.ProductName}</Text>
-                <Text style={styles.price}>{route.params.Price}</Text>
+                <Text style={styles.name}>{route.params.itemName}</Text>
+                <Text style={styles.price}>By: { userName }</Text>
+                <Text style={styles.price}>RM {route.params.itemPrice}</Text>
             </View>
 
-            <Text style={styles.description}>{route.params.product_desc}</Text>
+            <Text style={styles.description}>{route.params.itemDesc}</Text>
 
-            <View style={styles.row}>
-
-                <Text style={styles.title2}>Quantity:</Text>
-
-                <NumericInput onChange={value => console.log(value)} minValue={1} />
-
-            </View>
-
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('BuyNow')}>
+            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('BuyNow', route.params)}>
               <Text style={styles.shareButtonText}>Buy Now</Text>  
             </TouchableOpacity>
 
@@ -67,7 +78,7 @@ const styles = StyleSheet.create({
     price:{
       marginTop:10,
       fontSize:20,
-      color:"#dc2f02",
+      
       fontWeight:'bold',
       paddingBottom:5
     },

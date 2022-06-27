@@ -66,7 +66,7 @@ function ViewTradeRequest ({navigation}) {
             renderItem={({item}) => {
                 return (
                     <TouchableOpacity style={styles.container}                            
-                    onPress={() => navigation.navigate('TradeDetailScreen', item)}>
+                    onPress={() => navigation.navigate('ViewTradeRequestDetails', item)}>
                         <View style={styles.row}>
                             <Text style={styles.title}>{item.requestTradeItemName}</Text>
                             {Statuscolor(item.requestTradeStatus)}

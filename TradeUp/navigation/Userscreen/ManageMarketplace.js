@@ -9,7 +9,7 @@ function ManageMarketplace({ navigation }){
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
   const [itemList, setitemList] = React.useState([]);
   const [search, setNewSearch] = React.useState("");
-  const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputUserID=uid0002'; //update this when logging
+  const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputUserID=uid0003'; //update this when logging
   const getitemList = () => {
       fetch(getItemAPI).then((response) => response.json()).then((json) => { 
         setitemList(json);

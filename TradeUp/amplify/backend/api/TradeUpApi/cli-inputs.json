@@ -28,6 +28,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/receipts": {
+      "name": "/receipts",
+      "lambdaFunction": "TradeUpReceipt",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }

@@ -1,0 +1,14 @@
+{
+  "resourceName": "TradeUpReceipts",
+  "tableName": "TradeUpReceipts",
+  "partitionKey": {
+    "fieldName": "receiptID",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "itemID",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

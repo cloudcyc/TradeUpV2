@@ -2,54 +2,172 @@ import React,{useState, useEffect} from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { event } from 'react-native-reanimated';
+import { Picker } from "@react-native-picker/picker";
+import uuid from 'react-native-uuid';
+import { useRoute } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 
 function BuyNow({ navigation }){
+    const route = useRoute();
+    const isFocused = useIsFocused();
 
+    
+    const [createdTime, setcreatedTime] = useState(null);
+    
+    const [location, setlocation] = useState(null);
+    
+    const [paymentMethod, setpaymentMethod] = useState(null);
+    const [totalBill, settotalBill] = useState(route.params.itemPrice);
+    const [sellerID, setsellerID] = useState(route.params.userID);
+    const [userID, setuserID] = useState(null);
+    const [displayLocation, setdisplayLocation] = useState("Location:");
+    
+    const getcurrentTime = () => {
+        var date = new Date().getDate(); //Current Date
+        var month = new Date().getMonth() + 1; //Current Month
+        var year = new Date().getFullYear(); //Current Year
+        var hours = new Date().getHours(); //Current Hours
+        var min = new Date().getMinutes(); //Current Minutes
+        var sec = new Date().getSeconds(); //Current Seconds
+        setcreatedTime(
+          date + '/' + month + '/' + year 
+          + ' ' + hours + ':' + min + ':' + sec
+        );
+    }
+
+    useEffect(() => {
+       if(isFocused){ 
+        getcurrentTime();
+      }
+    },[navigation, isFocused]);
+
+    const locationMode = (inputBillingMethod) =>{
+    if (inputBillingMethod == "COD"){
+        setdisplayLocation("Meet up location:");
+        setpaymentMethod(inputBillingMethod);
+    }else if (inputBillingMethod == "Bank Transfer"){
+        setdisplayLocation("Delivery location:");
+        setpaymentMethod(inputBillingMethod);
+    }else{
+        setdisplayLocation("Location:");
+        setpaymentMethod(inputBillingMethod);
+    }
+    }
+
+    const payNow = async (inputpaymentMethod) => {
+        if (location == null || paymentMethod == null){
+            alert("Please fill in every criteria.");
+        }else{
+            switch (inputpaymentMethod) {
+                case "COD":
+                    let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/receipts", {
+                method: "POST",
+                body: JSON.stringify({
+                    receiptID: 're' + uuid.v4(),
+                    itemID: route.params.itemID,
+                    userID: 'uid0002', //update this when logging
+                    sellerID: sellerID,
+                    paymentMethod: paymentMethod,
+                    meetLocation: location,
+                    deliverLocation: '',
+                    totalBill: route.params.itemPrice,
+                    createdTime: createdTime,
+                    decoyView: "True",
+                }),
+              }).then((res) => {
+                if (res.status == 200) {
+                        alert("Successfully purchased.")
+                        updateItem();
+                      } else {
+                        alert("Submission failed Error:" + res.status)
+                        console.log("Some error occured: ");
+                        console.log(res.status)
+                        console.log(res)
+                      }
+              });
+                break;
+                case "Bank Transfer":
+                    let res1 = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/receipts", {
+                method: "POST",
+                body: JSON.stringify({
+                    receiptID: 're' + uuid.v4(),
+                    itemID: route.params.itemID,
+                    userID: 'uid0002', //update this when logging
+                    sellerID: sellerID,
+                    paymentMethod: paymentMethod,
+                    meetLocation: '',
+                    deliverLocation: location,
+                    totalBill: route.params.itemPrice,
+                    createdTime: createdTime,
+                    decoyView: "True",
+                }),
+                }).then((res1) => {
+                    if (res1.status == 200) {
+                            alert("Successfully purchased.")
+                            updateItem();
+                        } else {
+                            alert("Submission failed Error:" + res.status)
+                            console.log("Some error occured: ");
+                            console.log(res.status)
+                            console.log(res)
+                        }
+                });
+                break;
+
+        }
+ 
+        }
+    }
+
+    const updateItem = async () => {
+        var updateItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?';
+        updateItemAPI = updateItemAPI + "NewImage=False&inputItemID="+route.params.itemID;
+        let res = await fetch(updateItemAPI, {
+            method: "POST",
+            body: JSON.stringify({
+                itemID: route.params.itemID,
+                userID: route.params.userID,
+                itemCategory: route.params.itemCategory,
+                itemDate: route.params.itemDate,
+                itemDesc: route.params.itemDesc,
+                itemMode: route.params.itemMode,
+                itemName: route.params.itemName,
+                itemPrice: route.params.itemPrice,
+                itemStatus: "Sold"
+            }),
+        }).then((res) => {
+            if (res.status == 200) {
+                navigation.navigate('HomeTabs')
+                } else {
+                    alert("Submission failed Error:" + res.status)
+                    console.log("Some error occured: ");
+                    console.log(res.status)
+                    console.log(res)
+                }
+        });
+        // navigation.navigate('ManageMarketplace')
+    
+}
     return(
         <ScrollView style={styles.root}>
             <View>
-                <Text style={styles.title2}>Recipient Name:</Text>
-                <View style={styles.sectionStyle}>
+                <Text style={styles.title2}>Billing methods:</Text>
+                <View style={styles.sectionStyle1}>
+                <Picker
+                        selectedValue={paymentMethod}
+                        onValueChange={(itemValue, itemIndex) =>
+                        locationMode(itemValue)
+                        }>
+                        <Picker.Item label="Select a billing method" value='' />
+                        <Picker.Item label="COD" value="COD" />
+                        <Picker.Item label="Bank Transfer" value="Bank Transfer" />
 
-                    <Ionicons name='person-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter Name Here"
-                        underlineColorAndroid="transparent"
-                    />
-                    {/* call the name of user according to the account */}
-
+                    </Picker>
                 </View>
             </View>
-
+            
             <View>
-                <Text style={styles.title2}>Email Address:</Text>
-                <View style={styles.sectionStyle}>
-                    
-                    <Ionicons name='mail-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter Email Address Here"
-                        underlineColorAndroid="transparent"
-                    />
-                </View>
-            </View>
-
-            <View>
-                <Text style={styles.title2}>Phone Number:</Text>
-                <View style={styles.sectionStyle}>
-                    
-                    <Ionicons name='call-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
-                    <TextInput
-                        style={styles.textInputStyle}
-                        placeholder="Enter Contact Number Here"
-                        underlineColorAndroid="transparent"
-                    />
-                </View>
-            </View>
-
-            <View>
-                <Text style={styles.title2}>Recipient Delivery Address:</Text>
+                <Text style={styles.title2}>{displayLocation}</Text>
                 <View style={styles.sectionStyle2}>
                     
                     <Ionicons name='location-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
@@ -58,7 +176,25 @@ function BuyNow({ navigation }){
                         placeholder="Enter Delivery Address Here"
                         underlineColorAndroid="transparent"
                         multiline={true}
+                        value={location} onChangeText = {(val) => setlocation(val)}
                     />
+                </View>
+            </View>
+
+            <View>
+                <Text style={styles.title2}>Total:</Text>
+                <View style={styles.sectionStyle}>
+
+                    <Ionicons name='person-outline' size={25} style={{paddingLeft:5, paddingRight:5}} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder="Enter Name Here"
+                        underlineColorAndroid="transparent"
+                        editable = {false}
+                        value= {"RM " + totalBill} 
+                    />
+                    {/* call the name of user according to the account */}
+
                 </View>
             </View>
 
@@ -66,9 +202,9 @@ function BuyNow({ navigation }){
 
                 <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('HomeTabs')}                    
+                    onPress={() => payNow(paymentMethod)}                    
                     underlayColor='#fff'>
-                    <Text style={styles.loginText}>Submit</Text>
+                    <Text style={styles.loginText}>Pay</Text>
                 </TouchableOpacity>
 
             </View>
