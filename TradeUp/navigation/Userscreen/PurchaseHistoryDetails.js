@@ -11,6 +11,8 @@ function PurchaseHistoryDetails({ navigation }){
 
   //Seller
   const [sellerName, setsellerName] = React.useState('');
+  const [itemName, setitemName] = React.useState('');
+  const [itemDesc, setitemDesc] = React.useState('');
 
   const getBuyerInfo = () =>{
     var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.buyerID;
@@ -31,10 +33,25 @@ function PurchaseHistoryDetails({ navigation }){
     });
   };
 
+  const getitemInfo = () =>{
+    var getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+ route.params.itemID;
+    
+    fetch(getItemAPI).then((response) => response.json()).then((json) => {
+      setitemName(json[0].itemName);
+      setitemDesc(json[0].itemDesc);
+      // setitemInfo(json);
+      // console.log(itemInfo);
+    }).catch((error) => {
+        console.log("Wrong API");
+        console.error(error);
+    });
+  };
+
   React.useEffect(() => {
     if(isFocused){ 
       getBuyerInfo();
       getSellerInfo();
+      getitemInfo();
     }
   },[navigation, isFocused]);
 
@@ -62,7 +79,7 @@ function PurchaseHistoryDetails({ navigation }){
         <ScrollView>
           <View >
             <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
-            <Text style={styles.name}>Brand New iPhone 20</Text>
+            <Text style={styles.name}>{itemName} - {itemDesc}</Text>
 
             <View style={styles.row}>
                 <Text style={styles.title}>Seller Name:</Text>
@@ -72,6 +89,7 @@ function PurchaseHistoryDetails({ navigation }){
             <View style={styles.row}>
                 <Text style={styles.title}>Phone:</Text>
                 <Text style={styles.Desc}>0123456789</Text>
+                {/* //remember to update */}
             </View>
 
             <View style={styles.row}>
@@ -82,6 +100,13 @@ function PurchaseHistoryDetails({ navigation }){
             <View style={styles.row}>
                 <Text style={styles.title}>Phone:</Text>
                 <Text style={styles.Desc}>0123456789</Text>
+                {/* //remember to update */}
+            </View>
+
+            <View style={styles.row}>
+                <Text style={styles.title}>Payment method:</Text>
+                <Text style={styles.Desc}>{route.params.paymentMethod}</Text>
+                {/* //remember to update */}
             </View>
 
             {showLocation(route.params.paymentMethod)}
@@ -91,9 +116,9 @@ function PurchaseHistoryDetails({ navigation }){
 
           <View style={styles.separator}></View>
           <View style={styles.addToCarContainer}>
-          <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('PurchaseHistory')}>
+          {/* <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('PurchaseHistory')}>
               <Text style={styles.shareButtonText}>Cancel Order</Text>  
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('PurchaseHistory')}>
               <Text style={styles.shareButtonText}>Back</Text>  
             </TouchableOpacity>

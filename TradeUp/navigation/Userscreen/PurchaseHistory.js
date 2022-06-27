@@ -13,22 +13,21 @@ function PurchaseHistory ({navigation}) {
         
         fetch(getReceiptListAPI).then((response) => response.json()).then((json) => { 
             setreceiptList(json);
+            
         }).catch((error) => {
             console.error(error);
         });
     }
-    
+
     var tempname = '';
     const getitemList = (inputItemID) => {
         const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+inputItemID; //update this when logging
-        
         fetch(getItemAPI).then((response) => response.json()).then((json) => { 
             
         
-            if(json.length > 1){
-
-            }else{
+            if(json.length >= 1){
                 tempname =json[0].itemName
+                
             }
             
         }).catch((error) => {
@@ -52,6 +51,7 @@ function PurchaseHistory ({navigation}) {
             numColumns={1}
             contentContainerStyle={styles.listContainer}
             renderItem={({item}) => {
+                {getitemList(item.itemID)}
                 return (
                     <TouchableOpacity style={styles.container}                            
                     onPress={() => navigation.navigate('PurchaseHistoryDetails',item)}>
@@ -59,7 +59,7 @@ function PurchaseHistory ({navigation}) {
                             <View style={styles.row}>
                                 <Image style={styles.productImg} resizeMode="stretch" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
                                 <View>
-                                {getitemList(item.itemID)}
+                                
                                 
                                     <Text style={styles.title}>{tempname}</Text>
                                     <Text style={styles.time}>{item.createdTime}</Text>

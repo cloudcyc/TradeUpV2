@@ -37,8 +37,12 @@ function ShopProductDetails({ navigation }){
 
 
             <View style={styles.row}>
-                <Text style={styles.price}>By: { userName }</Text>
-                <Text style={styles.price2}>RM {route.params.itemPrice}</Text>
+              <Text style={styles.price2}>RM {route.params.itemPrice}</Text>
+                
+            </View>
+
+            <View style={styles.row}>
+              <Text style={styles.price}>By: { userName }</Text>
             </View>
 
             <Text style={styles.description}>{route.params.itemDesc}</Text>
