@@ -33,10 +33,12 @@ function ShopProductDetails({ navigation }){
 
           <View style={{ marginLeft:20,marginRight:20,height:'100%'}}>
 
+          <Text style={styles.name}>{route.params.itemName}</Text>
+
+
             <View style={styles.row}>
-                <Text style={styles.name}>{route.params.itemName}</Text>
                 <Text style={styles.price}>By: { userName }</Text>
-                <Text style={styles.price}>RM {route.params.itemPrice}</Text>
+                <Text style={styles.price2}>RM {route.params.itemPrice}</Text>
             </View>
 
             <Text style={styles.description}>{route.params.itemDesc}</Text>
@@ -71,6 +73,7 @@ const styles = StyleSheet.create({
       marginBottom:20
     },
     name:{
+      paddingLeft:10,
       fontSize:25,
       color:"black",
       fontWeight:'bold'
@@ -78,10 +81,18 @@ const styles = StyleSheet.create({
     price:{
       marginTop:10,
       fontSize:20,
-      
       fontWeight:'bold',
       paddingBottom:5
     },
+
+    price2:{
+      marginTop:10,
+      fontSize:20,
+      color:'#0077b6',
+      fontWeight:'bold',
+      paddingBottom:5
+    },
+
     description:{
       marginTop:20,
       paddingLeft:10,
