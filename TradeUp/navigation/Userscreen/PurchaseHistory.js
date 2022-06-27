@@ -1,56 +1,114 @@
-import * as React from 'react';
-import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable } from 'react-native';
-
+import React, { useEffect } from 'react';
+import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList } from 'react-native';
+import { useIsFocused } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 function PurchaseHistory ({navigation}) {
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
+    const [receiptList, setreceiptList] = React.useState([]);
+    const [search, setNewSearch] = React.useState("");
+    
+    const getReceiptList = () => {
+        // const getSendRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputUserID='+ ; //remember to update
+        const getReceiptListAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/receipts?inputUserID=uid0002'; //remember to update
+        
+        fetch(getReceiptListAPI).then((response) => response.json()).then((json) => { 
+            setreceiptList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+    
+    var tempname = '';
+    const getitemList = (inputItemID) => {
+        const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+inputItemID; //update this when logging
+        
+        fetch(getItemAPI).then((response) => response.json()).then((json) => { 
+            
+        
+            if(json.length > 1){
+
+            }else{
+                tempname =json[0].itemName
+            }
+            
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    useEffect(() => {
+        if(isFocused){ 
+            getReceiptList();
+        }
+    },[navigation, isFocused]);
     return(
-        <ScrollView style={styles.root}>
+        <View style={styles.root}>
+        <FlatList
+            data={receiptList}
+            keyExtractor= {(key) => {
+                            return key.receiptID;
+                        }}
+            style={styles.list}
+            numColumns={1}
+            contentContainerStyle={styles.listContainer}
+            renderItem={({item}) => {
+                return (
+                    <TouchableOpacity style={styles.container}                            
+                    onPress={() => navigation.navigate('PurchaseHistoryDetails',item)}>
+
+                            <View style={styles.row}>
+                                <Image style={styles.productImg} resizeMode="stretch" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
+                                <View>
+                                {getitemList(item.itemID)}
+                                
+                                    <Text style={styles.title}>{tempname}</Text>
+                                    <Text style={styles.time}>{item.createdTime}</Text>
+                                </View>
+                                
+                                <Text style={styles.success}>RM {item.totalBill} </Text>
+                            </View>
+                        
+
+                    </TouchableOpacity>
+                    )
+                }}
+            />
+            </View>  
+        // <ScrollView style={styles.root}>
             
-            <TouchableOpacity style={styles.container}                            
-            onPress={() => navigation.navigate('PurchaseHistoryDetails')}>
+        //     
 
-                    <View style={styles.row}>
-                        <Image style={styles.productImg} resizeMode="stretch" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
-                        <View>
-                            <Text style={styles.title}>iPhone 13</Text>
-                            <Text style={styles.time}>18 April 2022 12:00 pm</Text>
-                        </View>
-                        <Text style={styles.success}> Delivered </Text>
-                    </View>
-                   
-
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.container}                            
-            onPress={() => navigation.navigate('PurchaseHistoryDetails')}>
+        //     <TouchableOpacity style={styles.container}                            
+        //     onPress={() => navigation.navigate('PurchaseHistoryDetails')}>
                 
-                    <View style={styles.row}>
-                        <Image style={styles.productImg} resizeMode="stretch" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
-                        <View>
-                            <Text style={styles.title}>iPhone 13</Text>
-                            <Text style={styles.time}>18 April 2022 12:00 pm</Text>
-                        </View>
-                        <Text style={styles.pending}> Pending </Text>
-                    </View>
+        //             <View style={styles.row}>
+        //                 <Image style={styles.productImg} resizeMode="stretch" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
+        //                 <View>
+        //                     <Text style={styles.title}>iPhone 13</Text>
+        //                     <Text style={styles.time}>18 April 2022 12:00 pm</Text>
+        //                 </View>
+        //                 <Text style={styles.pending}> Pending </Text>
+        //             </View>
                    
 
-            </TouchableOpacity>
+        //     </TouchableOpacity>
 
-            <TouchableOpacity style={styles.container}                            
-            onPress={() => navigation.navigate('PurchaseHistoryDetails')}>
+        //     <TouchableOpacity style={styles.container}                            
+        //     onPress={() => navigation.navigate('PurchaseHistoryDetails')}>
                 
-                    <View style={styles.row}>
-                        <Image style={styles.productImg} resizeMode="stretch" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
-                        <View>
-                            <Text style={styles.title}>iPhone 13</Text>
-                            <Text style={styles.time}>18 April 2022 12:00 pm</Text>
-                        </View>
-                        <Text style={styles.canceled}> Canceled </Text>
-                    </View>
+        //             <View style={styles.row}>
+        //                 <Image style={styles.productImg} resizeMode="stretch" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
+        //                 <View>
+        //                     <Text style={styles.title}>iPhone 13</Text>
+        //                     <Text style={styles.time}>18 April 2022 12:00 pm</Text>
+        //                 </View>
+        //                 <Text style={styles.canceled}> Canceled </Text>
+        //             </View>
                    
 
-            </TouchableOpacity>
+        //     </TouchableOpacity>
             
-        </ScrollView>
+        // </ScrollView>
     )
 }
 

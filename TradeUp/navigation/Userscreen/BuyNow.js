@@ -65,7 +65,7 @@ function BuyNow({ navigation }){
                 body: JSON.stringify({
                     receiptID: 're' + uuid.v4(),
                     itemID: route.params.itemID,
-                    userID: 'uid0002', //update this when logging
+                    buyerID: 'uid0002', //update this when logging
                     sellerID: sellerID,
                     paymentMethod: paymentMethod,
                     meetLocation: location,

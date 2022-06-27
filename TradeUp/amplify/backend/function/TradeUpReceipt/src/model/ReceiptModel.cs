@@ -5,7 +5,8 @@ namespace TradeUpReceipt
         {
                 public string receiptID {get; set;}
                 public string itemID {get; set;}
-                public string userID {get; set;}
+                public string buyerID {get; set;}
+                public string sellerID {get; set;}
                 public string paymentMethod {get; set;}
                 public string meetLocation {get; set;}
                 public string deliverLocation {get; set;}

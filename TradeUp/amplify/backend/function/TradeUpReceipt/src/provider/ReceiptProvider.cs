@@ -23,7 +23,7 @@ namespace TradeUpReceipt
         {
             var result = await dynamoDB.QueryAsync(new QueryRequest{
                 TableName = "TradeUpReceipts-dev",
-                IndexName = "decoyView-index",
+                IndexName = "decoyView-createdTime-index",
                 ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
                     {":decoyView", new AttributeValue { S = "True" }},
                     
@@ -37,7 +37,8 @@ namespace TradeUpReceipt
                 foreach (var item in result.Items){
                     item.TryGetValue("receiptID", out var receiptID);
                     item.TryGetValue("itemID", out var itemID);
-                    item.TryGetValue("userID", out var userID);
+                    item.TryGetValue("buyerID", out var buyerID);
+                    item.TryGetValue("sellerID", out var sellerID);
                     item.TryGetValue("paymentMethod", out var paymentMethod);
                     item.TryGetValue("meetLocation", out var meetLocation);
                     item.TryGetValue("deliverLocation", out var deliverLocation);
@@ -48,7 +49,8 @@ namespace TradeUpReceipt
                     items.Add(new ReceiptModel{
                         receiptID = receiptID?.S,
                         itemID = itemID?.S,
-                        userID = userID?.S,
+                        buyerID = buyerID?.S,
+                        sellerID = sellerID?.S,
                         paymentMethod = paymentMethod?.S,
                         meetLocation = meetLocation?.S,
                         deliverLocation = deliverLocation?.S,
@@ -66,11 +68,11 @@ namespace TradeUpReceipt
         {
             var result = await dynamoDB.QueryAsync(new QueryRequest{
                 TableName = "TradeUpReceipts-dev",
-                IndexName = "userID-index",
+                IndexName = "buyerID-createdTime-index",
                 ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
-                    {":userID", new AttributeValue { S = inputUserID }},
+                    {":buyerID", new AttributeValue { S = inputUserID }},
                 },
-                KeyConditionExpression = "userID = :userID",
+                KeyConditionExpression = "buyerID = :buyerID",
                 
             });
 
@@ -79,7 +81,8 @@ namespace TradeUpReceipt
                 foreach (var item in result.Items){
                     item.TryGetValue("receiptID", out var receiptID);
                     item.TryGetValue("itemID", out var itemID);
-                    item.TryGetValue("userID", out var userID);
+                    item.TryGetValue("buyerID", out var buyerID);
+                    item.TryGetValue("sellerID", out var sellerID);
                     item.TryGetValue("paymentMethod", out var paymentMethod);
                     item.TryGetValue("meetLocation", out var meetLocation);
                     item.TryGetValue("deliverLocation", out var deliverLocation);
@@ -90,7 +93,8 @@ namespace TradeUpReceipt
                     items.Add(new ReceiptModel{
                         receiptID = receiptID?.S,
                         itemID = itemID?.S,
-                        userID = userID?.S,
+                        buyerID = buyerID?.S,
+                        sellerID = sellerID?.S,
                         paymentMethod = paymentMethod?.S,
                         meetLocation = meetLocation?.S,
                         deliverLocation = deliverLocation?.S,
@@ -113,7 +117,8 @@ namespace TradeUpReceipt
                 {
                     {"receiptID", new AttributeValue(item.receiptID)},
                     {"itemID", new AttributeValue(item.itemID)},
-                    {"userID", new AttributeValue(item.userID)},
+                    {"buyerID", new AttributeValue(item.buyerID)},
+                    {"sellerID", new AttributeValue(item.sellerID)},
                     {"paymentMethod", new AttributeValue(item.paymentMethod)},
                     {"meetLocation", new AttributeValue(item.meetLocation)},
                     {"deliverLocation", new AttributeValue(item.deliverLocation)},
