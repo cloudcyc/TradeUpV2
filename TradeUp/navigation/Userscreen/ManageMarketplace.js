@@ -1,16 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 Ionicons.loadFont();
 
 function ManageMarketplace({ navigation }){
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
   const [itemList, setitemList] = React.useState([]);
   const [search, setNewSearch] = React.useState("");
-  const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputUserID=uid0003'; //update this when logging
-  const getitemList = () => {
+  const [userID,setuserID] = useState('');
+  const retrieveUserID  = async () =>{
+    try {
+      const value = await AsyncStorage.getItem('userID')
+      if(value != null) {
+        // value previously stored
+        console.log(value);
+        getitemList(value);
+        
+      }
+    } catch(e) {
+      // error reading value
+      console.log(e);
+    }
+  }
+  const getitemList = (inputuserID) => {
+    const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputUserID='+inputuserID; //update this when logging
+    console.log(getItemAPI);
       fetch(getItemAPI).then((response) => response.json()).then((json) => { 
         setitemList(json);
       }).catch((error) => {
@@ -30,7 +48,9 @@ function ManageMarketplace({ navigation }){
 
   useEffect(() => {
       if(isFocused){ 
-          getitemList();
+          retrieveUserID();
+          
+          
         }
       
   },[navigation, isFocused]);

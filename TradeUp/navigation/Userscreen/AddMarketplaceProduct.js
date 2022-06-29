@@ -6,8 +6,13 @@ import { event } from 'react-native-reanimated';
 import { Picker } from "@react-native-picker/picker";
 import ImgToBase64 from 'react-native-image-base64';
 import uuid from 'react-native-uuid';
+import { useIsFocused } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function AddMarketplaceProduct({ navigation }){
+    const isFocused = useIsFocused(); //used to refresh upon entering new screen
+    const route = useRoute();
 
     const [itemID, setitemID] = useState();
     const [userID, setuserID] = useState();
@@ -52,10 +57,25 @@ function AddMarketplaceProduct({ navigation }){
           + ' ' + hours + ':' + min + ':' + sec
         );
     }
+    const retrieveUserID  = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('userID')
+          if(value != null) {
+            // value previously stored
+            console.log(value);
+            setuserID(value);
+            
+          }
+        } catch(e) {
+          // error reading value
+          console.log(e);
+        }
+      }
         
     useEffect(() => {
+        retrieveUserID();
         getcurrentTime();
-    },[]);
+    },[navigation, isFocused]);
 
     const addItem = async () => {
         // console.log("\nThis is iid : iid" + uuid.v4());
@@ -78,7 +98,7 @@ function AddMarketplaceProduct({ navigation }){
                         method: "POST",
                         body: JSON.stringify({
                             itemID: 'iid' + uuid.v4(),
-                            userID: 'uid0002', //update this when logging
+                            userID: userID, //update this when logging
                             itemCategory: itemCategory,
                             itemDate: currentTime,
                             itemDesc: itemDesc,
@@ -108,11 +128,12 @@ function AddMarketplaceProduct({ navigation }){
                         alert("Please fill in item price.");
                     }
                     else{
+                        
                         let res1 = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items", {
                         method: "POST",
                         body: JSON.stringify({
                             itemID: 'iid' + uuid.v4(),
-                            userID: 'uid0002', //update this when logging
+                            userID: userID, //update this when logging
                             itemCategory: itemCategory,
                             itemDate: currentTime,
                             itemDesc: itemDesc,

@@ -9,6 +9,7 @@ Ionicons.loadFont();
 function Profile({ navigation }){
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [userFullname, setUserFullname] = useState('Username');
+    const [userEmail, setuserEmail] = useState('Useremail');
     const [userInfo, setUserInfo] = useState([]);
 
     const getUserFunction = async(inputUserID) => {
@@ -19,6 +20,7 @@ function Profile({ navigation }){
           setUserInfo(json);
           // console.log(userInfo);
           setUserFullname(json[0].userFullname);
+          setuserEmail(json[0].userEmail);
           // console.log(userFullname);
           
           
@@ -76,40 +78,40 @@ function Profile({ navigation }){
                 <Image source={{ uri: "https://static.wikia.nocookie.net/pingu/images/9/97/KFCLogo.png/revision/latest?cb=20170428071912" }} style={styles.pic} />
                 <View style={styles.ProfileDetail}>
                     <Text style={styles.name}>{userFullname}</Text>
-                    <Text style={styles.Email}>Holland@gmail.com</Text>
+                    <Text style={styles.Email}>{userEmail}</Text>
                 </View>
             </View>
             <ScrollView style={styles.bodyContent}>
 
-                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('EditProfile')}>
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('EditProfile',userInfo[0])}>
                   <View style={styles.row}>
                       <Ionicons name='person-outline' size={35} />
                       <Text style={styles.ButtonText}>Edit Profile</Text>
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('MyTradeRequest')}>
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('MyTradeRequest',userInfo[0])}>
                   <View style={styles.row}>
                       <Ionicons name='newspaper-outline' size={35} />
                       <Text style={styles.ButtonText}>My Trade Request</Text>
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('ViewTradeRequest')}>
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('ViewTradeRequest',userInfo[0])}>
                   <View style={styles.row}>
                       <Ionicons name='albums-outline' size={35} />
                       <Text style={styles.ButtonText}>View Trade Request</Text>
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('PurchaseHistory')}>
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('PurchaseHistory',userInfo[0])}>
                   <View style={styles.row}>
                       <Ionicons name='cart-outline' size={35} />
                       <Text style={styles.ButtonText}>My Purchase History</Text>
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('ManageMarketplace')}>
+                <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('ManageMarketplace',userInfo[0])}>
                   <View style={styles.row}>
                       <Ionicons name='briefcase-outline' size={35} />
                       <Text style={styles.ButtonText}>Manage My Inventory</Text>

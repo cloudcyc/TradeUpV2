@@ -22,8 +22,56 @@ namespace TradeUpRequest
         //Admin view all
         public async Task<RequestModel[]> GetAllRequestAsync()
         {
-            var result = await dynamoDB.ScanAsync(new ScanRequest{
+            var result = await dynamoDB.QueryAsync(new QueryRequest{
                 TableName = "TradeUpRequests-dev",
+                IndexName = "decoyView-requestTradeDate-index",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":decoyView", new AttributeValue { S = "True" }}
+                },
+                KeyConditionExpression = "decoyView = :decoyView",
+            });
+
+            if (result != null && result.Items != null){
+                var requests = new  List<RequestModel>();
+                foreach (var item in result.Items){
+                    item.TryGetValue("requestID", out var requestID);
+                    item.TryGetValue("requestTradeItemName", out var requestTradeItemName);
+                    item.TryGetValue("requestTradeItemDesc", out var requestTradeItemDesc);
+                    item.TryGetValue("requestTradeDate", out var requestTradeDate);
+                    item.TryGetValue("requestTradeStatus", out var requestTradeStatus);
+                    item.TryGetValue("requestTradeToID", out var requestTradeToID);
+                    item.TryGetValue("requestTradeFromID", out var requestTradeFromID);
+                    item.TryGetValue("requestItemID", out var requestItemID);
+                    item.TryGetValue("requestMeetLocation", out var requestMeetLocation);
+                    
+                    
+                    requests.Add(new RequestModel{
+                        requestID = requestID?.S,
+                        requestTradeItemName = requestTradeItemName?.S,
+                        requestTradeItemDesc = requestTradeItemDesc?.S,
+                        requestTradeDate = requestTradeDate?.S,
+                        requestTradeStatus = requestTradeStatus?.S,
+                        requestTradeToID = requestTradeToID?.S,
+                        requestTradeFromID = requestTradeFromID?.S,
+                        requestItemID = requestItemID?.S,
+                        requestMeetLocation = requestMeetLocation?.S,
+                        
+                    });
+                }
+                return requests.ToArray();
+            }
+            return Array.Empty<RequestModel>();
+        }
+
+        public async Task<RequestModel[]> GetRequestByStatusAsync(string inputrequestTradeStatus)
+        {
+            var result = await dynamoDB.QueryAsync(new QueryRequest{
+                TableName = "TradeUpRequests-dev",
+                IndexName = "requestTradeStatus-index",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":requestTradeStatus", new AttributeValue { S = inputrequestTradeStatus }}
+                },
+                KeyConditionExpression = "requestTradeStatus = :requestTradeStatus",
             });
 
             if (result != null && result.Items != null){

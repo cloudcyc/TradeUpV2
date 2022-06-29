@@ -61,6 +61,49 @@ namespace TradeUpItem
             }
             return Array.Empty<ItemModel>();
         }
+        public async Task<ItemModel[]> GetActiveItemByModeAndUserIDAsync(string inputItemMode, string inputUserID)
+        {
+            var result = await dynamoDB.QueryAsync(new QueryRequest{
+                TableName = "TradeUpItems-dev",
+                IndexName = "itemMode-itemCategory-index",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":itemMode", new AttributeValue { S = inputItemMode }},
+                    {":userID", new AttributeValue { S = inputUserID }},
+                    {":itemStatus", new AttributeValue { S = "Active" }},
+                },
+                KeyConditionExpression = "itemMode = :itemMode",
+                FilterExpression = "itemStatus = :itemStatus AND userID <> :userID"
+            });
+
+            if (result != null && result.Items != null){
+                var items = new  List<ItemModel>();
+                foreach (var item in result.Items){
+                    item.TryGetValue("itemID", out var itemID);
+                    item.TryGetValue("userID", out var userID);
+                    item.TryGetValue("itemCategory", out var itemCategory);
+                    item.TryGetValue("itemDate", out var itemDate);
+                    item.TryGetValue("itemDesc", out var itemDesc);
+                    item.TryGetValue("itemMode", out var itemMode);
+                    item.TryGetValue("itemName", out var itemName);
+                    item.TryGetValue("itemPrice", out var itemPrice);
+                    item.TryGetValue("itemStatus", out var itemStatus);
+                    
+                    items.Add(new ItemModel{
+                        itemID = itemID?.S,
+                        userID = userID?.S,
+                        itemCategory = itemCategory?.S,
+                        itemDate = itemDate?.S,
+                        itemDesc = itemDesc?.S,
+                        itemMode = itemMode?.S,
+                        itemName = itemName?.S,
+                        itemPrice = itemPrice?.S,
+                        itemStatus = itemStatus?.S
+                    });
+                }
+                return items.ToArray();
+            }
+            return Array.Empty<ItemModel>();
+        }
         //Admin view
         public async Task<ItemModel[]> AdminGetAllItemByModeAsync(string inputItemMode)
         {

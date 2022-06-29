@@ -63,7 +63,7 @@ function EditTradeRequest({ navigation }){
                                 requestTradeDate: requestTradeDate,
                                 requestTradeStatus: requestTradeStatus,
                                 requestTradeToID: requestTradeToID,
-                                requestTradeFromID: requestTradeFromID, //update this when logging
+                                requestTradeFromID: requestTradeFromID, 
                                 requestItemID: requestItemID,
                                 requestMeetLocation: requestMeetLocation,
                                 requestImage: newitemImage
@@ -97,7 +97,7 @@ function EditTradeRequest({ navigation }){
                                 requestTradeDate: requestTradeDate,
                                 requestTradeStatus: requestTradeStatus,
                                 requestTradeToID: requestTradeToID,
-                                requestTradeFromID: requestTradeFromID, //update this when logging
+                                requestTradeFromID: requestTradeFromID, 
                                 requestItemID: requestItemID,
                                 requestMeetLocation: requestMeetLocation,
                                 

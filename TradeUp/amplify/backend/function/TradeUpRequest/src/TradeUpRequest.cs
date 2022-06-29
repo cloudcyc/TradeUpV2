@@ -77,6 +77,27 @@ namespace TradeUpRequest
                             Body = JsonConvert.SerializeObject(requests)
                         };
                     }
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("GetByAdmin"))
+                    {
+                        
+                        var requests = await requestProvider.GetAllRequestAsync();
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(requests)
+                        };
+                    }
+                    else if(request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("GetByAdmin") && request.QueryStringParameters.ContainsKey("inputrequestTradeStatus"))
+                    {
+                        
+                        var requests = await requestProvider.GetRequestByStatusAsync(request.QueryStringParameters["inputrequestTradeStatus"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(requests)
+                        };
+                    }
+                    
                     break;
                 case "POST":
                     if(request.QueryStringParameters == null)

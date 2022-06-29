@@ -1,17 +1,32 @@
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList, SafeAreaView } from 'react-native';
 import { NavigationHelpersContext, useIsFocused, useRoute} from "@react-navigation/native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function ViewTradeRequest ({navigation}) {
     const route = useRoute();
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [requestList, setrequestList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
-    const getRequestList = () => {
-        // const getReceiveRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestTradeFromID='+ route.params.userID; //remember to update
-        const getReceiveRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?RequestMode=Receive&inputRequestTradeFromID=uid0002'; //remember to update
-    
+
+    const retrieveUserID  = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('userID')
+          if(value != null) {
+            // value previously stored
+            console.log(value);
+          //   setuserID(value);
+          getRequestList(value);
+          }
+        } catch(e) {
+          // error reading value
+          console.log(e);
+        }
+      }
+
+    const getRequestList = (inputuserID) => {
+        const getReceiveRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?RequestMode=Receive&inputRequestTradeFromID='+inputuserID; //remember to update
+    console.log(getReceiveRequestAPI);
         fetch(getReceiveRequestAPI).then((response) => response.json()).then((json) => { 
             setrequestList(json);
         }).catch((error) => {
@@ -50,7 +65,7 @@ function ViewTradeRequest ({navigation}) {
 
     useEffect(() => {
         if(isFocused){ 
-            getRequestList();
+            retrieveUserID();
         }
     },[navigation, isFocused]);
     return(

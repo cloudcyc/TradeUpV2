@@ -9,7 +9,7 @@ Ionicons.loadFont();
 function AdminProfile({ navigation }){
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [userFullname, setUserFullname] = useState('Username');
-    const [userEmail, setuserEmail] = useState('Username');
+    const [userEmail, setuserEmail] = useState('Useremail');
     const [userInfo, setUserInfo] = useState([]);
 
     const getUserFunction = async(inputUserID) => {
@@ -49,7 +49,7 @@ function AdminProfile({ navigation }){
         retrieveUserID();
       }, [navigation,isFocused]);
 
-    const clearAsyncStorage  = () =>{
+      const clearAsyncStorage  = () =>{
         try {
              AsyncStorage.removeItem('userID');
           return true;
@@ -118,7 +118,7 @@ function AdminProfile({ navigation }){
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.Signoutbutton} onPress={() => navigation.navigate('HomeTabs')}>
+                <TouchableOpacity style={styles.Signoutbutton} onPress={() => logoutFunction()}>
                   <View style={styles.row}>
                       <Ionicons name='power-outline' size={35} color='#FFF' />
                       <Text style={styles.SignoutText}>Sign Out</Text>

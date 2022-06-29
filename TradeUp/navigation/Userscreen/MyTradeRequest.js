@@ -1,16 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList, SafeAreaView } from 'react-native';
 import { useIsFocused } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 function MyTradeRequest ({navigation}) {
     const route = useRoute();
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [requestList, setrequestList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
-    const getRequestList = () => {
-        // const getSendRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestTradeFromID='+ route.params.userID; //remember to update
-        const getSendRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?RequestMode=Send&inputRequestTradeFromID=uid0002'; //remember to update
+
+    // const [userID,setuserID] = useState(''); 
+    const retrieveUserID  = async () =>{
+      try {
+        const value = await AsyncStorage.getItem('userID')
+        if(value != null) {
+          // value previously stored
+          console.log(value);
+        //   setuserID(value);
+        getRequestList(value);
+        }
+      } catch(e) {
+        // error reading value
+        console.log(e);
+      }
+    }
+        
+    const getRequestList = (inputuserID) => {
+        const getSendRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?RequestMode=Send&inputRequestTradeFromID='+inputuserID; //remember to update
     
+        console.log(getSendRequestAPI);
         fetch(getSendRequestAPI).then((response) => response.json()).then((json) => { 
             setrequestList(json);
         }).catch((error) => {
@@ -30,7 +48,7 @@ function MyTradeRequest ({navigation}) {
 
     useEffect(() => {
         if(isFocused){ 
-            getRequestList();
+            retrieveUserID();
         }
     },[navigation, isFocused]);
 

@@ -47,6 +47,78 @@ function AdminEditProfile ({navigation}) {
         setMode(cureentMode);
     }
 
+    const updateProfileFunction = async () => {
+        // console.log(userID);
+        // console.log(userFullname);
+        // console.log(userEmail);
+        // console.log(userCurrentPassword);
+        // console.log(userRole);
+        // console.log(createdTime);
+        // console.log(userDoB);
+
+        if (userOldPassword == '' && userNewPassword == ''){
+            let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
+                method: "POST",
+                body: JSON.stringify({
+                    userID: userID,
+                    userEmail: userEmail,
+                    userFullname: userFullname,
+                    userPassword: userCurrentPassword,
+                    userDoB: userDoB,
+                    userRole: userRole,
+                    createdTime: createdTime
+                }),
+            }).then((res) => {
+                if (res.status == 200) {
+                        alert("Profile update successfully without changing password.")
+                        navigation.navigate('AdminTabs')
+                    } else {
+                        alert("User update failed Error:" + res.status)
+                        console.log("Some error occured: ");
+                        console.log(res.status)
+                        console.log(res)
+                    }
+            });
+        }
+        else if (userOldPassword != '' && userCurrentPassword == userOldPassword)
+        {
+            if (userNewPassword != ''){
+                let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        userID: userID,
+                        userEmail: userEmail,
+                        userFullname: userFullname,
+                        userPassword: userNewPassword,
+                        userDoB: userDoB,
+                        userRole: userRole,
+                        createdTime: createdTime
+                    }),
+                }).then((res) => {
+                    if (res.status == 200) {
+                            alert("Profile update successfully with new password.")
+                            navigation.navigate('AdminTabs')
+                        } else {
+                            alert("User update failed Error:" + res.status)
+                            console.log("Some error occured: ");
+                            console.log(res.status)
+                            console.log(res)
+                        }
+                });
+            }
+            else
+            {
+                alert("Please enter new Password")
+            }
+            
+        }
+        else if (userOldPassword != '' && userCurrentPassword != userOldPassword)
+        {
+            alert("Current password does not match.")
+        }
+
+    }
+
     return(
         <ScrollView style={styles.root}>
 
@@ -60,7 +132,7 @@ function AdminEditProfile ({navigation}) {
                     style={styles.textInputStyle}
                     placeholder="Enter Your Name Here"
                     underlineColorAndroid="transparent"
-                    editable={false}
+                    editable={true}
                     selectTextOnFocus={false}
                     value={userFullname} onChangeText = {(val) => setuserFullname(val)}
                 />
@@ -153,7 +225,7 @@ function AdminEditProfile ({navigation}) {
 
             <TouchableOpacity
                     style={styles.loginScreenButton}
-                    onPress={() => navigation.navigate('AdminTabs')}
+                    onPress={() => updateProfileFunction()}
                     underlayColor='#fff'>
                     <Text style={styles.loginText}>Update Profile</Text>
             </TouchableOpacity>

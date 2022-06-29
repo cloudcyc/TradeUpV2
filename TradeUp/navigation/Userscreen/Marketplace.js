@@ -5,6 +5,7 @@ import { SliderBox } from "react-native-image-slider-box";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ignoreWarnings from 'ignore-warnings';
 import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 Ionicons.loadFont();
 
 
@@ -13,13 +14,46 @@ function Marketplace({ navigation }){
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [tradeList, settradeList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
-    const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Trade&inputUserRole=';
-    const gettradeList = () => {
-        fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
-            settradeList(json);
-        }).catch((error) => {
-            console.error(error);
-        });
+
+    const retrieveUserID  = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('userID')
+          if(value != null) {
+            // value previously stored
+            console.log(value);
+          //   setuserID(value);
+            gettradeList(value);
+          }
+          else
+          {
+            gettradeList(null);
+          }
+        } catch(e) {
+          // error reading value
+          console.log(e);
+        }
+      }
+    const gettradeList = (inputUserID) => {
+        if (inputUserID == null){
+            const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Trade&inputUserRole=';
+    
+            fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+                settradeList(json);
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+        else
+        {
+            const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Trade&inputUserID='+inputUserID;
+            console.log(getActiveItemAPI);
+            fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+                settradeList(json);
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+        
     }
 
     const handleSearchChange = (text) => {
@@ -34,7 +68,7 @@ function Marketplace({ navigation }){
 
     useEffect(() => {
         if(isFocused){ 
-            gettradeList();
+            retrieveUserID();
           }
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     },[navigation, isFocused]);
@@ -168,7 +202,7 @@ function Marketplace({ navigation }){
                         <View style={styles.cardFooter}>
                             <View style={{alignItems:"center", justifyContent:"center"}}>
                             <Text style={styles.name}>{item.itemName}</Text>
-                            <Text style={styles.name}>{item.userID}</Text>
+                            {/* <Text style={styles.name}>{item.userID}</Text> */}
                             {/* <TouchableOpacity style={styles.followButton}>
                                 <Text style={styles.followButtonText}>View</Text>  
                             </TouchableOpacity> */}

@@ -1,52 +1,130 @@
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
 import { useRoute } from "@react-navigation/native";
-
+import { useIsFocused } from "@react-navigation/native";
 
 function AdminPurchaseHistoryDetails({ navigation }){
+  const route = useRoute();
+  const isFocused = useIsFocused(); //used to refresh upon entering new screen
+  //Buyer
+  const [buyerName, setbuyerName] = React.useState('');
 
+  //Seller
+  const [sellerName, setsellerName] = React.useState('');
+  const [itemName, setitemName] = React.useState('');
+  const [itemDesc, setitemDesc] = React.useState('');
 
+  const getBuyerInfo = () =>{
+    var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.buyerID;
+    fetch(getUserAPI).then((response) => response.json()).then((json) => {
+      setbuyerName(json[0].userFullname);
+    }).catch((error) => {
+        console.log("Wrong API");
+        console.error(error);
+    });
+  };
+  const getSellerInfo = () =>{
+    var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.sellerID;
+    fetch(getUserAPI).then((response) => response.json()).then((json) => {
+      setsellerName(json[0].userFullname);
+    }).catch((error) => {
+        console.log("Wrong API");
+        console.error(error);
+    });
+  };
+
+  const getitemInfo = () =>{
+    var getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+ route.params.itemID;
+    
+    fetch(getItemAPI).then((response) => response.json()).then((json) => {
+      setitemName(json[0].itemName);
+      setitemDesc(json[0].itemDesc);
+      // setitemInfo(json);
+      // console.log(itemInfo);
+    }).catch((error) => {
+        console.log("Wrong API");
+        console.error(error);
+    });
+  };
+
+  React.useEffect(() => {
+    if(isFocused){ 
+      getBuyerInfo();
+      getSellerInfo();
+      getitemInfo();
+    }
+  },[navigation, isFocused]);
+
+  const showLocation = (inputPaymentMode) => {
+    if (inputPaymentMode == "COD"){
+      return(
+        <View style={styles.row}>
+                <Text style={styles.title}>Meet Location: </Text>
+                <Text style={styles.Desc}>{route.params.meetLocation}</Text>
+        </View>
+      )
+    }
+    else if (inputPaymentMode == "Bank Transfer"){
+      return(
+        <View style={styles.row}>
+                <Text style={styles.title}>Deliver Location: </Text>
+                <Text style={styles.Desc}>{route.params.deliverLocation}</Text>
+            </View>
+      )
+    }
+  }
     return(
-        <View style={styles.container}>
-        <ScrollView>
-          <View >
-            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
-            <Text style={styles.name}>Brand New iPhone 20</Text>
+      <View style={styles.container}>
+      <ScrollView>
+        <View >
+          <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +route.params.itemID +'.jpg'}}/>
+          <Text style={styles.name}>{itemName} - {itemDesc}</Text>
 
-            <View style={styles.row}>
-                <Text style={styles.title}>Name:</Text>
-                <Text style={styles.Desc}>Meå</Text>
-            </View>
-
-            <View style={styles.row}>
-                <Text style={styles.title}>Email:</Text>
-                <Text style={styles.Desc}>Me@mail.com</Text>
-            </View>
-
-            <View style={styles.row}>
-                <Text style={styles.title}>Phone:</Text>
-                <Text style={styles.Desc}>0123456789</Text>
-            </View>
-
-            <View style={styles.row}>
-                <Text style={styles.title}>Address:</Text>
-                <Text style={styles.Desc}>3, Jalan PJS 11/11, Bandar Sunway, 47500 Subang Jaya, Selangor</Text>
-            </View>
-
+          <View style={styles.row}>
+              <Text style={styles.title}>Seller Name:</Text>
+              <Text style={styles.Desc}>{sellerName}</Text>
           </View>
 
-          <View style={styles.separator}></View>
-          <View style={styles.addToCarContainer}>
-          <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('AdminTabs')}>
-              <Text style={styles.shareButtonText}>Cancel Order</Text>  
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('AdminTabs')}>
-              <Text style={styles.shareButtonText}>Back</Text>  
-            </TouchableOpacity>
-          </View> 
-        </ScrollView>
-      </View>
-    );
+          <View style={styles.row}>
+              <Text style={styles.title}>Phone:</Text>
+              <Text style={styles.Desc}>0123456789</Text>
+              {/* //remember to update */}
+          </View>
+
+          <View style={styles.row}>
+              <Text style={styles.title}>Buyer Name:</Text>
+              <Text style={styles.Desc}>{buyerName}</Text>
+          </View>
+          
+          <View style={styles.row}>
+              <Text style={styles.title}>Phone:</Text>
+              <Text style={styles.Desc}>0123456789</Text>
+              {/* //remember to update */}
+          </View>
+
+          <View style={styles.row}>
+              <Text style={styles.title}>Payment method:</Text>
+              <Text style={styles.Desc}>{route.params.paymentMethod}</Text>
+              {/* //remember to update */}
+          </View>
+
+          {showLocation(route.params.paymentMethod)}
+          
+
+        </View>
+
+        <View style={styles.separator}></View>
+        <View style={styles.addToCarContainer}>
+        {/* <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('PurchaseHistory')}>
+            <Text style={styles.shareButtonText}>Cancel Order</Text>  
+          </TouchableOpacity> */}
+          <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('PurchaseHistory')}>
+            <Text style={styles.shareButtonText}>Back</Text>  
+          </TouchableOpacity>
+        </View> 
+      </ScrollView>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -78,7 +78,7 @@ function PurchaseHistoryDetails({ navigation }){
         <View style={styles.container}>
         <ScrollView>
           <View >
-            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:"https://i.ytimg.com/vi/vIRapJCr7kg/maxresdefault.jpg"}}/>
+            <ImageBackground style={styles.productImg} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +route.params.itemID +'.jpg'}}/>
             <Text style={styles.name}>{itemName} - {itemDesc}</Text>
 
             <View style={styles.row}>

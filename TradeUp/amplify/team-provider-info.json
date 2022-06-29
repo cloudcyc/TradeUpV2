@@ -23,11 +23,11 @@
         },
         "TradeUpItem": {
           "deploymentBucketName": "amplify-tradeup-dev-22836-deployment",
-          "s3Key": "amplify-builds/TradeUpItem-4a566a34713048704934-build.zip"
+          "s3Key": "amplify-builds/TradeUpItem-4b6d426e764b306a5755-build.zip"
         },
         "TradeUpRequest": {
           "deploymentBucketName": "amplify-tradeup-dev-22836-deployment",
-          "s3Key": "amplify-builds/TradeUpRequest-61366a6b513064763777-build.zip"
+          "s3Key": "amplify-builds/TradeUpRequest-514b626d7856716c5151-build.zip"
         },
         "TradeUpReceipt": {
           "deploymentBucketName": "amplify-tradeup-dev-22836-deployment",

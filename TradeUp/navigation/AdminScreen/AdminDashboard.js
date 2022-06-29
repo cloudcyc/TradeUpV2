@@ -12,6 +12,8 @@ function AdminDashboard ({navigation}) {
     const [sellList, setsellList] = React.useState([]);
     const [centreList, setcentreList] = React.useState([]);
     const [RequestList, setRequestList] = React.useState([]);
+    const [tradeRequestPendingList, settradeRequestPendingList] = React.useState([]);
+    const [receiptList, setreceiptList] = React.useState([]);
     const getSellList = () => {
         const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Sell&inputUserRole=Admin';
         fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
@@ -30,6 +32,27 @@ function AdminDashboard ({navigation}) {
             console.error(error);
         });
     }
+    const gettradeRequestPendingList = () => {
+        const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?GetByAdmin=True&inputrequestTradeStatus=Pending';
+        fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+            settradeRequestPendingList(json);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+    const getreceiptList = () => {
+       
+        const getReceiptListAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/receipts?decoyView=True';
+        
+        fetch(getReceiptListAPI).then((response) => response.json()).then((json) => { 
+            setreceiptList(json);
+            
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    
 
     
     const getCentreList = () => {
@@ -59,6 +82,8 @@ function AdminDashboard ({navigation}) {
       getSellList();
       getCentreList();
       getRequestList();
+      gettradeRequestPendingList();
+      getreceiptList();
     }
     
     
@@ -92,7 +117,7 @@ function AdminDashboard ({navigation}) {
                         <TouchableOpacity style={styles.roundcard} >
 
                             <Text style={styles.pendingrequest}>Request Pending:</Text>
-                            <Text style={styles.cardnumber}>8</Text>
+                            <Text style={styles.cardnumber}>{tradeRequestPendingList.length}</Text>
 
                         </TouchableOpacity>
 
@@ -116,7 +141,7 @@ function AdminDashboard ({navigation}) {
                             <TouchableOpacity style={styles.roundcard} >
 
                                 <Text style={styles.pendingrequest}>Purchase Pending:</Text>
-                                <Text style={styles.cardnumber}>8</Text>
+                                <Text style={styles.cardnumber}>{receiptList.length}</Text>
 
                             </TouchableOpacity>
 

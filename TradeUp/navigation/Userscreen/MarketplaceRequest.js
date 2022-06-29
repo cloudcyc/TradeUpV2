@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { event } from 'react-native-reanimated';
 import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImgToBase64 from 'react-native-image-base64';
 import uuid from 'react-native-uuid';
 
@@ -12,6 +13,7 @@ function MarketplaceRequest({ navigation }){
     const route = useRoute();
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
 
+    const [userID, setuserID] = useState(null);
     const [requestID,setrequestID] = useState('');
     const [requestTradeItemName, setrequestTradeItemName] = useState(null);
     const [requestTradeItemDesc, setrequestTradeItemDesc] = useState(null);
@@ -57,9 +59,25 @@ function MarketplaceRequest({ navigation }){
         );
     }
 
+    const retrieveUserID  = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('userID')
+          if(value != null) {
+            // value previously stored
+            console.log(value);
+            setuserID(value);
+            
+          }
+        } catch(e) {
+          // error reading value
+          console.log(e);
+        }
+      }
+
     useEffect(() => {
+        retrieveUserID();
         getcurrentTime();
-    },[]);
+    },[navigation, isFocused]);
 
     const sendRequest = async () => {
         // console.log("\nThis is iid : iid" + uuid.v4());
@@ -86,7 +104,7 @@ function MarketplaceRequest({ navigation }){
                             requestTradeDate: currentTime,
                             requestTradeStatus: "Pending",
                             requestTradeToID: route.params.userID,
-                            requestTradeFromID: 'uid0002', //update this when logging
+                            requestTradeFromID: userID, //update this when logging
                             requestItemID: route.params.itemID,
                             requestMeetLocation: requestMeetLocation,
                             requestImage: uploadImage

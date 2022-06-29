@@ -5,6 +5,7 @@ import { SliderBox } from "react-native-image-slider-box";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ignoreWarnings from 'ignore-warnings';
 import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 Ionicons.loadFont();
 
 
@@ -13,13 +14,43 @@ function Shop({ navigation }){
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [sellList, setsellList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
-    const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Sell&inputUserRole=';
-    const getSellList = () => {
-        fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
-            setsellList(json);
-        }).catch((error) => {
-            console.error(error);
-        });
+
+    const retrieveUserID  = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('userID')
+          if(value != null) {
+            // value previously stored
+            console.log(value);
+          //   setuserID(value);
+            getSellList(value);
+          }
+          else
+          {
+            getSellList(null);
+          }
+        } catch(e) {
+          // error reading value
+          console.log(e);
+        }
+      }
+    const getSellList = (inputUserID) => {
+        if (inputUserID == null){
+            const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Sell&inputUserRole=';
+            fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+                setsellList(json);
+            }).catch((error) => {
+                console.error(error);
+            });
+        }else{
+            const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Sell&inputUserID='+inputUserID;
+            console.log(getActiveItemAPI);
+            fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+                setsellList(json);
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+        
     }
 
     const handleSearchChange = (text) => {
@@ -35,7 +66,7 @@ function Shop({ navigation }){
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
         if(isFocused){ 
-            getSellList();
+            retrieveUserID();
           }
           
           
@@ -170,7 +201,7 @@ function Shop({ navigation }){
                             <View style={{alignItems:"center", justifyContent:"center"}}>
                             <Text style={styles.name}>{item.itemName}</Text>
                             <Text style={styles.position}>RM {item.itemPrice}</Text>
-                            <Text style={styles.name}>{item.userID}</Text>
+                            {/* <Text style={styles.name}>{item.userID}</Text> */}
 
                         </View>
                         </View>

@@ -4,8 +4,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { event } from 'react-native-reanimated';
 import { Picker } from "@react-native-picker/picker";
 import uuid from 'react-native-uuid';
-import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function BuyNow({ navigation }){
     const route = useRoute();
@@ -35,10 +36,24 @@ function BuyNow({ navigation }){
         );
     }
 
-    useEffect(() => {
-       if(isFocused){ 
-        getcurrentTime();
+    const retrieveUserID  = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('userID')
+          if(value != null) {
+            // value previously stored
+            console.log(value);
+            setuserID(value);
+            
+          }
+        } catch(e) {
+          // error reading value
+          console.log(e);
+        }
       }
+        
+    useEffect(() => {
+        retrieveUserID();
+        getcurrentTime();
     },[navigation, isFocused]);
 
     const locationMode = (inputBillingMethod) =>{
@@ -65,7 +80,7 @@ function BuyNow({ navigation }){
                 body: JSON.stringify({
                     receiptID: 're' + uuid.v4(),
                     itemID: route.params.itemID,
-                    buyerID: 'uid0002', //update this when logging
+                    buyerID: userID, //update this when logging
                     sellerID: sellerID,
                     paymentMethod: paymentMethod,
                     meetLocation: location,
@@ -92,7 +107,7 @@ function BuyNow({ navigation }){
                 body: JSON.stringify({
                     receiptID: 're' + uuid.v4(),
                     itemID: route.params.itemID,
-                    userID: 'uid0002', //update this when logging
+                    buyerID: userID, //update this when logging
                     sellerID: sellerID,
                     paymentMethod: paymentMethod,
                     meetLocation: '',
@@ -106,10 +121,10 @@ function BuyNow({ navigation }){
                             alert("Successfully purchased.")
                             updateItem();
                         } else {
-                            alert("Submission failed Error:" + res.status)
+                            alert("Submission failed Error:" + res1.status)
                             console.log("Some error occured: ");
-                            console.log(res.status)
-                            console.log(res)
+                            console.log(res1.status)
+                            console.log(res1)
                         }
                 });
                 break;

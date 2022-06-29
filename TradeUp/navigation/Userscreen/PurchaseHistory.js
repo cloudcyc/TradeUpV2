@@ -2,15 +2,30 @@ import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, FlatList } from 'react-native';
 import { useIsFocused } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 function PurchaseHistory ({navigation}) {
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [receiptList, setreceiptList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
+
+    const retrieveUserID  = async () =>{
+        try {
+          const value = await AsyncStorage.getItem('userID')
+          if(value != null) {
+            // value previously stored
+            console.log(value);
+          //   setuserID(value);
+          getReceiptList(value);
+          }
+        } catch(e) {
+          // error reading value
+          console.log(e);
+        }
+      }
     
-    const getReceiptList = () => {
-        // const getSendRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputUserID='+ ; //remember to update
-        const getReceiptListAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/receipts?inputUserID=uid0002'; //remember to update
-        
+    const getReceiptList = (inputuserID) => {
+        const getReceiptListAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/receipts?inputUserID='+inputuserID; //remember to update
+        console.log(getReceiptListAPI);
         fetch(getReceiptListAPI).then((response) => response.json()).then((json) => { 
             setreceiptList(json);
             
@@ -21,7 +36,7 @@ function PurchaseHistory ({navigation}) {
 
     var tempname = '';
     const getitemList = (inputItemID) => {
-        const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+inputItemID; //update this when logging
+        const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+inputItemID;
         fetch(getItemAPI).then((response) => response.json()).then((json) => { 
             
         
@@ -37,7 +52,7 @@ function PurchaseHistory ({navigation}) {
 
     useEffect(() => {
         if(isFocused){ 
-            getReceiptList();
+            retrieveUserID();
         }
     },[navigation, isFocused]);
     return(

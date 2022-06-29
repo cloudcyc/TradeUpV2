@@ -76,15 +76,6 @@ namespace TradeUpItem
                                 };
                             break;
 
-                            case "Member":
-                                var MemberItems = await itemProvider.GetActiveItemByModeAsync(request.QueryStringParameters["inputItemMode"]);
-                                return new APIGatewayProxyResponse
-                                {
-                                    StatusCode = 200,
-                                    Body = JsonConvert.SerializeObject(MemberItems)
-                                };
-                            break;
-
                             case "":
                                 var AllActiveItemsOnly = await itemProvider.GetActiveItemByModeAsync(request.QueryStringParameters["inputItemMode"]);
                                 return new APIGatewayProxyResponse
@@ -94,6 +85,16 @@ namespace TradeUpItem
                                 };
                             break;
                         }    
+                    }
+                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputItemMode") && request.QueryStringParameters.ContainsKey("inputUserID")) 
+                    {     
+                        var items = await itemProvider.GetActiveItemByModeAndUserIDAsync(request.QueryStringParameters["inputItemMode"],request.QueryStringParameters["inputUserID"]);
+                        return new APIGatewayProxyResponse
+                        {
+                             StatusCode = 200,
+                             Body = JsonConvert.SerializeObject(items)
+                        };
+     
                     }
                     else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputItemID")){
                         var items = await itemProvider.GetItemByItemID(request.QueryStringParameters["inputItemID"]);
