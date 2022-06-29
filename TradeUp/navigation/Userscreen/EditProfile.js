@@ -15,6 +15,7 @@ function EditProfile ({navigation}) {
     const [userDoB,setuserDoB] = useState(route.params.userDoB);
     const [userCurrentPassword,setuserPassword] = useState(route.params.userPassword);
     const [userRole,setuserRole] = useState(route.params.userRole);
+    const [userPhone,setuserPhone] = useState(route.params.userPhone);
     const [createdTime,setcreatedTime] = useState(route.params.createdTime);
 
     const [userOldPassword,setuserOldPassword] = useState('');
@@ -61,12 +62,13 @@ function EditProfile ({navigation}) {
                 method: "POST",
                 body: JSON.stringify({
                     userID: userID,
-                    userEmail: userEmail,
-                    userFullname: userFullname,
-                    userPassword: userCurrentPassword,
-                    userDoB: userDoB,
-                    userRole: userRole,
-                    createdTime: createdTime
+                        userEmail: userEmail,
+                        userFullname: userFullname,
+                        userPassword: userNewPassword,
+                        userDoB: userDoB,
+                        userRole: userRole,
+                        userPhone: userPhone,
+                        createdTime: createdTime
                 }),
             }).then((res) => {
                 if (res.status == 200) {
@@ -92,6 +94,7 @@ function EditProfile ({navigation}) {
                         userPassword: userNewPassword,
                         userDoB: userDoB,
                         userRole: userRole,
+                        userPhone: userPhone,
                         createdTime: createdTime
                     }),
                 }).then((res) => {
@@ -192,6 +195,7 @@ function EditProfile ({navigation}) {
                     placeholder="Enter Your Phone Number Here"
                     underlineColorAndroid="transparent"
                     keyboardType="phone-pad"
+                    value={userPhone} onChangeText = {(val) => setuserPhone(val)}
                 />
             </View>
 

@@ -8,6 +8,7 @@ namespace TradeUpUser
        Task<UserModel[]> GetUserByEmailAndPasswordAsync(string inputUserEmail, string inputUserPassword);
        Task<UserModel[]> GetOtherAdminAsync(string inputUserRole,string inputUserID);
        Task<UserModel[]> GetUserByEmailAsync(string inputUserEmail);
+       Task<UserModel[]> GetUserByPhoneAsync(string inputUserPhone);
        Task<UserModel[]> GetUserByIDAsync(string inputUserID);
        Task<bool> AddNewUser (UserModel user);
        Task<bool> DeleteUserAsync(string inputUserEmail, string inputUserID);

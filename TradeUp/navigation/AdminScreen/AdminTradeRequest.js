@@ -9,6 +9,7 @@ function AdminTradeRequest ({navigation}) {
     const [search, setNewSearch] = React.useState("");
     const getRequestList = () => {
         const getRequestAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?GetByAdmin=True';
+        console.log(getRequestAPI);
         fetch(getRequestAPI).then((response) => response.json()).then((json) => { 
             setrequestList(json);
         }).catch((error) => {

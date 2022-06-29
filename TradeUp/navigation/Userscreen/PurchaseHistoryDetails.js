@@ -8,9 +8,11 @@ function PurchaseHistoryDetails({ navigation }){
   const isFocused = useIsFocused(); //used to refresh upon entering new screen
   //Buyer
   const [buyerName, setbuyerName] = React.useState('');
+  const [buyerPhone, setbuyerPhone] = React.useState('');
 
   //Seller
   const [sellerName, setsellerName] = React.useState('');
+  const [sellerPhone, setsellerPhone] = React.useState('');
   const [itemName, setitemName] = React.useState('');
   const [itemDesc, setitemDesc] = React.useState('');
 
@@ -18,6 +20,7 @@ function PurchaseHistoryDetails({ navigation }){
     var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.buyerID;
     fetch(getUserAPI).then((response) => response.json()).then((json) => {
       setbuyerName(json[0].userFullname);
+      setbuyerPhone(json[0].userPhone);
     }).catch((error) => {
         console.log("Wrong API");
         console.error(error);
@@ -27,6 +30,7 @@ function PurchaseHistoryDetails({ navigation }){
     var getUserAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?inputUserID='+route.params.sellerID;
     fetch(getUserAPI).then((response) => response.json()).then((json) => {
       setsellerName(json[0].userFullname);
+      setsellerPhone(json[0].userPhone);
     }).catch((error) => {
         console.log("Wrong API");
         console.error(error);
@@ -88,7 +92,7 @@ function PurchaseHistoryDetails({ navigation }){
 
             <View style={styles.row}>
                 <Text style={styles.title}>Phone:</Text>
-                <Text style={styles.Desc}>0123456789</Text>
+                <Text style={styles.Desc}>{sellerPhone}</Text>
                 {/* //remember to update */}
             </View>
 
@@ -99,7 +103,7 @@ function PurchaseHistoryDetails({ navigation }){
             
             <View style={styles.row}>
                 <Text style={styles.title}>Phone:</Text>
-                <Text style={styles.Desc}>0123456789</Text>
+                <Text style={styles.Desc}>{buyerPhone}</Text>
                 {/* //remember to update */}
             </View>
 
@@ -119,9 +123,9 @@ function PurchaseHistoryDetails({ navigation }){
           {/* <TouchableOpacity style={styles.shareButton2} onPress={() => navigation.navigate('PurchaseHistory')}>
               <Text style={styles.shareButtonText}>Cancel Order</Text>  
             </TouchableOpacity> */}
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('PurchaseHistory')}>
+            {/* <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('PurchaseHistory')}>
               <Text style={styles.shareButtonText}>Back</Text>  
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View> 
         </ScrollView>
       </View>

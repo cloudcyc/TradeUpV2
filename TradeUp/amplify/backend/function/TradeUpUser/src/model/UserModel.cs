@@ -9,6 +9,7 @@ namespace TradeUpUser
                 public string userPassword {get; set;}
                 public string userDoB {get; set;}
                 public string userRole {get; set;}
+                public string userPhone {get; set;}
                 public string createdTime {get; set;}
         }
 

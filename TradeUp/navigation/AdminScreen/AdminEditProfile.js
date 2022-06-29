@@ -13,6 +13,7 @@ function AdminEditProfile ({navigation}) {
     const [userFullname,setuserFullname] = useState(route.params.userFullname);
     const [userEmail,setuserEmail] = useState(route.params.userEmail);
     const [userDoB,setuserDoB] = useState(route.params.userDoB);
+    const [userPhone,setuserPhone] = useState(route.params.userPhone);
     const [userCurrentPassword,setuserPassword] = useState(route.params.userPassword);
     const [userRole,setuserRole] = useState(route.params.userRole);
     const [createdTime,setcreatedTime] = useState(route.params.createdTime);
@@ -61,12 +62,13 @@ function AdminEditProfile ({navigation}) {
                 method: "POST",
                 body: JSON.stringify({
                     userID: userID,
-                    userEmail: userEmail,
-                    userFullname: userFullname,
-                    userPassword: userCurrentPassword,
-                    userDoB: userDoB,
-                    userRole: userRole,
-                    createdTime: createdTime
+                        userEmail: userEmail,
+                        userFullname: userFullname,
+                        userPassword: userNewPassword,
+                        userDoB: userDoB,
+                        userRole: userRole,
+                        userPhone: userPhone,
+                        createdTime: createdTime
                 }),
             }).then((res) => {
                 if (res.status == 200) {
@@ -92,6 +94,7 @@ function AdminEditProfile ({navigation}) {
                         userPassword: userNewPassword,
                         userDoB: userDoB,
                         userRole: userRole,
+                        userPhone: userPhone,
                         createdTime: createdTime
                     }),
                 }).then((res) => {
@@ -194,6 +197,7 @@ function AdminEditProfile ({navigation}) {
                     placeholder="Enter Your Phone Number Here"
                     underlineColorAndroid="transparent"
                     keyboardType="phone-pad"
+                    value={userPhone} onChangeText = {(val) => setuserPhone(val)}
                 />
             </View>
 
