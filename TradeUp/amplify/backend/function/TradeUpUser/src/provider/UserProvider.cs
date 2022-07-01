@@ -42,6 +42,7 @@ namespace TradeUpUser
                     item.TryGetValue("userPassword", out var userPassword);
                     item.TryGetValue("userDoB", out var userDoB);
                     item.TryGetValue("userRole", out var userRole);
+                    item.TryGetValue("userPhone", out var userPhone);
                     item.TryGetValue("createdTime", out var createdTime);
                     
                     user.Add(new UserModel{
@@ -51,6 +52,7 @@ namespace TradeUpUser
                         userPassword = userPassword?.S,
                         userDoB = userDoB?.S,
                         userRole = userRole?.S,
+                        userPhone = userPhone?.S,
                         createdTime = createdTime?.S
                     });
                 }
@@ -79,6 +81,7 @@ namespace TradeUpUser
                     item.TryGetValue("userPassword", out var userPassword);
                     item.TryGetValue("userDoB", out var userDoB);
                     item.TryGetValue("userRole", out var userRole);
+                    item.TryGetValue("userPhone", out var userPhone);
                     item.TryGetValue("createdTime", out var createdTime);
                     
                     user.Add(new UserModel{
@@ -88,6 +91,46 @@ namespace TradeUpUser
                         userPassword = userPassword?.S,
                         userDoB = userDoB?.S,
                         userRole = userRole?.S,
+                        userPhone = userPhone?.S,
+                        createdTime = createdTime?.S
+                    });
+                }
+                return user.ToArray();
+            }
+            return Array.Empty<UserModel>();
+        }
+
+        public async Task<UserModel[]> GetUserByPhoneAsync(string inputUserPhone)
+        {
+            var result = await dynamoDB.QueryAsync(new QueryRequest{
+                TableName = "TradeUpUsers-dev",
+                IndexName = "userPhone-index",
+                ExpressionAttributeValues = new Dictionary<string,AttributeValue> {
+                    {":userPhone", new AttributeValue { S = inputUserPhone }},
+                },
+                KeyConditionExpression = "userPhone = :userPhone",
+            });
+
+            if (result != null && result.Items != null){
+                var user = new  List<UserModel>();
+                foreach (var item in result.Items){
+                    item.TryGetValue("userID", out var userID);
+                    item.TryGetValue("userEmail", out var userEmail);
+                    item.TryGetValue("userFullname", out var userFullname);
+                    item.TryGetValue("userPassword", out var userPassword);
+                    item.TryGetValue("userDoB", out var userDoB);
+                    item.TryGetValue("userRole", out var userRole);
+                    item.TryGetValue("userPhone", out var userPhone);
+                    item.TryGetValue("createdTime", out var createdTime);
+                    
+                    user.Add(new UserModel{
+                        userID = userID?.S,
+                        userEmail = userEmail?.S,
+                        userFullname = userFullname?.S,
+                        userPassword = userPassword?.S,
+                        userDoB = userDoB?.S,
+                        userRole = userRole?.S,
+                        userPhone = userPhone?.S,
                         createdTime = createdTime?.S
                     });
                 }
@@ -116,6 +159,7 @@ namespace TradeUpUser
                     item.TryGetValue("userPassword", out var userPassword);
                     item.TryGetValue("userDoB", out var userDoB);
                     item.TryGetValue("userRole", out var userRole);
+                    item.TryGetValue("userPhone", out var userPhone);
                     item.TryGetValue("createdTime", out var createdTime);
                     
                     user.Add(new UserModel{
@@ -125,6 +169,7 @@ namespace TradeUpUser
                         userPassword = userPassword?.S,
                         userDoB = userDoB?.S,
                         userRole = userRole?.S,
+                        userPhone = userPhone?.S,
                         createdTime = createdTime?.S
                     });
                 }
@@ -155,6 +200,7 @@ namespace TradeUpUser
                     item.TryGetValue("userPassword", out var userPassword);
                     item.TryGetValue("userDoB", out var userDoB);
                     item.TryGetValue("userRole", out var userRole);
+                    item.TryGetValue("userPhone", out var userPhone);
                     item.TryGetValue("createdTime", out var createdTime);
                     
                     user.Add(new UserModel{
@@ -164,6 +210,7 @@ namespace TradeUpUser
                         userPassword = userPassword?.S,
                         userDoB = userDoB?.S,
                         userRole = userRole?.S,
+                        userPhone = userPhone?.S,
                         createdTime = createdTime?.S
                     });
                 }
@@ -185,6 +232,7 @@ namespace TradeUpUser
                     {"userPassword", new AttributeValue(user.userPassword)},
                     {"userDoB", new AttributeValue(user.userDoB)},
                     {"userRole", new AttributeValue(user.userRole)},
+                    {"userPhone", new AttributeValue(user.userPhone)},
                     {"createdTime", new AttributeValue(user.createdTime)},
                 }
             };

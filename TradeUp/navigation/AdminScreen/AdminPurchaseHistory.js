@@ -42,7 +42,7 @@ function AdminPurchaseHistory ({navigation}) {
     }
     const getItemName = (inputItemName) => {
         getitemList(inputItemName);
-        var temp = tempName
+        let temp = tempName
         
         // {getitemList(item.itemID)}
         // console.log(getitemList(inputItemName).then(response => response.json()).then(data => {
@@ -104,10 +104,10 @@ function AdminPurchaseHistory ({navigation}) {
                                 <View>
                                 
                                 {/* {getItemName(item.itemID)} */}
-                                {/* <Text style={styles.title}>{
+                                <Text style={styles.title}>{
                                     getItemName(item.itemID)
                                     
-                                    }</Text> */}
+                                    }</Text>
                                     <Text style={styles.time}>{item.createdTime}</Text>
                                 </View>
                                 

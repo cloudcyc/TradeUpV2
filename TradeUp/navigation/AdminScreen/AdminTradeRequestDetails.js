@@ -72,7 +72,7 @@ function AdminTradeRequestDetails({ navigation }){
     }
 
     const displayButtons = (inputStatus) => {
-      if (inputStatus == "Rejected" || inputStatus == "Canceled" || inputStatus == "Removed by Admin"){
+      if (inputStatus == "Accepted" ||inputStatus == "Rejected" || inputStatus == "Canceled" || inputStatus == "Removed by Admin"){
         
       }
       else

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
 import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function ShopProductDetails({ navigation }){
@@ -20,6 +20,24 @@ function ShopProductDetails({ navigation }){
           console.error(error);
       });
     };
+
+    const retrieveUserID  = async () =>{
+      try {
+        const value = await AsyncStorage.getItem('userID')
+        if(value != null) {
+          navigation.navigate('BuyNow', route.params)
+        }
+        else
+        {
+
+          alert("Login to Buy");
+          navigation.navigate('NonMemberHomeTabs')
+        }
+      } catch(e) {
+        // error reading value
+        console.log(e);
+      }
+    }
 
     React.useEffect(() => {
       if(isFocused){ 
@@ -47,7 +65,7 @@ function ShopProductDetails({ navigation }){
 
             <Text style={styles.description}>{route.params.itemDesc}</Text>
 
-            <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('BuyNow', route.params)}>
+            <TouchableOpacity style={styles.shareButton} onPress={() => retrieveUserID()}>
               <Text style={styles.shareButtonText}>Buy Now</Text>  
             </TouchableOpacity>
 

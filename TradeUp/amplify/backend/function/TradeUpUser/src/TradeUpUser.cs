@@ -63,6 +63,15 @@ namespace TradeUpUser
                             Body = JsonConvert.SerializeObject(users)
                         };
                     }
+                    else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserPhone"))
+                    {
+                        var users = await userProvider.GetUserByPhoneAsync(request.QueryStringParameters["inputUserPhone"]);
+                        return new APIGatewayProxyResponse
+                        {
+                            StatusCode = 200,
+                            Body = JsonConvert.SerializeObject(users)
+                        };
+                    }
                     else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey("inputUserID") && request.QueryStringParameters.ContainsKey("inputUserRole"))
                     {
                         var users = await userProvider.GetOtherAdminAsync(request.QueryStringParameters["inputUserRole"],request.QueryStringParameters["inputUserID"]);

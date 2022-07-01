@@ -19,6 +19,7 @@ function AdminEditUser ({navigation}) {
     const [userPassword,setuserPassword] = useState(route.params.userPassword);
     const [userConfirmPassword,setuserConfirmPassword] = useState('');
     const [userRole,setuserRole] = useState(route.params.userRole);
+    const [userPhone,setuserPhone] = useState(route.params.userPhone);
     const [createdTime,setcreatedTime] = useState(route.params.createdTime);
     const [centreStatus, setCentreStatus] = useState(null);
 
@@ -77,11 +78,13 @@ function AdminEditUser ({navigation}) {
                 body: JSON.stringify({
                     userID: userID,
                     userEmail: userEmail,
-                    userFullname: userFullname,
-                    userPassword: userPassword,
-                    userDoB: userDoB,
-                    userRole: userRole,
-                    createdTime: createdTime
+                                    userFullname: userFullname,
+                                    userPhoneNumber: userPhone,
+                                    userPassword: userPassword,
+                                    userDoB: userDoB,
+                                    userRole: userRole,
+                                    userPhone: userPhone,
+                                    createdTime: createdTime
                 }),
             }).then((res) => {
                 if (res.status == 200) {
@@ -178,12 +181,13 @@ function AdminEditUser ({navigation}) {
                     placeholder="Enter Phone Number Here"
                     underlineColorAndroid="transparent"
                     keyboardType="phone-pad"
+                    value={userPhone} onChangeText = {(val) => setuserPhone(val)}
                 />
             </View>
             <View style={styles.sectionStyle2}>
                 <Picker
                         selectedValue={userRole}
-                        onValueChange={(value, index) => setCentreStatus(value)}
+                        onValueChange={(value, index) => setuserRole(value)}
                         mode="dropdown" // Android only
                         style={styles.picker}>
                         

@@ -93,7 +93,7 @@ function AdminProfile({ navigation }){
                 <TouchableOpacity style={styles.ButtonContainer} onPress={() => navigation.navigate('AdminManageUserScreen',userInfo[0])}>
                   <View style={styles.row}>
                       <Ionicons name='people-circle-outline' size={35} />
-                      <Text style={styles.ButtonText}>Manage Users</Text>
+                      <Text style={styles.ButtonText}>Manage Admins</Text>
                   </View>
                 </TouchableOpacity>
 
