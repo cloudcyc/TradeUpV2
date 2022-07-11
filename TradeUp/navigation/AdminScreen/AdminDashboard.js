@@ -116,7 +116,7 @@ function AdminDashboard ({navigation}) {
 
                         <TouchableOpacity style={styles.roundcard} >
 
-                            <Text style={styles.pendingrequest}>Request Pending:</Text>
+                            <Text style={styles.pendingrequest}>Total Request:</Text>
                             <Text style={styles.cardnumber}>{tradeRequestPendingList.length}</Text>
 
                         </TouchableOpacity>
@@ -133,14 +133,14 @@ function AdminDashboard ({navigation}) {
                         <View style={styles.row}>
                             <TouchableOpacity style={styles.roundcard} >
 
-                                <Text style={styles.totalrequest}>Total Purchase:</Text>
+                                <Text style={styles.totalrequest}>Total Item:</Text>
                                 <Text style={styles.cardnumber}> {sellList.length}</Text>
 
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.roundcard} >
 
-                                <Text style={styles.pendingrequest}>Purchase Pending:</Text>
+                                <Text style={styles.totalrequest}>Total Sold:</Text>
                                 <Text style={styles.cardnumber}>{receiptList.length}</Text>
 
                             </TouchableOpacity>

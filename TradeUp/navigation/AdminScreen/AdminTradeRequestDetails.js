@@ -72,7 +72,7 @@ function AdminTradeRequestDetails({ navigation }){
     }
 
     const displayButtons = (inputStatus) => {
-      if (inputStatus == "Accepted" ||inputStatus == "Rejected" || inputStatus == "Canceled" || inputStatus == "Removed by Admin"){
+      if (inputStatus == "Accepted" ||inputStatus == "Rejected" || inputStatus == "Canceled" || inputStatus == "Removed by Admin" || inputStatus == "Item Removed by Owner"){
         
       }
       else
@@ -129,6 +129,7 @@ function AdminTradeRequestDetails({ navigation }){
                       underlineColorAndroid="transparent"
                       placeholderTextColor="black"
                       editable= {false}
+                      multiline = {true}
                   />
 
               </View>
