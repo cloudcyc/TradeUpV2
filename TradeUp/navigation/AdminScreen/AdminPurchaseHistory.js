@@ -100,7 +100,7 @@ function AdminPurchaseHistory ({navigation}) {
                     onPress={() => navigation.navigate('AdminPurchaseHistoryDetails',item)}>
 
                             <View style={styles.row}>
-                                <Image style={styles.productImg} resizeMode="stretch" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
+                                <Image style={styles.productImg} resizeMode="contain" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
                                 <View>
                                 
                                 {/* {getItemName(item.itemID)} */}
@@ -111,7 +111,7 @@ function AdminPurchaseHistory ({navigation}) {
                                     <Text style={styles.time}>{item.createdTime}</Text>
                                 </View>
                                 
-                                <Text style={styles.success}>RM {item.totalBill} </Text>
+                                {/* <Text style={styles.success}>RM {item.totalBill} </Text> */}
                             </View>
                         
 
@@ -178,16 +178,28 @@ const styles = StyleSheet.create({
 
 root:{
     height:'100%',
+    paddingRight:10
 },
 
 container:{
-    backgroundColor:'white',
-    borderBottomColor:'#DCDCDC',
-    borderBottomWidth: 1,
+    shadowColor: '#00000021',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+    elevation: 12,
+
+    marginVertical: 5,
+    backgroundColor:"white",
+    flexBasis: '46%',
+    marginHorizontal: 10,
+    borderRadius:15
 },
 
 row:{
-    flexDirection: 'row',
+    //flexDirection: 'row',
     backgroundColor:'white',
 },
 
@@ -202,10 +214,10 @@ title:{
 time: {
     fontWeight: '400',
     color: '#666',
-    fontSize: 12,
-    marginLeft:10,
+    fontSize: 15,
     paddingBottom:25,
-    paddingTop:30
+    paddingTop:30,
+    alignSelf:'center'
 },
 
 success:{
@@ -225,9 +237,9 @@ pending:{
 },
 
 productImg:{
-    width: 80,
-    height:80,
-    margin:10
+    height: 120,
+    width: "100%",
+    alignSelf:'center',
   },
 
 canceled:{

@@ -224,7 +224,6 @@ const styles = StyleSheet.create({
       userImage:{
         height: 120,
         width: 120,
-        borderRadius:60,
         alignSelf:'center',
       },
 

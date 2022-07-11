@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
 
     root:{
         backgroundColor: '#dff0fb',
-        // paddingTop: 50,
+        //paddingTop: 50,
     },
 
     row3:{
