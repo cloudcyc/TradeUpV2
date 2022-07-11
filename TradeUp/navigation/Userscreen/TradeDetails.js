@@ -134,13 +134,13 @@ function TradeDetailScreen({ navigation }){
                 <View style={styles.sectionStyle}>
 
                     <Ionicons name='chatbox-ellipses-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
-                    <TextInput
-                        style={styles.Desc}
-                        placeholder={route.params.requestTradeItemDesc}
+                    <Text style={styles.Desc}>{route.params.requestTradeItemDesc}</Text>
+                        
+                        {/* placeholder=
                         underlineColorAndroid="transparent"
                         placeholderTextColor="black"
-                        editable= {false}
-                    />
+                        editable= {false} */}
+                  
 
                 </View>
 
@@ -267,6 +267,7 @@ imageStyle2: {
       paddingLeft:20,
       fontSize: 18,
       fontWeight: 'bold',
+      paddingRight:20
   },
 
   Desc2:{
@@ -440,12 +441,13 @@ sectionStyle4: {
     alignItems: 'center',
     backgroundColor: '#fff',
     borderWidth: 1,
-    height: 50,
+    minHeight: 50,
     borderRadius: 5,
     marginTop: 10,
     marginBottom:10,
     marginLeft:20,
-    marginRight:20
+    marginRight:20,
+    paddingRight:20
 },
 
 sectionStyle2: {

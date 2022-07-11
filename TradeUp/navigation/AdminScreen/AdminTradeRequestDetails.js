@@ -120,17 +120,16 @@ function AdminTradeRequestDetails({ navigation }){
               </View>
 
               <Text style={styles.title}>Description:</Text>
-              <View style={styles.sectionStyle}>
+              <View style={styles.sectionStyle3}>
 
                   <Ionicons name='chatbox-ellipses-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
-                  <TextInput
-                      style={styles.Desc}
-                      placeholder={route.params.requestTradeItemDesc}
+                  <Text style={styles.Desc}>{route.params.requestTradeItemDesc}</Text>
+                      
+                      {/* placeholder=
                       underlineColorAndroid="transparent"
                       placeholderTextColor="black"
-                      editable= {false}
-                      multiline = {true}
-                  />
+                      editable= {false} */}
+                  
 
               </View>
 
@@ -448,6 +447,20 @@ marginTop: 10,
 marginBottom:10,
 marginLeft:20,
 marginRight:20
+},
+
+sectionStyle3: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#fff',
+  borderWidth: 1,
+  minHeight: 50,
+  borderRadius: 5,
+  marginTop: 10,
+  marginBottom:10,
+  marginLeft:20,
+  marginRight:20,
+  paddingRight:20
 },
 });    
 

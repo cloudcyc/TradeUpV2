@@ -231,13 +231,12 @@ function ViewTradeRequestDetails({ navigation }){
               <View style={styles.sectionStyle}>
 
                   <Ionicons name='chatbox-ellipses-outline' size={25} style={{paddingLeft:5, paddingRight:10}} />
-                  <TextInput
-                      style={styles.Desc}
-                      placeholder={route.params.requestTradeItemDesc}
+                  <Text style={styles.Desc}>{route.params.requestTradeItemDesc}</Text>
+                      
+                      {/* placeholder=
                       underlineColorAndroid="transparent"
                       placeholderTextColor="black"
-                      editable= {false}
-                  />
+                      editable= {false} */}
 
               </View>
 
@@ -339,6 +338,7 @@ const styles = StyleSheet.create({
       paddingLeft:20,
       fontSize: 18,
       fontWeight: 'bold',
+      paddingRight:20
   },
 
   Desc2:{
@@ -505,7 +505,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom:10,
     marginLeft:20,
-    marginRight:20
+    marginRight:20,
+    paddingRight:20
 },
 
 sectionStyle2: {
