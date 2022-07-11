@@ -64,7 +64,7 @@ function EditProfile ({navigation}) {
                     userID: userID,
                         userEmail: userEmail,
                         userFullname: userFullname,
-                        userPassword: userNewPassword,
+                        userPassword: userCurrentPassword,
                         userDoB: userDoB,
                         userRole: userRole,
                         userPhone: userPhone,

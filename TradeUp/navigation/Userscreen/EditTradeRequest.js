@@ -66,6 +66,7 @@ function EditTradeRequest({ navigation }){
                                 requestTradeFromID: requestTradeFromID, 
                                 requestItemID: requestItemID,
                                 requestMeetLocation: requestMeetLocation,
+                                decoyView: "True",
                                 requestImage: newitemImage
                             }),
                         }).then((res) => {
@@ -100,6 +101,7 @@ function EditTradeRequest({ navigation }){
                                 requestTradeFromID: requestTradeFromID, 
                                 requestItemID: requestItemID,
                                 requestMeetLocation: requestMeetLocation,
+                                decoyView: "True",
                                 
                             }),
                         }).then((res) => {

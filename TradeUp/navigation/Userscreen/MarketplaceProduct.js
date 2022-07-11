@@ -1,36 +1,76 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRoute } from "@react-navigation/native";
 Ionicons.loadFont();
 
 function MarketplaceProduct({ navigation }){
+  const route = useRoute();
+  const isFocused = useIsFocused(); //used to refresh upon entering new screen
+  const [tradeList, settradeList] = React.useState([]);
+  const [search, setNewSearch] = React.useState("");
+  const [selectedItemCategory, setselectedItemCategory] = React.useState(route.params.itemCategory);
 
-    const SampleProduct = [{
-        ProductName: "Iphone 13", Name: "John Sandford", product_image:
-        "https://www.igeeksblog.com/wp-content/uploads/2021/08/black-wallpaper-for-iphone-10-675x450.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 14", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 15", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }, {
-        ProductName: "Iphone 16", Name: "John Sandford", product_image:
-        "https://img1.ibay.com.mv/is1/full/2022/04/item_3928693_147.jpg", product_desc:"This is brand new iPhone 13. Condition like 10/10 exactly new"
-      }];
+  const retrieveUserID  = async () =>{
+      try {
+        const value = await AsyncStorage.getItem('userID')
+        if(value != null) {
+          // value previously stored
+          console.log(value);
+        //   setuserID(value);
+          gettradeList(value, selectedItemCategory);
+        }
+        else
+        {
+          gettradeList(null, selectedItemCategory);
+        }
+      } catch(e) {
+        // error reading value
+        console.log(e);
+      }
+    }
+  const gettradeList = (inputUserID, inputItemCategory) => {
+      if (inputUserID == null){
+          const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Trade&inputItemCategory='+inputItemCategory;
+          console.log(getActiveItemAPI);
+          fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+              settradeList(json);
+          }).catch((error) => {
+              console.error(error);
+          });
+      }
+      else
+      {
+          const getActiveItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemMode=Trade&inputItemCategory='+inputItemCategory+'&inputUserID='+inputUserID;
+          console.log(getActiveItemAPI);
+          fetch(getActiveItemAPI).then((response) => response.json()).then((json) => { 
+              settradeList(json);
+          }).catch((error) => {
+              console.error(error);
+          });
+      }
+      
+  }
+
+  const handleSearchChange = (text) => {
+      setNewSearch(text)
+      
+      };
+  const filteredTrade = !search
+  ? tradeList
+  : tradeList.filter((filteredTrade) =>
+  filteredTrade.itemName.toLowerCase().includes(search.toLowerCase())
+      );
+
+  useEffect(() => {
+      if(isFocused){ 
+          retrieveUserID();
+        }
+      
+  },[navigation, isFocused]);
 
     return(
         <SafeAreaView style={styles.root}>
@@ -39,13 +79,18 @@ function MarketplaceProduct({ navigation }){
                 
                 <View style={styles.containerSearch}>
                     <Ionicons name='search-outline' size={25} color='grey' style={{paddingLeft:5,paddingRight:5}} />
-                    <TextInput placeholder='Search Product Name'/>
+                    <TextInput placeholder='Search Product Name'
+                        onChangeText ={(text) => handleSearchChange(text)}
+                    />
                 </View>
 
             </View>
 
             <FlatList
-            data={SampleProduct}
+            data={filteredTrade}
+            keyExtractor= {(key) => {
+                            return key.itemID;
+                        }}
             style={styles.list}
             numColumns={2}
             contentContainerStyle={styles.listContainer}
@@ -53,15 +98,15 @@ function MarketplaceProduct({ navigation }){
                 return (
 
                     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate( 'MarketplaceDetails', item)}>
-                        <Image style={styles.userImage} source={{uri:item.product_image}}/>
+                        <Image style={styles.userImage} source={{uri: 'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
                         <View style={styles.cardFooter}>
                             <View style={{alignItems:"center", justifyContent:"center"}}>
-                            <Text style={styles.name}>{item.ProductName}</Text>
-                            <Text style={styles.position}>{item.Name}</Text>
+                            <Text style={styles.name}>{item.itemName}</Text>
+                            {/* <Text style={styles.name}>{item.userID}</Text> */}
                             {/* <TouchableOpacity style={styles.followButton}>
                                 <Text style={styles.followButtonText}>View</Text>  
                             </TouchableOpacity> */}
-                        </View>
+                          </View>
                         </View>
                     </TouchableOpacity>
 

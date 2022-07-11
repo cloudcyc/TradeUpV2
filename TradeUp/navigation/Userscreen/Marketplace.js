@@ -122,63 +122,63 @@ function Marketplace({ navigation }){
                <ScrollView  horizontal={true}>
 
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('MarketplaceProduct')}
+                    onPress={() => navigation.navigate('MarketplaceProduct',{itemCategory: 'MobileAndAccessories'})}
                     style={styles.roundButton1}>
                     <Image style={styles.icon} source={{
                     uri:
-                        'https://cdn-icons-png.flaticon.com/512/644/644458.png',
+                        'https://cdn-icons.flaticon.com/png/512/4681/premium/4681177.png?token=exp=1657465559~hmac=2eed2023175f71846c74ac9b97354ef6',
                     }}/>
-                    <Text>Electronics</Text>
+                    <Text>Mobile & Accessories</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('MarketplaceProduct')}
+                    onPress={() => navigation.navigate('MarketplaceProduct',{itemCategory: 'Automotive'})}
                     style={styles.roundButton1}>
                     <Image style={styles.icon} source={{
                     uri:
-                        'https://cdn-icons.flaticon.com/png/512/1867/premium/1867682.png?token=exp=1655051547~hmac=bc825fcbac8d07f32ce7674e37c40e77',
+                        'https://cdn-icons-png.flaticon.com/512/741/741407.png',
+                    }}/>
+                    <Text>Automotive</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('MarketplaceProduct',{itemCategory: 'HealthAndBeauty'})}
+                    style={styles.roundButton1}>
+                    <Image style={styles.icon} source={{
+                    uri:
+                        'https://cdn-icons.flaticon.com/png/512/1807/premium/1807392.png?token=exp=1657465732~hmac=f37db411c5facff2f78c72e391d55340',
+                    }}/>
+                    <Text>Health & Beauty</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('MarketplaceProduct',{itemCategory: 'ComputerAndAccessories'})}
+                    style={styles.roundButton1}>
+                    <Image style={styles.icon} source={{
+                    uri:
+                        'https://cdn-icons.flaticon.com/png/512/2704/premium/2704234.png?token=exp=1657465499~hmac=aeb717aeeef367c6e70979660fbd87c9',
+                    }}/>
+                    <Text>Computer & Accessories</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('MarketplaceProduct',{itemCategory: 'Clothes'})}
+                    style={styles.roundButton1}>
+                    <Image style={styles.icon} source={{
+                    uri:
+                        'https://cdn-icons-png.flaticon.com/512/2934/2934972.png',
                     }}/>
                     <Text>Clothes</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('MarketplaceProduct')}
+                    onPress={() => navigation.navigate('MarketplaceProduct',{itemCategory: 'HomeAndLiving'})}
                     style={styles.roundButton1}>
                     <Image style={styles.icon} source={{
                     uri:
-                        'https://cdn-icons.flaticon.com/png/512/5074/premium/5074541.png?token=exp=1655051716~hmac=8d75192e9d4be22a0d13f25e293042b9',
+                        'https://cdn-icons.flaticon.com/png/512/3659/premium/3659944.png?token=exp=1657465359~hmac=e9a3c9ba9a8b2a990ea1abdf9c3d8864',
                     }}/>
-                    <Text>Deals</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('MarketplaceProduct')}
-                    style={styles.roundButton1}>
-                    <Image style={styles.icon} source={{
-                    uri:
-                        'https://cdn-icons.flaticon.com/png/512/3097/premium/3097180.png?token=exp=1655051857~hmac=34f9a0fa30dc4a51a7acd25f470b0bf3',
-                    }}/>
-                    <Text>Vehicles</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('MarketplaceProduct')}
-                    style={styles.roundButton1}>
-                    <Image style={styles.icon} source={{
-                    uri:
-                        'https://cdn-icons-png.flaticon.com/512/2991/2991552.png',
-                    }}/>
-                    <Text>Entertainment</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('MarketplaceProduct')}
-                    style={styles.roundButton1}>
-                    <Image style={styles.icon} source={{
-                    uri:
-                        'https://cdn-icons.flaticon.com/png/512/3458/premium/3458061.png?token=exp=1655052199~hmac=389fe7588e70d13c084baa1ff71013a4',
-                    }}/>
-                    <Text>Home & Garden</Text>
+                    <Text>Home & Living</Text>
                 </TouchableOpacity>
 
                </ScrollView>
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     },
 
     roundButton1: {
-        maxWidth:120,
+        maxWidth:100,
         minWidth:80,
         height: 80,
         justifyContent: 'center',

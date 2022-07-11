@@ -21,6 +21,7 @@ function EditMarketplaceDetails({ navigation }){
     const [itemName, setitemName] = useState(route.params.itemName);
     const [itemPrice, setitemPrice] = useState(route.params.itemPrice);
     const [itemStatus, setitemStatus] = useState(route.params.itemStatus);
+    const [currentitemStatus, setcurrentitemStatus] = useState(route.params.itemStatus);
     
     //new
     const [newitemImage, setnewitemImage] = useState();
@@ -82,11 +83,60 @@ function EditMarketplaceDetails({ navigation }){
         }
       },[navigation, isFocused]);
 
+      const removePendingRequest = async (inputRequestItemID, inputNewStatus) => {
+        var removePendingRequestAPI = "https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestItemID="+inputRequestItemID+"&inputNewStatus="+inputNewStatus;
+        console.log(removePendingRequestAPI)
+        let res = await fetch(removePendingRequestAPI, {
+            method: "POST",
+        }).then((res) => {
+            if (res.status == 200) {
+              console.log("200")
+              navigation.navigate('ManageMarketplace')
+                } else {
+                    // alert("Submission failed Error:" + res.status)
+                    console.log("400")
+                    navigation.navigate('ManageMarketplace')
+                    console.log("Some error occured: ");
+                    console.log(res.status)
+                    console.log(res)
+                }
+        });
+      }
       const updateItem = async () => {
         if (newitemImage != null){
             // update with new image
             if (itemCategory == null || itemDesc == null || itemMode == null || itemName == null || itemStatus == null){
                 alert("Please fill in every criteria.");
+            }
+            else if(itemStatus == "Inactive"){
+                updateItemAPI = updateItemAPI + "NewImage=True&inputItemID="+itemID;
+                let res = await fetch(updateItemAPI, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            itemID: itemID,
+                            userID: userID,
+                            itemCategory: itemCategory,
+                            itemDate: itemDate,
+                            itemDesc: itemDesc,
+                            itemMode: itemMode,
+                            itemName: itemName,
+                            itemPrice: itemPrice,
+                            itemStatus: itemStatus,
+                            itemImage: newitemImage
+                        }),
+                    }).then((res) => {
+                        if (res.status == 200) {
+                                alert("Item updated successfully.")
+                                console.log("Item updated successfully");
+                                removePendingRequest(itemID, "Rejected");
+                                
+                            } else {
+                                alert("Submission failed Error:" + res.status)
+                                console.log("Some error occured: ");
+                                console.log(res.status)
+                                console.log(res)
+                            }
+                    });
             }
             else{
                 updateItemAPI = updateItemAPI + "NewImage=True&inputItemID="+itemID;
@@ -123,6 +173,35 @@ function EditMarketplaceDetails({ navigation }){
             //update without new image
             if (itemCategory == null || itemDesc == null || itemMode == null || itemName == null || itemStatus == null){
                 alert("Please fill in every criteria.");
+            }
+            else if(itemStatus == "Inactive"){
+                updateItemAPI = updateItemAPI + "NewImage=False&inputItemID="+itemID;
+                let res = await fetch(updateItemAPI, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            itemID: itemID,
+                            userID: userID,
+                            itemCategory: itemCategory,
+                            itemDate: itemDate,
+                            itemDesc: itemDesc,
+                            itemMode: itemMode,
+                            itemName: itemName,
+                            itemPrice: itemPrice,
+                            itemStatus: itemStatus
+                        }),
+                    }).then((res) => {
+                        if (res.status == 200) {
+                                alert("Item updated successfully.")
+                                console.log("Item updated successfully");
+                                removePendingRequest(itemID, "Rejected");
+                                
+                            } else {
+                                alert("Submission failed Error:" + res.status)
+                                console.log("Some error occured: ");
+                                console.log(res.status)
+                                console.log(res)
+                            }
+                    });
             }
             else{
                 updateItemAPI = updateItemAPI + "NewImage=False&inputItemID="+itemID;
@@ -201,12 +280,12 @@ function EditMarketplaceDetails({ navigation }){
                         }>
                     
                         <Picker.Item label="Select a categories" value="NULL" />
-                        <Picker.Item label="Mobile & Accessories" value="Mobile & Accessories" />
+                        <Picker.Item label="Mobile & Accessories" value="MobileAndAccessories" />
                         <Picker.Item label="Automotive" value="Automotive" />
-                        <Picker.Item label="Electronic" value="Electronic" />
-                        <Picker.Item label="Computer & Accessories" value="Computer & Accessories" />
+                        <Picker.Item label="Health & Beauty" value="HealthAndBeauty" />
+                        <Picker.Item label="Computer & Accessories" value="ComputerAndAccessories" />
                         <Picker.Item label="Clothes" value="Clothes" />
-                        <Picker.Item label="Home & Living" value="Home & Living" />
+                        <Picker.Item label="Home & Living" value="HomeAndLiving" />
                         
                         
                     </Picker>
@@ -231,15 +310,13 @@ function EditMarketplaceDetails({ navigation }){
 
             </View>
             <View>
-            <Text style={styles.title2}>Current Status: {itemStatus}</Text>
+            <Text style={styles.title2}>Current Status: {currentitemStatus}</Text>
                 <View style={styles.sectionStyle3}>
                 <Picker
                         selectedValue={itemStatus}
                         onValueChange={(itemValue, itemIndex) =>
                         setitemStatus(itemValue)
                         }>
-                    
-                        <Picker.Item label="Select a categories" value="NULL" />
                         <Picker.Item label="Active" value="Active" />
                         <Picker.Item label="Inactive" value="Inactive" />
                         

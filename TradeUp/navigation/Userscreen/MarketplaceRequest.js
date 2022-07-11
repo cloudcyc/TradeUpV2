@@ -107,6 +107,7 @@ function MarketplaceRequest({ navigation }){
                             requestTradeFromID: userID, //update this when logging
                             requestItemID: route.params.itemID,
                             requestMeetLocation: requestMeetLocation,
+                            decoyView: "True",
                             requestImage: uploadImage
                         }),
                     }).then((res) => {

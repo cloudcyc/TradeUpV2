@@ -13,6 +13,7 @@ namespace TradeUpRequest
                 public string requestItemID {get; set;}
                 public string requestMeetLocation {get; set;}
                 public string requestImage {get; set;}
+                public string decoyView{get;set;}
 
         }
 

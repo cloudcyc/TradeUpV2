@@ -209,6 +209,7 @@ namespace TradeUpRequest
                     {"requestTradeFromID", new AttributeValue(requestbody.requestTradeFromID)},
                     {"requestItemID", new AttributeValue(requestbody.requestItemID)},
                     {"requestMeetLocation", new AttributeValue(requestbody.requestMeetLocation)},
+                    {"decoyView", new AttributeValue(requestbody.decoyView)},
                 }
             };
             
@@ -248,6 +249,7 @@ namespace TradeUpRequest
                     {"requestTradeFromID", new AttributeValue(requestbody.requestTradeFromID)},
                     {"requestItemID", new AttributeValue(requestbody.requestItemID)},
                     {"requestMeetLocation", new AttributeValue(requestbody.requestMeetLocation)},
+                    {"decoyView", new AttributeValue(requestbody.decoyView)},
                 }
             };
             var response = await dynamoDB.PutItemAsync(request);
@@ -331,31 +333,34 @@ namespace TradeUpRequest
                 foreach (var item in result.Items){
                     item.TryGetValue("requestID", out var requestID);
                     item.TryGetValue("requestItemID", out var requestItemID);
+                    item.TryGetValue("requestTradeStatus", out var requestTradeStatus);
                     
-                    var request = new UpdateItemRequest
-                    {
-                        TableName = "TradeUpRequests-dev",
-                        Key = new Dictionary<string, AttributeValue>(){
-                            { "requestItemID",new AttributeValue {S = requestItemID?.S}},
-                            { "requestID",new AttributeValue {S = requestID?.S}},
-                            
-                        },
-                        ExpressionAttributeNames = new Dictionary<string, string>(){
-                            {"#requestTradeStatus", "requestTradeStatus"},
-                            {"#requestTradeStatus1", "requestTradeStatus"},
-                            
-                        },
-                        ExpressionAttributeValues = new Dictionary<string, AttributeValue>(){
-                            {":newStatus",new AttributeValue {S = inputNewStatus}},
-                            {":currentStatus",new AttributeValue {S = "Pending"}},
-                            
-                            // This updates price only if current price is 20.00.
-                            
-                        },
-                        UpdateExpression = "SET #requestTradeStatus = :newStatus",
-                        ConditionExpression = "#requestTradeStatus1 = :currentStatus"
-                    };
-                    var response =  await dynamoDB.UpdateItemAsync(request);
+                    if(requestTradeStatus?.S == "Pending"){
+                        var request = new UpdateItemRequest
+                        {
+                            TableName = "TradeUpRequests-dev",
+                            Key = new Dictionary<string, AttributeValue>(){
+                                { "requestItemID",new AttributeValue {S = requestItemID?.S}},
+                                { "requestID",new AttributeValue {S = requestID?.S}},
+                                
+                            },
+                            ExpressionAttributeNames = new Dictionary<string, string>(){
+                                {"#requestTradeStatus", "requestTradeStatus"},
+                                {"#requestTradeStatus1", "requestTradeStatus"},
+                                
+                            },
+                            ExpressionAttributeValues = new Dictionary<string, AttributeValue>(){
+                                {":newStatus",new AttributeValue {S = inputNewStatus}},
+                                {":currentStatus",new AttributeValue {S = "Pending"}},
+                                
+                                // This updates price only if current price is 20.00.
+                                
+                            },
+                            UpdateExpression = "SET #requestTradeStatus = :newStatus",
+                            ConditionExpression = "#requestTradeStatus1 = :currentStatus"
+                        };
+                        var response =  await dynamoDB.UpdateItemAsync(request);
+                    }
                 }
                 return true;
             }

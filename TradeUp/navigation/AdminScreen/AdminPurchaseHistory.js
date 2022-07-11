@@ -91,7 +91,7 @@ function AdminPurchaseHistory ({navigation}) {
                             return key.receiptID;
                         }}
             style={styles.list}
-            numColumns={1}
+            numColumns={2}
             contentContainerStyle={styles.listContainer}
             renderItem={({item}) => {
                 return (
@@ -104,10 +104,10 @@ function AdminPurchaseHistory ({navigation}) {
                                 <View>
                                 
                                 {/* {getItemName(item.itemID)} */}
-                                <Text style={styles.title}>{
+                                {/* <Text style={styles.title}>{
                                     getItemName(item.itemID)
                                     
-                                    }</Text>
+                                    }</Text> */}
                                     <Text style={styles.time}>{item.createdTime}</Text>
                                 </View>
                                 

@@ -62,6 +62,7 @@ function TradeDetailScreen({ navigation }){
                             requestTradeFromID:  route.params.requestTradeFromID,
                             requestItemID: route.params.requestItemID,
                             requestMeetLocation:  route.params.requestMeetLocation,
+                            decoyView: "True",
                         }),
                     }).then((res) => {
                         if (res.status == 200) {

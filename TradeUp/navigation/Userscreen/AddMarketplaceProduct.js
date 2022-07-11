@@ -20,7 +20,7 @@ function AddMarketplaceProduct({ navigation }){
     // const [itemDate, setitemDate] = useState();
     const [currentTime,setcurrentTime] = useState('');
     const [itemDesc, setitemDesc] = useState();
-    const [itemMode, setitemMode] = useState();
+    const [itemMode, setitemMode] = useState('');
     const [itemName, setitemName] = useState();
     const [itemPrice, setitemPrice] = useState();
     const [itemStatus, setitemStatus] = useState();
@@ -87,7 +87,7 @@ function AddMarketplaceProduct({ navigation }){
         // console.log("\nThis is currentTime :" + currentTime);
         // console.log("\nThis is uploadImage :" + uploadImage);
         
-        if (itemCategory == null || itemDesc == null || itemMode == null || itemName == null || itemStatus == null || uploadImage == null){
+        if (itemCategory == null || itemDesc == null || itemMode == '' || itemName == null || itemStatus == null || uploadImage == null){
             alert("Please fill in every criteria.");
         }
         else 
@@ -207,12 +207,12 @@ function AddMarketplaceProduct({ navigation }){
                             setitemCategory(itemValue)
                         }>
                         <Picker.Item label="Select a categories" value="" />
-                        <Picker.Item label="Mobile & Accessories" value="Mobile & Accessories" />
+                        <Picker.Item label="Mobile & Accessories" value="MobileAndAccessories" />
                         <Picker.Item label="Automotive" value="Automotive" />
-                        <Picker.Item label="Electronic" value="Electronic" />
-                        <Picker.Item label="Computer & Accessories" value="Computer & Accessories" />
+                        <Picker.Item label="Health & Beauty" value="HealthAndBeauty" />
+                        <Picker.Item label="Computer & Accessories" value="ComputerAndAccessories" />
                         <Picker.Item label="Clothes" value="Clothes" />
-                        <Picker.Item label="Home & Living" value="Home & Living" />
+                        <Picker.Item label="Home & Living" value="HomeAndLiving" />
                     </Picker>
                 </View>
 
@@ -262,8 +262,6 @@ function AddMarketplaceProduct({ navigation }){
                         onValueChange={(itemValue, itemIndex) =>
                         setitemStatus(itemValue)
                         }>
-                    
-                        <Picker.Item label="Select a categories" value="" />
                         <Picker.Item label="Active" value="Active" />
                         <Picker.Item label="Inactive" value="Inactive" />
                         

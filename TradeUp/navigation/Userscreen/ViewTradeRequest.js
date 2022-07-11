@@ -63,6 +63,23 @@ function ViewTradeRequest ({navigation}) {
             }
           }
 
+    const showPendingAndAccepted = (inputStatus) => {
+        if (inputStatus != "Cancelled" ){
+            return(
+                <TouchableOpacity style={styles.container}                            
+                onPress={() => navigation.navigate('ViewTradeRequestDetails', item)}>
+                    <View style={styles.row}>
+                        <Text style={styles.title}>{item.requestTradeItemName}</Text>
+                        {Statuscolor(item.requestTradeStatus)}
+                    </View>
+                    <View style={styles.end}>
+                        <Text style={styles.time}>{item.requestTradeDate}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+          }
+    }
+
     useEffect(() => {
         if(isFocused){ 
             retrieveUserID();
@@ -79,18 +96,25 @@ function ViewTradeRequest ({navigation}) {
             numColumns={1}
             contentContainerStyle={styles.listContainer}
             renderItem={({item}) => {
-                return (
-                    <TouchableOpacity style={styles.container}                            
-                    onPress={() => navigation.navigate('ViewTradeRequestDetails', item)}>
-                        <View style={styles.row}>
-                            <Text style={styles.title}>{item.requestTradeItemName}</Text>
-                            {Statuscolor(item.requestTradeStatus)}
-                        </View>
-                        <View style={styles.end}>
-                            <Text style={styles.time}>{item.requestTradeDate}</Text>
-                        </View>
-                    </TouchableOpacity>
-                    )
+                    {
+                        if(item.requestTradeStatus == "Canceled" || item.requestTradeStatus == "Removed by Admin" || item.requestTradeStatus == "Rejected" || item.requestTradeStatus == "Item Removed by Owner" ){
+                            
+                        }else{
+                            return (
+                                <TouchableOpacity style={styles.container}                            
+                                    onPress={() => navigation.navigate('ViewTradeRequestDetails', item)}>
+                                        <View style={styles.row}>
+                                            <Text style={styles.title}>{item.requestTradeItemName}</Text>
+                                            {Statuscolor(item.requestTradeStatus)}
+                                        </View>
+                                        <View style={styles.end}>
+                                            <Text style={styles.time}>{item.requestTradeDate}</Text>
+                                        </View>
+                                </TouchableOpacity>
+                            )
+                        }
+                        
+                    }
                 }}
             />
             </View> 

@@ -64,13 +64,16 @@ function ViewTradeRequestDetails({ navigation }){
     //Not sure why it hit Error
     const removePendingItem = async (inputRequestItemID, inputNewStatus) => {
       var removePendingRequestAPI = "https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestItemID="+inputRequestItemID+"&inputNewStatus="+inputNewStatus;
+      console.log(removePendingRequestAPI)
       let res = await fetch(removePendingRequestAPI, {
           method: "POST",
       }).then((res) => {
           if (res.status == 200) {
+            console.log("200")
               navigation.navigate('ViewTradeRequest', {userID: route.params.requestTradeToID})
               } else {
                   // alert("Submission failed Error:" + res.status)
+                  console.log("400")
                   navigation.navigate('ViewTradeRequest', {userID: route.params.requestTradeToID})
                   console.log("Some error occured: ");
                   console.log(res.status)
@@ -93,6 +96,7 @@ function ViewTradeRequestDetails({ navigation }){
                       requestTradeFromID:  route.params.requestTradeFromID,
                       requestItemID: route.params.requestItemID,
                       requestMeetLocation:  route.params.requestMeetLocation,
+                      decoyView: "True",
                   }),
               }).then((res) => {
                   if (res.status == 200) {
@@ -121,6 +125,7 @@ function ViewTradeRequestDetails({ navigation }){
                       requestTradeFromID:  route.params.requestTradeFromID,
                       requestItemID: route.params.requestItemID,
                       requestMeetLocation:  route.params.requestMeetLocation,
+                      decoyView: "True",
                   }),
               }).then((res) => {
                   if (res.status == 200) {
@@ -137,7 +142,7 @@ function ViewTradeRequestDetails({ navigation }){
     }
 
     const displayButtons = (inputStatus) => {
-      if (inputStatus == "Rejected" || inputStatus == "Accepted" || inputStatus == "Item Removed by Owner" || inputStatus == "Item Removed by Admin" ){
+      if (inputStatus == "Canceled" || inputStatus == "Rejected" || inputStatus == "Accepted" || inputStatus == "Item Removed by Owner" || inputStatus == "Item Removed by Admin" ){
         
       }
       else

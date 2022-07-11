@@ -7,6 +7,7 @@ function PurchaseHistory ({navigation}) {
     const isFocused = useIsFocused(); //used to refresh upon entering new screen
     const [receiptList, setreceiptList] = React.useState([]);
     const [search, setNewSearch] = React.useState("");
+    
 
     const retrieveUserID  = async () =>{
         try {
@@ -34,21 +35,23 @@ function PurchaseHistory ({navigation}) {
         });
     }
 
-    var tempname = '';
+    const tempItemName = [];
     const getitemList = (inputItemID) => {
         const getItemAPI = 'https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?inputItemID='+inputItemID;
         fetch(getItemAPI).then((response) => response.json()).then((json) => { 
             
         
             if(json.length >= 1){
-                tempname =json[0].itemName
-                
+                tempItemName.push(json[0].itemName)
             }
+            
             
         }).catch((error) => {
             console.error(error);
         });
     }
+
+
 
     useEffect(() => {
         if(isFocused){ 
@@ -63,29 +66,27 @@ function PurchaseHistory ({navigation}) {
                             return key.receiptID;
                         }}
             style={styles.list}
-            numColumns={1}
+            numColumns={2}
             contentContainerStyle={styles.listContainer}
             renderItem={({item}) => {
-                {getitemList(item.itemID)}
-                return (
-                    <TouchableOpacity style={styles.container}                            
-                    onPress={() => navigation.navigate('PurchaseHistoryDetails',item)}>
-
+                
+                    
+                    return(
+                        <TouchableOpacity style={styles.container}
+                        onPress={() => navigation.navigate('PurchaseHistoryDetails',item)}>
                             <View style={styles.row}>
                                 <Image style={styles.productImg} resizeMode="stretch" source={{uri:'https://tradeups3.s3.ap-southeast-1.amazonaws.com/ItemAsset/' +item.itemID +'.jpg'}}/>
-                                <View>
-                                
-                                
-                                    <Text style={styles.title}>{tempname}</Text>
-                                    <Text style={styles.time}>{item.createdTime}</Text>
-                                </View>
-                                
-                                <Text style={styles.success}>RM {item.totalBill} </Text>
+                                    <View>
+                                        
+                                        <Text style={styles.time}>{item.createdTime}</Text>
+                                    </View>
+                                    <Text style={styles.success}>RM {item.totalBill} </Text>
                             </View>
-                        
+                            
 
-                    </TouchableOpacity>
+                        </TouchableOpacity>
                     )
+                
                 }}
             />
             </View>  
