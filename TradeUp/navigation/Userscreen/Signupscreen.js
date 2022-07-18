@@ -148,9 +148,7 @@ function Signupscreen ({navigation}) {
     const addNewUser = async () => {
             checkEmailExist(userEmail);
             checkPhoneExist(userPhone);
-            // checkEmailExist(userEmail);
-            // const exist = checkEmailExist(userEmail);
-            
+    
             if (userEmailExist == false){
                 if (userPhoneExist == false){
                     if (userRole != ''){

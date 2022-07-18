@@ -54,8 +54,11 @@ function AddNewRequest ({navigation}) {
     },[]); 
 
     const addRequest = async () => {
-        
-        let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres", {
+        if (centreName == "" || centreAddress == "" || centreLatitude == "" || centreLongitude == "" || centreDesc == "" || uploadImage == ""){
+            alert("Please Fill in all criteria.")
+        }else{
+            
+            let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/centres", {
                 method: "POST",
                 body: JSON.stringify({
                     centreID: 'cid' + uuid.v4(),
@@ -79,6 +82,8 @@ function AddNewRequest ({navigation}) {
                         console.log(res)
                       }
               });
+        }
+        
     }
 
     return(
