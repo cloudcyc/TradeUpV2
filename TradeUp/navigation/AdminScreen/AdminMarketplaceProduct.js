@@ -35,7 +35,8 @@ function AdminMarketplaceProduct({ navigation }){
       }).then((res) => {
         if (res.status == 200) {
                 alert("Item deleted successfully.");
-                navigation.navigate('AdminTabs');
+                removePendingItem(route.params.itemID, "Item Removed by Admin");
+                
               } else {
                 alert("Item delete failed. Error:" + res.status)
                 console.log("Some error occured: ");
@@ -44,6 +45,22 @@ function AdminMarketplaceProduct({ navigation }){
               }
       });
     };
+
+    const removePendingItem = async (inputRequestItemID, inputNewStatus) => {
+      var removePendingRequestAPI = "https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?inputRequestItemID="+inputRequestItemID+"&inputNewStatus="+inputNewStatus;
+      let res = await fetch(removePendingRequestAPI, {
+          method: "POST",
+      }).then((res) => {
+          if (res.status == 200) {
+              navigation.navigate('AdminTabs');
+              } else {
+                  alert("Submission failed Error:" + res.status)
+                  console.log("Some error occured: ");
+                  console.log(res.status)
+                  console.log(res)
+              }
+      });
+    }
 
     const showAlertBox = (inputItemID,inputUserID,inputUserName) => {
       return Alert.alert(
@@ -66,6 +83,18 @@ function AdminMarketplaceProduct({ navigation }){
       );
     };
 
+    const displayButtons = (inputStatus) => {
+      if (inputStatus == "Active" || inputStatus == "Removed"){
+        return (
+          <TouchableOpacity style={styles.shareButton2} onPress={() => showAlertBox(route.params.itemID,route.params.userID, userName)}>
+              <Text style={styles.shareButtonText}>Remove</Text>  
+          </TouchableOpacity>
+        )
+        
+      }
+      
+    }
+
 
     return(
         <View style={styles.container}>
@@ -79,9 +108,12 @@ function AdminMarketplaceProduct({ navigation }){
 
           <View style={styles.separator}></View>
           <View style={styles.addToCarContainer}>
-          <TouchableOpacity style={styles.shareButton2} onPress={() => showAlertBox(route.params.itemID,route.params.userID, userName)}>
+          { 
+            displayButtons(route.params.itemStatus)
+          }
+          {/* <TouchableOpacity style={styles.shareButton2} onPress={() => showAlertBox(route.params.itemID,route.params.userID, userName)}>
               <Text style={styles.shareButtonText}>Delete</Text>  
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {/* <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('AdminEditMarketplaceProduct')}>
               <Text style={styles.shareButtonText}>Edit Details</Text>  
             </TouchableOpacity> */}

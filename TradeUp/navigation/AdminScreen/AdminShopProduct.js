@@ -66,6 +66,18 @@ const showAlertBox = (inputItemID,inputUserID,inputUserName) => {
   );
 };
 
+const displayButtons = (inputStatus) => {
+  if (inputStatus == "Active" || inputStatus == "Removed"){
+    return (
+      <TouchableOpacity style={styles.shareButton2} onPress={() => showAlertBox(route.params.itemID,route.params.userID, userName)}>
+          <Text style={styles.shareButtonText}>Remove</Text>  
+      </TouchableOpacity>
+    )
+    
+  }
+  
+}
+
     return(
         <ScrollView style={styles.container}>
 
@@ -84,9 +96,10 @@ const showAlertBox = (inputItemID,inputUserID,inputUserName) => {
 
             <View style={styles.separator}></View>
             <View style={styles.addToCarContainer}>
-                <TouchableOpacity style={styles.shareButton2} onPress={() => showAlertBox(route.params.itemID,route.params.userID, userName)}>
+            {displayButtons(route.params.itemStatus)}
+                {/* <TouchableOpacity style={styles.shareButton2} onPress={() => showAlertBox(route.params.itemID,route.params.userID, userName)}>
                 <Text style={styles.shareButtonText}>Delete</Text>  
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 {/* <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('AdminEditShopProduct')}>
                 <Text style={styles.shareButtonText}>Edit Details</Text>  
