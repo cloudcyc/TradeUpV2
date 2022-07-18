@@ -126,8 +126,7 @@ function Shop({ navigation }){
                     style={styles.roundButton1}>
                     <Image style={styles.icon} source={{
                     uri:
-                        'https://cdn-icons.flaticon.com/png/512/4681/premium/4681177.png?token=exp=1657465559~hmac=2eed2023175f71846c74ac9b97354ef6',
-                    }}/>
+                    'https://tradeups3.s3.ap-southeast-1.amazonaws.com/asset/mobile.png',}}/>
                     <Text>Mobile & Accessories</Text>
                 </TouchableOpacity>
 
@@ -136,7 +135,7 @@ function Shop({ navigation }){
                     style={styles.roundButton1}>
                     <Image style={styles.icon} source={{
                     uri:
-                        'https://cdn-icons-png.flaticon.com/512/741/741407.png',
+                    'https://tradeups3.s3.ap-southeast-1.amazonaws.com/asset/car.png',
                     }}/>
                     <Text>Automotive</Text>
                 </TouchableOpacity>
@@ -146,7 +145,7 @@ function Shop({ navigation }){
                     style={styles.roundButton1}>
                     <Image style={styles.icon} source={{
                     uri:
-                        'https://cdn-icons.flaticon.com/png/512/1807/premium/1807392.png?token=exp=1657465732~hmac=f37db411c5facff2f78c72e391d55340',
+                    'https://tradeups3.s3.ap-southeast-1.amazonaws.com/asset/healthandbeauty.png',
                     }}/>
                     <Text>Health & Beauty</Text>
                 </TouchableOpacity>
@@ -156,7 +155,7 @@ function Shop({ navigation }){
                     style={styles.roundButton1}>
                     <Image style={styles.icon} source={{
                     uri:
-                        'https://cdn-icons.flaticon.com/png/512/2704/premium/2704234.png?token=exp=1657465499~hmac=aeb717aeeef367c6e70979660fbd87c9',
+                    'https://tradeups3.s3.ap-southeast-1.amazonaws.com/asset/computer.png',
                     }}/>
                     <Text>Computer & Accessories</Text>
                 </TouchableOpacity>
@@ -166,7 +165,7 @@ function Shop({ navigation }){
                     style={styles.roundButton1}>
                     <Image style={styles.icon} source={{
                     uri:
-                        'https://cdn-icons-png.flaticon.com/512/2934/2934972.png',
+                    'https://tradeups3.s3.ap-southeast-1.amazonaws.com/asset/cloth.png',
                     }}/>
                     <Text>Clothes</Text>
                 </TouchableOpacity>
@@ -176,8 +175,8 @@ function Shop({ navigation }){
                     style={styles.roundButton1}>
                     <Image style={styles.icon} source={{
                     uri:
-                        'https://cdn-icons.flaticon.com/png/512/3659/premium/3659944.png?token=exp=1657465359~hmac=e9a3c9ba9a8b2a990ea1abdf9c3d8864',
-                    }}/>
+                    'https://tradeups3.s3.ap-southeast-1.amazonaws.com/asset/furniture.png',
+                   }}/>
                     <Text>Home & Living</Text>
                 </TouchableOpacity>
 

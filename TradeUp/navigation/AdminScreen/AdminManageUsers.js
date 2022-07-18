@@ -82,7 +82,7 @@ function AdminManageUserScreen ({navigation}) {
                         renderItem={({item}) => {
                             return (
                                 <View style={styles.box}>
-                                  <Image style={styles.image} source={{uri: "https://bootdey.com/img/Content/avatar/avatar1.png"}} />
+                                  <Image style={styles.image} source={{uri: "https://tradeups3.s3.ap-southeast-1.amazonaws.com/asset/admin.png"}} />
                                   <View style={styles.boxContent}>
                                     <Text style={styles.title}>{item.userFullname}</Text>
                                     <Text style={styles.description}>{item.userEmail}</Text>

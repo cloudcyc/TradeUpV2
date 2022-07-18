@@ -317,6 +317,7 @@ function EditMarketplaceDetails({ navigation }){
                         onValueChange={(itemValue, itemIndex) =>
                         setitemStatus(itemValue)
                         }>
+                        <Picker.Item label="Select a Status" value="" />
                         <Picker.Item label="Active" value="Active" />
                         <Picker.Item label="Inactive" value="Inactive" />
                         

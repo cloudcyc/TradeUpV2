@@ -88,6 +88,7 @@ function AddMarketplaceProduct({ navigation }){
         // console.log("\nThis is uploadImage :" + uploadImage);
         
         if (itemCategory == null || itemDesc == null || itemMode == '' || itemName == null || itemStatus == null || uploadImage == null){
+            
             alert("Please fill in every criteria.");
         }
         else 
@@ -262,6 +263,7 @@ function AddMarketplaceProduct({ navigation }){
                         onValueChange={(itemValue, itemIndex) =>
                         setitemStatus(itemValue)
                         }>
+                        <Picker.Item label="Select a Status" value="" />
                         <Picker.Item label="Active" value="Active" />
                         <Picker.Item label="Inactive" value="Inactive" />
                         
