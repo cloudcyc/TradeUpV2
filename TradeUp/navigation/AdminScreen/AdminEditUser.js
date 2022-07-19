@@ -73,30 +73,36 @@ function AdminEditUser ({navigation}) {
         }
         else
         {
-            let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
-                method: "POST",
-                body: JSON.stringify({
-                    userID: userID,
-                    userEmail: userEmail,
-                                    userFullname: userFullname,
-                                    userPhoneNumber: userPhone,
-                                    userPassword: userPassword,
-                                    userDoB: userDoB,
-                                    userRole: userRole,
-                                    userPhone: userPhone,
-                                    createdTime: createdTime
-                }),
-            }).then((res) => {
-                if (res.status == 200) {
-                        alert("User update successfully.")
-                        navigation.navigate('AdminManageUserScreen',{userID: currentUserID})
-                    } else {
-                        alert("User update failed Error:" + res.status)
-                        console.log("Some error occured: ");
-                        console.log(res.status)
-                        console.log(res)
-                    }
-            });
+            if (userEmail == '' || userFullname == '' || userPhone == ''){
+                alert("Please fill in every criteria.");
+            }
+            else{
+                let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        userID: userID,
+                        userEmail: userEmail,
+                                        userFullname: userFullname,
+                                        userPhoneNumber: userPhone,
+                                        userPassword: userPassword,
+                                        userDoB: userDoB,
+                                        userRole: userRole,
+                                        userPhone: userPhone,
+                                        createdTime: createdTime
+                    }),
+                }).then((res) => {
+                    if (res.status == 200) {
+                            alert("User update successfully.")
+                            navigation.navigate('AdminManageUserScreen',{userID: currentUserID})
+                        } else {
+                            alert("User update failed Error:" + res.status)
+                            console.log("Some error occured: ");
+                            console.log(res.status)
+                            console.log(res)
+                        }
+                });
+            }
+            
         }
     }
 
@@ -134,6 +140,7 @@ function AdminEditUser ({navigation}) {
                     placeholder="Enter Email Here"
                     underlineColorAndroid="transparent"
                     keyboardType="email-address"
+                    editable={false}
                     value={userEmail} onChangeText = {(val) => setuserEmail(val)}
                 />
             </View>
@@ -181,6 +188,7 @@ function AdminEditUser ({navigation}) {
                     placeholder="Enter Phone Number Here"
                     underlineColorAndroid="transparent"
                     keyboardType="phone-pad"
+                    editable={false}
                     value={userPhone} onChangeText = {(val) => setuserPhone(val)}
                 />
             </View>

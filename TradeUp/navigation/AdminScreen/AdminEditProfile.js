@@ -58,48 +58,24 @@ function AdminEditProfile ({navigation}) {
         // console.log(userDoB);
 
         if (userOldPassword == '' && userNewPassword == ''){
-            let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
-                method: "POST",
-                body: JSON.stringify({
-                    userID: userID,
-                        userEmail: userEmail,
-                        userFullname: userFullname,
-                        userPassword: userCurrentPassword,
-                        userDoB: userDoB,
-                        userRole: userRole,
-                        userPhone: userPhone,
-                        createdTime: createdTime
-                }),
-            }).then((res) => {
-                if (res.status == 200) {
-                        alert("Profile update successfully without changing password.")
-                        navigation.navigate('AdminTabs')
-                    } else {
-                        alert("User update failed Error:" + res.status)
-                        console.log("Some error occured: ");
-                        console.log(res.status)
-                        console.log(res)
-                    }
-            });
-        }
-        else if (userOldPassword != '' && userCurrentPassword == userOldPassword)
-        {
-            if (userNewPassword != ''){
+            if (userEmail == '' || userFullname == '' || userRole == '' || userPhone == ''){
+                alert("Please fill in every criteria.");
+            }else {
                 let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
                     method: "POST",
                     body: JSON.stringify({
                         userID: userID,
-                        userEmail: userEmail,
-                        userFullname: userFullname,
-                        userPassword: userNewPassword,
-                        userDoB: userDoB,
-                        userRole: userRole,
-                        userPhone: userPhone,
-                        createdTime: createdTime
+                            userEmail: userEmail,
+                            userFullname: userFullname,
+                            userPassword: userCurrentPassword,
+                            userDoB: userDoB,
+                            userRole: userRole,
+                            userPhone: userPhone,
+                            createdTime: createdTime
                     }),
                 }).then((res) => {
                     if (res.status == 200) {
-                            alert("Profile update successfully with new password.")
+                            alert("Profile update successfully without changing password.")
                             navigation.navigate('AdminTabs')
                         } else {
                             alert("User update failed Error:" + res.status)
@@ -108,6 +84,40 @@ function AdminEditProfile ({navigation}) {
                             console.log(res)
                         }
                 });
+            }
+            
+        }
+        else if (userOldPassword != '' && userCurrentPassword == userOldPassword)
+        {
+            if (userNewPassword != ''){
+                if (userEmail == '' || userFullname == '' || userRole == '' || userPhone == ''){
+                    alert("Please fill in every criteria.");
+                }else {
+                    let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/users?UpdateUser=true", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            userID: userID,
+                            userEmail: userEmail,
+                            userFullname: userFullname,
+                            userPassword: userNewPassword,
+                            userDoB: userDoB,
+                            userRole: userRole,
+                            userPhone: userPhone,
+                            createdTime: createdTime
+                        }),
+                    }).then((res) => {
+                        if (res.status == 200) {
+                                alert("Profile update successfully with new password.")
+                                navigation.navigate('AdminTabs')
+                            } else {
+                                alert("User update failed Error:" + res.status)
+                                console.log("Some error occured: ");
+                                console.log(res.status)
+                                console.log(res)
+                            }
+                    });
+                }
+                
             }
             else
             {
@@ -197,6 +207,7 @@ function AdminEditProfile ({navigation}) {
                     placeholder="Enter Your Phone Number Here"
                     underlineColorAndroid="transparent"
                     keyboardType="phone-pad"
+                    editable={false}
                     value={userPhone} onChangeText = {(val) => setuserPhone(val)}
                 />
             </View>

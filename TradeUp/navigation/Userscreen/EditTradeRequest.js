@@ -49,7 +49,7 @@ function EditTradeRequest({ navigation }){
 
     const updateRequest = async () => {
         if (newitemImage != null){
-            if (requestTradeItemName == null || requestTradeItemDesc == null || requestMeetLocation == null){
+            if (requestTradeItemName == "" || requestTradeItemDesc == "" || requestMeetLocation == ""){
                 alert("Please fill in every criteria.");
             }
             else 
@@ -84,7 +84,7 @@ function EditTradeRequest({ navigation }){
         }
         else
         {
-            if (requestTradeItemName == null || requestTradeItemDesc == null || requestMeetLocation == null){
+            if (requestTradeItemName == "" || requestTradeItemDesc == "" || requestMeetLocation == ""){
                 alert("Please fill in every criteria.");
             }
             else 

@@ -105,7 +105,7 @@ function EditMarketplaceDetails({ navigation }){
       const updateItem = async () => {
         if (newitemImage != null){
             // update with new image
-            if (itemCategory == null || itemDesc == null || itemMode == null || itemName == null || itemStatus == null){
+            if (itemCategory == '' || itemDesc == '' || itemMode == '' || itemName == '' || itemStatus == ''){
                 alert("Please fill in every criteria.");
             }
             else if(itemStatus == "Inactive"){
@@ -171,7 +171,7 @@ function EditMarketplaceDetails({ navigation }){
         }
         else{
             //update without new image
-            if (itemCategory == null || itemDesc == null || itemMode == null || itemName == null || itemStatus == null){
+            if (itemCategory == '' || itemDesc == '' || itemMode == '' || itemName == '' || itemStatus == ''){
                 alert("Please fill in every criteria.");
             }
             else if(itemStatus == "Inactive"){

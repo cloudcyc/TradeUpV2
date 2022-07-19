@@ -105,21 +105,28 @@ function AdminEditLocation ({navigation}) {
                 }
             }
         }
-        let res = await fetch(postUpdateCentreAPI, {
-            method: "POST",
-            body: JSON.stringify(data),
-          }).then((res) => {
-            if (res.status == 200) {
-                    alert("Centre updated successfully.")
-                    console.log("Item created successfully");
-                    navigation.navigate('AdminTabs')
-                  } else {
-                    alert("Centre update failed. Error:" + res.status)
-                    console.log("Some error occured: ");
-                    console.log(res.status)
-                    console.log(res)
-                  }
-          });
+        if (centreName == '' || centreAddress == '' || centreLatitude == '' || centreLongitude == '' || centreDesc == ''){
+            alert("Please fill in every criteria.");
+        }
+        else 
+        {
+            let res = await fetch(postUpdateCentreAPI, {
+                method: "POST",
+                body: JSON.stringify(data),
+              }).then((res) => {
+                if (res.status == 200) {
+                        alert("Centre updated successfully.")
+                        console.log("Item created successfully");
+                        navigation.navigate('AdminTabs')
+                      } else {
+                        alert("Centre update failed. Error:" + res.status)
+                        console.log("Some error occured: ");
+                        console.log(res.status)
+                        console.log(res)
+                      }
+              });
+        }
+        
     }
 
     return(

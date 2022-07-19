@@ -64,8 +64,8 @@ function AdminAddLocation ({navigation}) {
         // console.log("\nThis is currentTime :" + currentTime);
         // console.log("\nThis is uploadImage :" + uploadImage);
         // console.log("\nThis is centreStatus :" + centreStatus);
-        if (centreStatus == null){
-            alert("Please fill in every criteria. Note: check Image and Centre Status");
+        if (centreStatus == '' || centreName == '' || centreAddress == '' || centreLatitude == '' || centreLongitude == '' || centreDesc == ''){
+            alert("Please fill in every criteria.");
         }
         else 
         {
