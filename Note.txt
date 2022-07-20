@@ -1,0 +1,14 @@
+When first open the project. Please make sure to type "npm install" to install all packages that going to be used in this application.
+To have a better experience with the application. Please use a physical devices. Recommended to use Android Platform only.
+It is not recommended to use the Virtual device where it will provide bad experiences.
+
+to login as Admin here is there email and password
+nic@gmail.com
+1234
+
+to login as Member you can either create an account or use the existing account.
+johndoe@gmail.com
+12345678
+
+williamdoe@gmail.com
+12345678
