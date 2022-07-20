@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
+import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground, Alert } from 'react-native';
 import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -34,7 +34,7 @@ function ManageMarketplaceDetails({ navigation }){
     {
       return(
         <View style={styles.addToCarContainer}>
-          <TouchableOpacity style={styles.shareButton2} onPress={() => deleteItem()}>
+          <TouchableOpacity style={styles.shareButton2} onPress={() => showAlertBox(route.params.itemName)}>
                 <Text style={styles.shareButtonText}>Delete</Text>  
           </TouchableOpacity>
           <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditMarketplaceDetails', route.params)}>
@@ -44,6 +44,27 @@ function ManageMarketplaceDetails({ navigation }){
       )
     }
   }
+
+  const showAlertBox = (inputItemName) => {
+    return Alert.alert(
+      "Are your sure?",
+      "Are you sure you want to delete this item: " + inputItemName +" ?" ,
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+            deleteItem();
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+  };
 
   const deleteItem = async () => {
     var updateItemAPI = "https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/items?NewImage=False&inputItemID="+route.params.itemID;

@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground } from 'react-native';
+import { Image, StyleSheet, Text, View, useWindowDimensions, ScrollView, TextInput, Button, TouchableOpacity,Pressable, Platform, SafeAreaView, ImageBackground, Alert } from 'react-native';
 import { useRoute } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { createOpenLink } from 'react-native-open-maps';
@@ -80,14 +80,10 @@ function TradeDetailScreen({ navigation }){
     }
 
     const displayButtons = (inputStatus) => {
-      if (inputStatus == "Rejected" || inputStatus == "Canceled"){
-        
-      }
-      else
-      {
+      if (inputStatus == "Pending"){
         return(
           <View style={styles.addToCarContainer}>
-          <TouchableOpacity style={styles.shareButton2} onPress={() => cancelRequest()}>
+          <TouchableOpacity style={styles.shareButton2} onPress={() => showAlertBox(route.params.requestTradeItemName)}>
               <Text style={styles.shareButtonText}>Cancel Request</Text>  
             </TouchableOpacity>
             <TouchableOpacity style={styles.shareButton} onPress={() => navigation.navigate('EditTradeRequest', route.params)}>
@@ -97,6 +93,27 @@ function TradeDetailScreen({ navigation }){
         )
       }
     }
+
+    const showAlertBox = (inputRequestName) => {
+      return Alert.alert(
+        "Are your sure?",
+        "Are you sure you want to cancel this request: " + inputRequestName +" ?" ,
+        [
+          // The "Yes" button
+          {
+            text: "Yes",
+            onPress: () => {
+              cancelRequest();
+            },
+          },
+          // The "No" button
+          // Does nothing but dismiss the dialog when tapped
+          {
+            text: "No",
+          },
+        ]
+      );
+    };
   
   React.useEffect(() => {
     if(isFocused){ 
