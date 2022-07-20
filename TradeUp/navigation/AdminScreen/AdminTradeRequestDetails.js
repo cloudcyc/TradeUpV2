@@ -43,6 +43,14 @@ function AdminTradeRequestDetails({ navigation }){
 
     
     const cancelRequest = async () => {
+      console.log(route.params.requestTradeItemName)
+      console.log(route.params.requestTradeItemDesc)
+      console.log(route.params.requestTradeDate)
+      console.log(route.params.requestTradeToID)
+      console.log(route.params.requestTradeFromID)
+      console.log(route.params.requestItemID)
+      console.log(route.params.requestMeetLocation)
+      console.log(route.params.requestID)
             let res = await fetch("https://kvih098pq8.execute-api.ap-southeast-1.amazonaws.com/dev/requests?NewImage=False&inputRequestID="+route.params.requestID, {
                         method: "POST",
                         body: JSON.stringify({
@@ -55,6 +63,7 @@ function AdminTradeRequestDetails({ navigation }){
                             requestTradeFromID:  route.params.requestTradeFromID,
                             requestItemID: route.params.requestItemID,
                             requestMeetLocation:  route.params.requestMeetLocation,
+                            decoyView: "True"
                         }),
                     }).then((res) => {
                         if (res.status == 200) {
